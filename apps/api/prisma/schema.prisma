@@ -10,12 +10,73 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Sample {
-  id        Int      @id @default(autoincrement())
+model User {
+  id        String      @id @default(cuid())
   name      String
-  code      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  email     String      @unique
+  password  String
+  avatar    String?
+  role      Roles
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt()
+  Absensi   Absensi[]
+  Pengajuan Pengajuan[]
+}
 
-  @@map("samples") // if you want to use snake_case format
+enum Roles {
+  User
+  SuperAdmin
+  AdminHR
+  AdminGudang
+}
+
+model Absensi {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+  clockIn   DateTime
+  clockOut  DateTime
+  location  String?
+  status    Status
+  date      DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+}
+
+enum Status {
+  Hadir
+  Terlambat
+  Sakit
+  Cuti
+  Izin
+  Alpha
+}
+
+model Pengajuan {
+  id         String     @id @default(cuid())
+  date       DateTime
+  nominal    Float
+  company    Companies
+  client     String
+  keterangan String     @db.MediumText()
+  tipeLembur OpsiLembur
+  status     Boolean    @default(false)
+  user       User       @relation(fields: [userId], references: [id])
+  userId     String
+}
+
+enum Companies {
+  Ristoan
+  Hayan
+  Sirius
+}
+
+enum OpsiLembur {
+  LemburSatu
+  LemburDua
+  LemburTiga
+}
+
+model Gudang {
+  id String @id @default(cuid())
 }
