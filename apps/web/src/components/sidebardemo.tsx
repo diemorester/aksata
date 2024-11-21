@@ -2,11 +2,11 @@
 import React, { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "../../src/components/ui/sidebar";
 import {
-    IconArrowLeft,
     IconSettings
 } from "@tabler/icons-react";
 import { RiCalendarCheckLine } from "react-icons/ri";
 import { LuUpload } from "react-icons/lu";
+import { VscSignOut } from "react-icons/vsc";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -39,7 +39,7 @@ export function SidebarDemo() {
             label: "Logout",
             href: "#",
             icon: (
-                <IconArrowLeft className="text-neutral-700 dark:text-neutral-200 h-7 w-7 flex-shrink-0" />
+                <VscSignOut className="text-neutral-700 dark:text-neutral-200 h-7 w-7 flex-shrink-0" />
             ),
         },
     ];
@@ -94,7 +94,7 @@ export const Logo = () => {
             <motion.span
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="font-medium text-black dark:text-white text-xl px-2 whitespace-pre"
+                className="font-semibold text-black dark:text-white text-xl px-2 whitespace-pre"
             >
                 Ristoan Tri Laras
             </motion.span>
