@@ -16,6 +16,7 @@ export class UserController {
         msg: 'User created, please check your email for verification',
         token,
       });
+      
     } catch (error) {
       next(error);
     }
@@ -28,6 +29,7 @@ export class UserController {
         msg: 'User verified',
         updateUser,
       });
+
     } catch (error) {
       next(error);
     }
