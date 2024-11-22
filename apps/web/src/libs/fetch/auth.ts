@@ -12,3 +12,15 @@ export const RegisterUser = async (payload: IRegister) => {
     })
     return res
 }
+
+export const FetchEmail = async (token: string) => {
+    const res = await axiosInstance.patch(`user/verify`, {
+
+    }, {
+        headers: {
+           
+           Authorization: `Bearer ${token}` 
+        }
+    })
+    return res
+}

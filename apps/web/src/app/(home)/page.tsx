@@ -1,5 +1,5 @@
 "use client"
-import Button from "@/components/button";
+import Button from "@/components/buttons/button";
 import Input from "@/components/input/input";
 import { RegisterUser } from "@/libs/fetch/auth";
 import { RegisterSchema } from "@/schemes/authSchema";
@@ -69,9 +69,9 @@ export default function Home() {
         {() => {
           return (
             <Form>
-              <div className={`flex flex-col ${variantAuth == "Login" ? 'gap-20' : 'gap-[70px] mb-3'}`}>
-                <h1 className="text-center text-5xl text-white font-bold">{variantAuth == "Login" ? "LOGIN" : "REGISTER"}</h1>
-                <div className={`flex flex-col ${variantAuth == "Login" ? 'gap-20' : 'gap-8'}`}>
+              <div className={`flex flex-col ${variantAuth == "Login" ? 'gap-16' : 'gap-5'}`}>
+                <h1 className="text-center text-5xl text-white font-bold pb-16">{variantAuth == "Login" ? "LOGIN" : "REGISTER"}</h1>
+                <div className={`flex flex-col ${variantAuth == "Login" ? 'gap-10' : 'gap-6'}`}>
                   {variantAuth == "Register" && <Input error disable={isLoading} name="name" type="text" placeholder="name" />}
                   <Input error disable={isLoading} name="email" type="email" placeholder="email" />
                   <div className="relative w-fit">
@@ -83,7 +83,7 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col gap-2 justify-center items-center">
                   <Button disable={isLoading} type="submit" auth>{variantAuth == "Login" ? "LOGIN" : "REGISTER"}</Button>
-                  {variantAuth == "Login" && <h2 className="text-center text-white italic">not registered? Sign Up <span onClick={ToggleAuth} className="font-bold cursor-pointer">Here</span></h2>}
+                  {variantAuth == "Login" && <h2 className="text-center text-xs text-white italic">not registered? Sign Up <span onClick={ToggleAuth} className="font-bold cursor-pointer">Here</span></h2>}
                 </div>
               </div>
             </Form>)
