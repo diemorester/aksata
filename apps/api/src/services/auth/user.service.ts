@@ -10,14 +10,14 @@ import { transporter } from '@/helpers/nodemailer';
 export const RegisterUserService = async (body: User) => {
   try {
     const { name, email, password } = body;
-    const user = await prisma.user.findFirst({
-      where: {
-        OR: [{ email }, { name }],
-      },
-    });
+    const userName = await prisma.user.findFirst({ where: { name }})
+    const userEmail = await prisma.user.findFirst({ where: { email }})
 
-    if (user?.email || user?.name)
-      throw new Error('Email or username already exist');
+    if (userName?.name)
+      throw new Error('name already exists');
+
+    if (userEmail?.email)
+      throw new Error('email already exists');
 
     const newPass = await hashPassword(password);
 
@@ -64,7 +64,7 @@ export const verifyUserService = async (id: number) => {
       },
     });
 
-    if (user?.isVerified) throw new Error('User has been verified');
+    if (user?.isVerified) throw new Error('User has already been verified');
 
     const verifiedUser = await prisma.user.update({
       where: {
