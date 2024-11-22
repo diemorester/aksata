@@ -64,7 +64,7 @@ export const verifyUserService = async (id: number) => {
       },
     });
 
-    if (user?.isVerified) throw new Error('User has been verified');
+    if (user?.isVerified) throw new Error('User has already been verified');
 
     const verifiedUser = await prisma.user.update({
       where: {
