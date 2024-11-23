@@ -11,8 +11,10 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { cn } from "../../src/libs/utils";
+import { useAppSelector } from "@/redux/hooks";
 
 export function SidebarDemo() {
+    const { name, avatar } = useAppSelector((user) => user.user)
     const links = [
         {
             label: "Absensi",
@@ -64,11 +66,11 @@ export function SidebarDemo() {
                     <div>
                         <SidebarLink
                             link={{
-                                label: "Burhan Hanafi",
+                                label: name,
                                 href: "#",
                                 icon: (
                                     <Image
-                                        src="/burhan.jpg"
+                                        src={avatar || "/profileplaceholder.png"}
                                         className="h-7 w-7 flex-shrink-0 rounded-full"
                                         width={50}
                                         height={50}

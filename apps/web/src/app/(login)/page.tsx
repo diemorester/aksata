@@ -1,10 +1,14 @@
 "use client"
 import Button from "@/components/buttons/button";
 import Input from "@/components/input/input";
-import { RegisterUser } from "@/libs/fetch/auth";
-import { RegisterSchema } from "@/schemes/authSchema";
+import { loginUser, registerUser } from "@/libs/fetch/auth";
+import { createCookie } from "@/libs/server";
+import { useAppDispatch } from "@/redux/hooks";
+import { loginAction } from "@/redux/slices/userslice";
+import { loginSchema, RegisterSchema } from "@/schemes/authSchema";
 import { AxiosError } from "axios";
-import { ErrorMessage, Form, Formik, FormikHelpers } from "formik";
+import { Form, Formik, FormikHelpers } from "formik";
+import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
 import { IoEyeOutline } from "react-icons/io5";
@@ -13,9 +17,11 @@ import { IoEyeOffOutline } from "react-icons/io5";
 type VariantAuth = "Register" | "Login"
 
 export default function Home() {
+  const router = useRouter()
   const [isPasswordRevealed, setIsPasswordRevealed] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [variantAuth, setVariantAuth] = useState<VariantAuth>("Login")
+  const dispatch = useAppDispatch()
 
   const ToggleAuth = useCallback(() => {
     if (variantAuth == "Login") {
@@ -25,22 +31,48 @@ export default function Home() {
     }
   }, [variantAuth])
 
-  const HandleAuth = async (data: IRegister, action: FormikHelpers<IRegister>) => {
+  const HandleAuth = async (
+    data: IRegister | ILogin,
+    action: FormikHelpers<IRegister | ILogin>
+  ) => {
     setIsLoading(true)
+
     if (variantAuth == "Login") {
       try {
-
+        const res = await loginUser(data)
+        const earnToken = {
+          ...res.data.user, token: res.data.token
+        }
+        toast.success(res.data.msg)
+        createCookie('token', res.data.token)
+        dispatch(loginAction(earnToken))
+        action.resetForm()
+        
+        if (res.data.user.role == "AdminHR") {
+          router.push('/dashboardHR')
+        } else if (res.data.user.role == "AdminGudang") {
+          router.push('/dashboardGudang')
+        } else if (res.data.user.role == "SuperAdmin") {
+          router.push('/dashboardAdmin')
+        } else {
+          router.push('/dashboard')
+        }
+        
       } catch (error) {
+        if (error instanceof AxiosError) {
+          toast.error(error.response?.data)
+        };
 
-      }
+      } finally { setIsLoading(false) }
     }
+
     if (variantAuth == "Register") {
       try {
-        const res = await RegisterUser(data)
+        const res = await registerUser(data)
         toast.success(res.data.msg)
         action.resetForm()
         setVariantAuth("Login")
-
+        
       } catch (error) {
         if (error instanceof AxiosError) {
           toast.error(error.response?.data)
@@ -63,7 +95,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen place-content-center items-center flex bg-neutral-900 pt-3">
-      <Formik initialValues={variantAuth == "Register" ? initialRegisterValues : initialLoginValues} validationSchema={RegisterSchema} onSubmit={(value, action) => {
+      <Formik initialValues={variantAuth == "Register" ? initialRegisterValues : initialLoginValues} validationSchema={variantAuth == "Register" ? RegisterSchema : loginSchema} onSubmit={(value, action) => {
         HandleAuth(value, action)
       }}>
         {() => {

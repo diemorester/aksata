@@ -1,6 +1,6 @@
 "use client"
 import SplitButton from "@/components/buttons/splitbutton"
-import { FetchEmail } from "@/libs/fetch/auth"
+import { fetchEmail } from "@/libs/fetch/auth"
 import { AxiosError } from "axios"
 import Link from "next/link"
 import { useState } from "react"
@@ -13,7 +13,7 @@ const VerifiedPage = ({ params }: { params: { token: string } }) => {
   const onSubmit = async () => {
     setIsLoading(true)
     try {
-      const res = await FetchEmail(params.token)
+      const res = await fetchEmail(params.token)
       toast.success(res.data.msg)
       setIsNowVerified(true)
     } catch (error: any) {
