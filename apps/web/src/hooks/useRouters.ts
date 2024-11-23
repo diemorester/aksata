@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation"
 import { useMemo, useState } from "react"
 import { LuUpload } from "react-icons/lu"
 import { RiCalendarCheckLine } from "react-icons/ri"
-import { IoIosSettings } from "react-icons/io";
+import { IoMdSettings } from "react-icons/io";
 import { VscSignOut } from "react-icons/vsc"
 
 const useRouter = () => {
@@ -27,7 +27,7 @@ const useRouter = () => {
         {
             label: "Settings",
             href: "/dashboard/settings",
-            icon: IoIosSettings,
+            icon: IoMdSettings,
             active: pathName == "/dashboard/settings"
         },
         {

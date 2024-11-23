@@ -1,16 +1,10 @@
 "use client";
 import { cn } from "../../libs/utils";
-import Link, { LinkProps } from "next/link";
-import React, { useState, createContext, useContext, act } from "react";
+import Link from "next/link";
+import React, { useState, createContext, useContext } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { IconMenu2, IconX } from "@tabler/icons-react";
 import { IconType } from "react-icons";
-
-interface Links {
-    label: string;
-    href: string;
-    icon: React.JSX.Element | React.ReactNode;
-}
 
 interface SidebarContextProps {
     open: boolean;
@@ -53,7 +47,7 @@ export const SidebarProvider = ({
     );
 };
 
-export const Sidebar = ({
+export const SidebarConfig = ({
     children,
     open,
     setOpen,
@@ -90,8 +84,8 @@ export const DesktopSidebar = ({
         <>
             <motion.div
                 className={cn(
-                    "h-full px-4 py-4 hidden  md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 w-[300px] flex-shrink-0",
-                    className
+                    "h-full hidden mt-5 md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 w-[300px] flex-shrink-0",
+                    className, open? "px-4" : "items-center"
                 )}
                 animate={{
                     width: animate ? (open ? "300px" : "60px") : "300px",
@@ -116,7 +110,7 @@ export const MobileSidebar = ({
         <>
             <div
                 className={cn(
-                    "h-10 px-4 py-4 flex flex-row md:hidden  items-center justify-between bg-neutral-100 dark:bg-neutral-800 w-full"
+                    "h-10 px-4 py-4 flex flex-row md:hidden items-center justify-between bg-neutral-100 dark:bg-neutral-800 w-full"
                 )}
                 {...props}
             >
@@ -181,11 +175,11 @@ export const SidebarLink = ({
             <Link
                 href={href}
                 className={cn(
-                    "flex items-center justify-start gap-2  group/sidebar py-2",
-                active? "bg-yellow-300" : "bg-neutral-900"
+                    `flex items-center justify-start gap-2  group/sidebar text-neutral-300`,
+                active? "bg-neutral-300/30 rounded-md text-neutral-500" : "", open? "py-1 px-2 text-neutral-300" : "bg-transparent"
             )}
             >
-                <Icon />
+                <Icon size={30} />
 
                 <motion.span
                     animate={{

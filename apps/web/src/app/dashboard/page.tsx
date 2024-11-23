@@ -1,9 +1,7 @@
-import { SidebarDemo } from "@/components/sidebardemo"
-
 const Dashboard = () => {
   return (
-    <div>
-        <SidebarDemo />
+    <div className="">
+        Absensi
     </div>
   )
 }
