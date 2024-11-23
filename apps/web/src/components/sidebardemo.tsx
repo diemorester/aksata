@@ -1,50 +1,18 @@
 "use client";
 import React, { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "../../src/components/ui/sidebar";
-import {
-    IconSettings
-} from "@tabler/icons-react";
-import { RiCalendarCheckLine } from "react-icons/ri";
-import { LuUpload } from "react-icons/lu";
-import { VscSignOut } from "react-icons/vsc";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { cn } from "../../src/libs/utils";
 import { useAppSelector } from "@/redux/hooks";
+import useRouter from "@/hooks/useRouters";
 
 export function SidebarDemo() {
+    const router = useRouter()
     const { name, avatar } = useAppSelector((user) => user.user)
-    const links = [
-        {
-            label: "Absensi",
-            href: "#",
-            icon: (
-                <RiCalendarCheckLine className="text-neutral-700 dark:text-neutral-200 h-7 w-7 flex-shrink-0" />
-            ),
-        },
-        {
-            label: "Pengajuan",
-            href: "#",
-            icon: (
-                <LuUpload className="text-neutral-700 dark:text-neutral-200 h-7 w-7 flex-shrink-0" />
-            ),
-        },
-        {
-            label: "Settings",
-            href: "#",
-            icon: (
-                <IconSettings className="text-neutral-700 dark:text-neutral-200 h-7 w-7 flex-shrink-0" />
-            ),
-        },
-        {
-            label: "Logout",
-            href: "#",
-            icon: (
-                <VscSignOut className="text-neutral-700 dark:text-neutral-200 h-7 w-7 flex-shrink-0" />
-            ),
-        },
-    ];
+    const { isOpen } = useAppSelector((modal) => modal.modal)
+    
     const [open, setOpen] = useState(false);
     return (
         <div
@@ -58,27 +26,10 @@ export function SidebarDemo() {
                     <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
                         {open ? <Logo /> : <LogoIcon />}
                         <div className="mt-8 flex flex-col gap-2">
-                            {links.map((link, idx) => (
-                                <SidebarLink key={idx} link={link} />
+                            {router.map((link, idx) => (
+                                <SidebarLink key={idx} href={link.href} label={link.label} icon={link.icon} active={link.active} onClick={link.onClick} />
                             ))}
                         </div>
-                    </div>
-                    <div>
-                        <SidebarLink
-                            link={{
-                                label: name,
-                                href: "#",
-                                icon: (
-                                    <Image
-                                        src={avatar || "/profileplaceholder.png"}
-                                        className="h-7 w-7 flex-shrink-0 rounded-full"
-                                        width={50}
-                                        height={50}
-                                        alt="Avatar"
-                                    />
-                                ),
-                            }}
-                        />
                     </div>
                 </SidebarBody>
             </Sidebar>

@@ -1,9 +1,10 @@
 "use client";
 import { cn } from "../../libs/utils";
 import Link, { LinkProps } from "next/link";
-import React, { useState, createContext, useContext } from "react";
+import React, { useState, createContext, useContext, act } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { IconMenu2, IconX } from "@tabler/icons-react";
+import { IconType } from "react-icons";
 
 interface Links {
     label: string;
@@ -156,35 +157,46 @@ export const MobileSidebar = ({
 };
 
 export const SidebarLink = ({
-    link,
-    className,
-    ...props
+    label,
+    href,
+    icon: Icon,
+    active,
+    onClick
 }: {
-    link: Links;
-    className?: string;
-    props?: LinkProps;
+    label: string,
+    href: string,
+    icon: IconType,
+    active?: boolean,
+    onClick: () => void
 }) => {
-    const { open, animate } = useSidebar();
-    return (
-        <Link
-            href={link.href}
-            className={cn(
-                "flex items-center justify-start gap-2  group/sidebar py-2",
-                className
-            )}
-            {...props}
-        >
-            {link.icon}
 
-            <motion.span
-                animate={{
-                    display: animate ? (open ? "inline-block" : "none") : "inline-block",
-                    opacity: animate ? (open ? 1 : 0) : 1,
-                }}
-                className="text-neutral-700 dark:text-neutral-200 text-lg group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block px-3"
+    const { open, animate } = useSidebar();
+    const handleClick = () => {
+        if (onClick) {
+            return onClick()
+        } 
+    }
+    return (
+        <div onClick={handleClick}>
+            <Link
+                href={href}
+                className={cn(
+                    "flex items-center justify-start gap-2  group/sidebar py-2",
+                active? "bg-yellow-300" : "bg-neutral-900"
+            )}
             >
-                {link.label}
-            </motion.span>
-        </Link>
+                <Icon />
+
+                <motion.span
+                    animate={{
+                        display: animate ? (open ? "inline-block" : "none") : "inline-block",
+                        opacity: animate ? (open ? 1 : 0) : 1,
+                    }}
+                    className="text-neutral-700 dark:text-neutral-200 text-lg group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block px-3"
+                >
+                    {label}
+                </motion.span>
+            </Link>
+        </div>
     );
 };
