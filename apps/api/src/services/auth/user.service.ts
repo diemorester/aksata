@@ -6,12 +6,13 @@ import path from 'path';
 import fs from 'fs';
 import handlebars from 'handlebars';
 import { transporter } from '@/helpers/nodemailer';
+import { compare } from 'bcrypt';
 
 export const RegisterUserService = async (body: User) => {
   try {
     const { name, email, password } = body;
-    const userName = await prisma.user.findFirst({ where: { name }})
-    const userEmail = await prisma.user.findFirst({ where: { email }})
+    const userName = await prisma.user.findFirst({ where: { name } })
+    const userEmail = await prisma.user.findFirst({ where: { email } })
 
     if (userName?.name)
       throw new Error('name already exists');
@@ -76,6 +77,38 @@ export const verifyUserService = async (id: number) => {
     });
 
     return verifiedUser
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const loginUserService = async (body: User) => {
+  try {
+    const { email, password } = body;
+    const user = await prisma.user.findFirst({
+      where: { email },
+    });
+
+    if (!user) throw new Error('user not found');
+
+    if (!user.isVerified)
+      throw new Error('user not verified');
+
+    const isValidPass = await compare(password!, user.password!);
+    if (!isValidPass)
+      throw new Error(
+        'incorrect password',
+      );
+
+    const payload = {
+      id: user.id,
+      role: user.role,
+      email: user.email
+    };
+
+    const token = createToken(payload, '1d');
+
+    return { user, token };
   } catch (error) {
     throw error;
   }
