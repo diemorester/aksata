@@ -5,15 +5,14 @@ interface IButton {
     disable?: boolean,
     danger?: boolean,
     type: "button" | "submit" | "reset",
-    outline?: boolean,
-    fullwidth?: boolean,
+    transparent?: boolean
     auth?: boolean,
     onclick?: () => void
 }
 
-const Button: React.FC<IButton> = ({ children, disable, danger, type, outline, auth, fullwidth, onclick }) => {
+const Button: React.FC<IButton> = ({ children, disable, danger, type, auth, transparent, onclick }) => {
     return (
-        <button className={clsx(`bg-white rounded-sm text-xl active:scale-95`, auth && "w-[131px] h-[51px]", danger && "bg-red-500 text-white", disable && "opacity-30" )} onClick={onclick} type={type} disabled={disable}>
+        <button className={clsx(`active:scale-95 px-4 py-2`, auth && "bg-neutral-300 w-full h-[45px] font-medium rounded-3xl", danger && "bg-red-600 text-white rounded-[4px]", disable && "opacity-30", transparent && "hover:underline" )} onClick={onclick} type={type} disabled={disable}>
             {children}
         </button>
     )

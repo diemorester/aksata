@@ -47,7 +47,7 @@ export default function Home() {
         createCookie('token', res.data.token)
         dispatch(loginAction(earnToken))
         action.resetForm()
-        
+
         if (res.data.user.role == "AdminHR") {
           router.push('/dashboardHR')
         } else if (res.data.user.role == "AdminGudang") {
@@ -57,7 +57,7 @@ export default function Home() {
         } else {
           router.push('/dashboard')
         }
-        
+
       } catch (error) {
         if (error instanceof AxiosError) {
           toast.error(error.response?.data)
@@ -72,7 +72,7 @@ export default function Home() {
         toast.success(res.data.msg)
         action.resetForm()
         setVariantAuth("Login")
-        
+
       } catch (error) {
         if (error instanceof AxiosError) {
           toast.error(error.response?.data)
@@ -94,31 +94,92 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen place-content-center items-center flex bg-neutral-900 pt-3">
-      <Formik initialValues={variantAuth == "Register" ? initialRegisterValues : initialLoginValues} validationSchema={variantAuth == "Register" ? RegisterSchema : loginSchema} onSubmit={(value, action) => {
-        HandleAuth(value, action)
-      }}>
+    <div className="min-h-screen w-full relative place-content-center py-8 items-center flex bg-custom-image bg-center bg-cover bg-no-repeat">
+      <Formik
+        initialValues={
+          variantAuth == "Register" ? initialRegisterValues : initialLoginValues
+        }
+        validationSchema={
+          variantAuth == "Register" ? RegisterSchema : loginSchema
+        }
+        onSubmit={(value, action) => {
+          HandleAuth(value, action);
+        }}
+      >
         {() => {
           return (
             <Form>
-              <div className={`flex flex-col ${variantAuth == "Login" ? 'gap-16' : 'gap-5'}`}>
-                <h1 className="text-center text-5xl text-white font-bold pb-16">{variantAuth == "Login" ? "LOGIN" : "REGISTER"}</h1>
-                <div className={`flex flex-col ${variantAuth == "Login" ? 'gap-10' : 'gap-6'}`}>
-                  {variantAuth == "Register" && <Input error disable={isLoading} name="name" type="text" placeholder="name" />}
-                  <Input error disable={isLoading} name="email" type="email" placeholder="email" />
-                  <div className="relative w-fit">
-                    <Input error disable={isLoading} name="password" type={isPasswordRevealed ? "text" : "password"} placeholder="password" />
-                    <button className="absolute right-2 top-[6px] text-white" type="button" onClick={() => setIsPasswordRevealed(!isPasswordRevealed)}>
-                      {isPasswordRevealed ? <IoEyeOutline size={23} /> : <IoEyeOffOutline size={23} />}
-                    </button>
+              <div
+                className={`flex flex-col gap-24 justify-center ring-2 md:w-[450px] md:h-[480px] ring-white/85 rounded-lg backdrop-blur-sm bg-neutral-800/95 ${variantAuth == "Login" ? "gap-14" : "gap-5"
+                  }`}
+              >
+                <div>
+                  <h1 className={`text-center text-4xl text-white font-bold ${variantAuth == "Login" ? "pb-0" : "pb-8"} `}>
+                    {variantAuth == "Login" ? "LOGIN" : "REGISTER"}
+                  </h1>
+                </div>
+                <div className="flex flex-col gap-14">
+                  <div
+                    className={`flex flex-col items-center ${variantAuth == "Login" ? "gap-12" : "gap-10"
+                      }`}
+                  >
+                    {variantAuth == "Register" && (
+                      <Input
+                        error
+                        disable={isLoading}
+                        name="name"
+                        type="text"
+                        placeholder="name"
+                      />
+                    )}
+                    <Input
+                      error
+                      disable={isLoading}
+                      name="email"
+                      type="email"
+                      placeholder="email"
+                    />
+                    <div className="relative w-fit">
+                      <Input
+                        error
+                        disable={isLoading}
+                        name="password"
+                        type={isPasswordRevealed ? "text" : "password"}
+                        placeholder="password"
+                      />
+                      <button
+                        className="absolute right-2 top-[4px] text-white"
+                        type="button"
+                        onClick={() => setIsPasswordRevealed(!isPasswordRevealed)}
+                      >
+                        {isPasswordRevealed ? (
+                          <IoEyeOutline size={19} />
+                        ) : (
+                          <IoEyeOffOutline size={19} />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-3 justify-center px-[54px]">
+                    <Button disable={isLoading} type="submit" auth>
+                      {variantAuth == "Login" ? "LOGIN" : "REGISTER"}
+                    </Button>
+                    {variantAuth == "Login" && (
+                      <h2 className="text-center text-xs text-white italic">
+                        not registered? Sign Up{" "}
+                        <span
+                          onClick={ToggleAuth}
+                          className="font-bold cursor-pointer border-b"
+                        >
+                          Here
+                        </span>
+                      </h2>
+                    )}
                   </div>
                 </div>
-                <div className="flex flex-col gap-2 justify-center items-center">
-                  <Button disable={isLoading} type="submit" auth>{variantAuth == "Login" ? "LOGIN" : "REGISTER"}</Button>
-                  {variantAuth == "Login" && <h2 className="text-center text-xs text-white italic">not registered? Sign Up <span onClick={ToggleAuth} className="font-bold cursor-pointer">Here</span></h2>}
-                </div>
               </div>
-            </Form>)
+            </Form>
+          );
         }}
       </Formik>
     </div>
