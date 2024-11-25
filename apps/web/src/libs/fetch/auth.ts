@@ -33,6 +33,22 @@ export const loginUser = async (payload: ILogin) => {
         headers: {
             "Content-Type": "application/json"
         }
-    })
+    });
+    return res
+}
+
+export const forgotPasswordFetch = async (payload: {email: string}) => {
+    const res = await axiosInstance.post('user/forgot-password', {
+        email: payload.email
+    });
+    return res
+}
+
+export const resetPasswordFetch = async (password: string, token: string) => {
+    const res = await axiosInstance.post('user/reset-password', {
+        password
+    }, {headers: {
+        Authorization: `Bearer ${token}`
+    }});
     return res
 }

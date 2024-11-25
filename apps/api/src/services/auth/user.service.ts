@@ -113,3 +113,56 @@ export const loginUserService = async (body: User) => {
     throw error;
   }
 };
+
+export const forgotPasswordService = async (email: string) => {
+  try {
+    const user = await prisma.user.findFirst({
+      where: { email }
+    });
+    if (!user) throw new Error('email not found');
+
+    const payload = {
+      id: user.id,
+      role: user.role,
+      email: user.email
+    };
+
+    const templatePath = path.join(__dirname, '../../templates', 'forgot-password.hbs');
+    const token = createToken(payload, '60m');
+    const link = process.env.BASE_URL_WEB + `/forgot-password/${token}`;
+    const dataEmail = {
+      link,
+      name: user.name
+    }
+
+    const templateSource = await fs.readFileSync(templatePath, 'utf-8');
+    const compiledTemplate = handlebars.compile(templateSource);
+    const html = compiledTemplate(dataEmail);
+
+    await transporter.sendMail({
+      to: email,
+      subject: 'Reset Password',
+      html
+    });
+
+    return user
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const resetPasswordService = async (password: string, userId: number) => {
+  try {
+    const user = await prisma.user.findFirst({
+      where: {id: userId}
+    });
+    if (!user) throw new Error('user not found');
+    const hashingPassword = await hashPassword(password)
+    const newPassword = await prisma.user.update({
+      where: {id: userId}, data: {password: hashingPassword}
+    });
+    return newPassword
+  } catch (error) {
+    throw error;
+  }
+}

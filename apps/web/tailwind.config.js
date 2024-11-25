@@ -11,7 +11,7 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        'custom-image': `url(/dummy-bg.jpg)`,
+        'custom-image': `url(/splash.png)`,
       },
     },
   },

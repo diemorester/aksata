@@ -1,9 +1,11 @@
 import {
+  forgotPasswordService,
   loginUserService,
   RegisterUserService,
+  resetPasswordService,
   verifyUserService,
 } from '@/services/auth/user.service';
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, request, Request, Response } from 'express';
 
 export class UserController {
   async RegisterUserController(
@@ -45,6 +47,30 @@ export class UserController {
         user,
         token
       })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async ForgotPassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      await forgotPasswordService(req.body.email);
+      return res.status(200).send({
+        status: 'ok',
+        msg: 'reset email has been sent! please check your email'
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async ResetPassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      await resetPasswordService(req.body.password, req.user?.id!);
+      return res.status(200).send({
+        status: 'ok',
+        msg: 'your password has been reset'
+      })      
     } catch (error) {
       next(error)
     }

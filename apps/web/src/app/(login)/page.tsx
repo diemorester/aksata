@@ -8,6 +8,7 @@ import { loginAction } from "@/redux/slices/userslice";
 import { loginSchema, RegisterSchema } from "@/schemes/authSchema";
 import { AxiosError } from "axios";
 import { Form, Formik, FormikHelpers } from "formik";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
@@ -110,15 +111,15 @@ export default function Home() {
           return (
             <Form>
               <div
-                className={`flex flex-col gap-24 justify-center ring-2 md:w-[450px] md:h-[480px] ring-white/85 rounded-lg backdrop-blur-sm bg-neutral-800/95 ${variantAuth == "Login" ? "gap-14" : "gap-5"
+                className={`flex flex-col gap-24 justify-center md:w-[450px] md:h-[480px] ring-white/85 rounded-lg backdrop-blur-md bg-neutral-800/85 ${variantAuth == "Login" ? "py-0" : "gap-9"
                   }`}
               >
                 <div>
-                  <h1 className={`text-center text-4xl text-white font-bold ${variantAuth == "Login" ? "pb-0" : "pb-8"} `}>
+                  <h1 className={`text-center text-4xl text-white font-bold ${variantAuth == "Login" ? "pb-0" : "pb-10"} `}>
                     {variantAuth == "Login" ? "LOGIN" : "REGISTER"}
                   </h1>
                 </div>
-                <div className="flex flex-col gap-14">
+                <div className="flex flex-col gap-12">
                   <div
                     className={`flex flex-col items-center ${variantAuth == "Login" ? "gap-12" : "gap-10"
                       }`}
@@ -158,6 +159,7 @@ export default function Home() {
                           <IoEyeOffOutline size={19} />
                         )}
                       </button>
+                      <Link href="/forgot-password" className={`text-sm px-2 text-neutral-300 ${variantAuth == "Login" ? "visible" : "hidden" } `}>forgot password?</Link>
                     </div>
                   </div>
                   <div className="flex flex-col gap-3 justify-center px-[54px]">
