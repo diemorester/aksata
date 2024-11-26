@@ -47,7 +47,7 @@ const ResetPassword = ({ params }: { params: { token: string } }) => {
                 return (
                     <Form className='bg-neutral-900 min-h-screen w-full relative place-content-center py-8 items-center flex'>
                         <div className='flex flex-col items-center justify-around gap-12 p-6 md:w-[400px] md:h-[420px] ring-white/85 rounded-3xl backdrop-blur-md bg-neutral-800/85'>
-                            <p className='text-xl text-neutral-300'>CREATE NEW PASSWORD</p>
+                            <p className='text-xl font-medium text-neutral-100'>CREATE NEW PASSWORD</p>
                             <div className='flex flex-col gap-14'>
                                 <div className='flex flex-col gap-5'>
                                     <div className="relative w-fit">

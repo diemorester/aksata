@@ -35,7 +35,7 @@ const ForgotPassword = () => {
                     <Form className="bg-neutral-900 min-h-screen w-full relative place-content-center py-8 items-center flex">
                         <div className="flex flex-col items-center justify-center gap-24 px-5 md:w-[400px] md:h-[420px] ring-white/85 rounded-3xl backdrop-blur-md bg-neutral-800/85">
                             <div>
-                                <p className="text-2xl font-medium text-center text-neutral-300">RESET PASSWORD</p>
+                                <p className="text-2xl font-medium text-center text-neutral-100">RESET PASSWORD</p>
                                 <p className="text-sm text-neutral-300 text-center font-extralight pt-2">forgot your password? no worries,  we will send you reset instructions to your email</p>
                             </div>
                             <div className="max -w-[300px]">
