@@ -1,6 +1,6 @@
 const Dashboard = () => {
   return (
-    <div className="">
+    <div className="bg-neutral-950">
         Absensi
     </div>
   )

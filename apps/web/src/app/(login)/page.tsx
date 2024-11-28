@@ -159,7 +159,7 @@ export default function Home() {
                           <IoEyeOffOutline size={19} />
                         )}
                       </button>
-                      <Link href="/forgot-password" className={`text-sm px-2 text-neutral-300 ${variantAuth == "Login" ? "visible" : "hidden" } `}>forgot password?</Link>
+                      <Link href="/forgot-password" className={`text-sm px-2 text-neutral-300 hover:text-neutral-100 ${variantAuth == "Login" ? "visible" : "hidden" } `}>forgot password?</Link>
                     </div>
                   </div>
                   <div className="flex flex-col gap-3 justify-center px-[54px]">

@@ -27,7 +27,7 @@ const Input: React.FC<IInput> = ({
                 disabled={disable}
                 id={id}
                 placeholder={placeholder}
-                className="text-white border-b-2 px-2 pb-1 text-sm border-b-white md:w-[350px] rounded-sm placeholder:italic focus:outline-none bg-transparent 
+                className="text-white border-b-2 px-2 pb-1 text-sm border-b-white md:w-[350px] rounded-sm focus:outline-none bg-transparent 
         focus:bg-transparent focus:text-white"
             >
                 {children}
@@ -36,7 +36,7 @@ const Input: React.FC<IInput> = ({
                 <ErrorMessage
                     name={name}
                     component="div"
-                    className="text-red-500 italic px-3 text-end text-xs"
+                    className="text-red-500 px-3 text-end text-xs"
                 />
             )}
         </div>
