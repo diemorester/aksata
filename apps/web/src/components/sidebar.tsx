@@ -68,7 +68,9 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
                     </div>
                 </SidebarBody>
             </SidebarConfig>
-            {children}
+            <div className='overflow-y-auto bg-neutral-900 scrollbar-none w-full'>
+                {children}
+            </div>
             <Modal isOpen={isOpen} onClose={onCLoseModal} backgroundClose>
                 <div className='flex flex-col gap-3 text-neutral-300'>
                     <h2 className='text-2xl font-semibold'>Logout</h2>

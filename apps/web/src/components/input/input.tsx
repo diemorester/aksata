@@ -26,6 +26,7 @@ const Input: React.FC<IInput> = ({
                 type={type}
                 disabled={disable}
                 id={id}
+                autocomplete="off"
                 placeholder={placeholder}
                 className="text-white border-b-2 px-2 pb-1 text-sm border-b-white md:w-[350px] rounded-sm focus:outline-none bg-transparent 
         focus:bg-transparent focus:text-white"

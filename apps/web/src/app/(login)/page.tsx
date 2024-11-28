@@ -2,7 +2,7 @@
 import Button from "@/components/buttons/button";
 import Input from "@/components/input/input";
 import { loginUser, registerUser } from "@/libs/fetch/auth";
-import { createCookie } from "@/libs/server";
+import { createCookie, navigate } from "@/libs/server";
 import { useAppDispatch } from "@/redux/hooks";
 import { loginAction } from "@/redux/slices/userslice";
 import { loginSchema, RegisterSchema } from "@/schemes/authSchema";
@@ -50,13 +50,13 @@ export default function Home() {
         action.resetForm()
 
         if (res.data.user.role == "AdminHR") {
-          router.push('/dashboardHR')
+          navigate('/dashboardHR')
         } else if (res.data.user.role == "AdminGudang") {
-          router.push('/dashboardGudang')
+          navigate('/dashboardGudang')
         } else if (res.data.user.role == "SuperAdmin") {
-          router.push('/dashboardAdmin')
+          navigate('/superAdmin')
         } else {
-          router.push('/dashboard')
+          navigate('/dashboard')
         }
 
       } catch (error) {
@@ -159,7 +159,7 @@ export default function Home() {
                           <IoEyeOffOutline size={19} />
                         )}
                       </button>
-                      <Link href="/forgot-password" className={`text-sm px-2 text-neutral-300 hover:text-neutral-100 ${variantAuth == "Login" ? "visible" : "hidden" } `}>forgot password?</Link>
+                      <Link href="/forgot-password" className={`text-sm px-2 text-neutral-300 hover:text-neutral-100 ${variantAuth == "Login" ? "visible" : "hidden"} `}>forgot password?</Link>
                     </div>
                   </div>
                   <div className="flex flex-col gap-3 justify-center px-[54px]">
@@ -167,11 +167,11 @@ export default function Home() {
                       {variantAuth == "Login" ? "LOGIN" : "REGISTER"}
                     </Button>
                     {variantAuth == "Login" && (
-                      <h2 className="text-center text-xs text-white italic">
+                      <h2 className="text-center text-xs text-neutral-300 italic">
                         not registered? Sign Up{" "}
                         <span
                           onClick={ToggleAuth}
-                          className="font-bold cursor-pointer border-b"
+                          className="font-bold cursor-pointer hover:text-neutral-100 border-b"
                         >
                           Here
                         </span>

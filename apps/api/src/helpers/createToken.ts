@@ -1,9 +1,9 @@
 import { sign } from 'jsonwebtoken';
 
 interface IPayload {
-  id: number;
+  id?: number;
   email: string;
-  role: string;
+  role?: string;
 }
 
 const secret = process.env.SECRET_KEY || 'real madrid';

@@ -66,7 +66,7 @@ export class UserController {
 
   async ResetPassword(req: Request, res: Response, next: NextFunction) {
     try {
-      await resetPasswordService(req.body.password, req.user?.id!);
+      await resetPasswordService(req.body.password, req.user?.email!);
       return res.status(200).send({
         status: 'ok',
         msg: 'your password has been reset'

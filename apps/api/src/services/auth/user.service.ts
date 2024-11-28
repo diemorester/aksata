@@ -106,7 +106,7 @@ export const loginUserService = async (body: User) => {
       email: user.email
     };
 
-    const token = createToken(payload, '1d');
+    const token = createToken(payload, '5m');
 
     return { user, token };
   } catch (error) {
@@ -122,8 +122,6 @@ export const forgotPasswordService = async (email: string) => {
     if (!user) throw new Error('email not found');
 
     const payload = {
-      id: user.id,
-      role: user.role,
       email: user.email
     };
 
@@ -151,15 +149,15 @@ export const forgotPasswordService = async (email: string) => {
   }
 };
 
-export const resetPasswordService = async (password: string, userId: number) => {
+export const resetPasswordService = async (password: string, email: string) => {
   try {
     const user = await prisma.user.findFirst({
-      where: {id: userId}
+      where: {email}
     });
     if (!user) throw new Error('user not found');
     const hashingPassword = await hashPassword(password)
     const newPassword = await prisma.user.update({
-      where: {id: userId}, data: {password: hashingPassword}
+      where: {email}, data: {password: hashingPassword}
     });
     return newPassword
   } catch (error) {
