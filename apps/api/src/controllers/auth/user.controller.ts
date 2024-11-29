@@ -56,6 +56,7 @@ export class UserController {
         msg: 'Login succeeded',
         user,
         accessToken,
+        refreshToken
       });
     } catch (error) {
       next(error)
@@ -90,7 +91,7 @@ export class UserController {
         role: user.role,
         email: user.email
       };
-      const newAccessToken = createToken(payload, '5m');
+      const newAccessToken = createToken(payload, '15m');
 
       return res.status(200).send({
         status: 'ok',

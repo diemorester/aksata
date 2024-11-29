@@ -26,7 +26,7 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
 
     const logOut = () => {
         deleteCookie('access_token')
-        deleteCookie('refresh_token')
+        deleteCookie('refreshToken')
         dispatch(logoutAction())
         dispatch(setIsModalOpen(false))
         localStorage.clear()

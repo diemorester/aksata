@@ -15,7 +15,7 @@ export const createToken = (payload: IPayload, expires: string) => {
 
 // Helper untuk Access Token
 export const createAccessToken = (payload: IPayload) => {
-  return createToken(payload, '1m');
+  return createToken(payload, '15m');
 };
 
 // Helper untuk Refresh Token
