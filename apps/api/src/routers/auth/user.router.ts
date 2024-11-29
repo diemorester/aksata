@@ -1,5 +1,6 @@
 import { UserController } from '@/controllers/auth/user.controller';
 import { authMiddleware } from '@/middleware/auth.middleware';
+import { refreshTokenMiddleware } from '@/middleware/refreshToken.middleware';
 import { Router } from 'express';
 
 export class UserRouter {
@@ -13,13 +14,17 @@ export class UserRouter {
   }
 
   private initializeRoutes(): void {
-    this.router.post('/register', this.userController.RegisterUserController);
+    this.router.post('/register', this.userController.RegisterUser);
     this.router.post('/login', this.userController.LoginUser);
-    this.router.post('/forgot-password', this.userController.ForgotPassword)
+    this.router.post('/forgot-password', this.userController.ForgotPassword);
+    this.router.post('/refresh-token',
+      refreshTokenMiddleware,
+      this.userController.RefreshToken
+    );
     this.router.post('/reset-password',
       authMiddleware,
       this.userController.ResetPassword
-    )
+    );
     this.router.patch(
       '/verify',
       authMiddleware,

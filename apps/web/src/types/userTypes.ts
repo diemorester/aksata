@@ -4,8 +4,7 @@ export interface UserSlice {
     email: string,
     avatar: string | null,
     isVerified: boolean,
-    role: Roles | null,
-    token: string
+    role: Roles | null
 }
 
 enum Roles {

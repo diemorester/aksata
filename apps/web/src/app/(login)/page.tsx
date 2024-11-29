@@ -40,14 +40,15 @@ export default function Home() {
 
     if (variantAuth == "Login") {
       try {
-        const res = await loginUser(data)
-        const earnToken = {
-          ...res.data.user, token: res.data.token
-        }
+        const res = await loginUser(data); // Login API request
+        
+        console.log(res.data);
+        
+        createCookie('access_token', res.data.accessToken); // Menyimpan token di cookie
+        dispatch(loginAction(res.data.user)); // Dispatch action untuk update state Redux dengan user data
+        
         toast.success(res.data.msg)
-        createCookie('token', res.data.token)
-        dispatch(loginAction(earnToken))
-        action.resetForm()
+        action.resetForm();
 
         if (res.data.user.role == "AdminHR") {
           navigate('/dashboardHR')

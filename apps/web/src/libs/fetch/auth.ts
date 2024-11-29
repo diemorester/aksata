@@ -1,4 +1,4 @@
-import { axiosInstance } from "../axios"
+import axiosInstance from "../axios"
 
 export const registerUser = async (payload: IRegister) => {
     const res = await axiosInstance.post(`user/register`, {

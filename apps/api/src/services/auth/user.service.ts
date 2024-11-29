@@ -1,4 +1,4 @@
-import { createToken } from '@/helpers/createToken';
+import { createAccessToken, createRefreshToken, createToken } from '@/helpers/createToken';
 import { hashPassword } from '@/helpers/hashPassword';
 import prisma from '@/prisma';
 import { User } from '@prisma/client';
@@ -85,30 +85,41 @@ export const verifyUserService = async (id: number) => {
 export const loginUserService = async (body: User) => {
   try {
     const { email, password } = body;
+
+    // Cari user berdasarkan email
     const user = await prisma.user.findFirst({
       where: { email },
     });
 
-    if (!user) throw new Error('user not found');
+    if (!user) throw new Error('User not found');
 
-    if (!user.isVerified)
-      throw new Error('user not verified');
+    if (!user.isVerified) throw new Error('User not verified');
 
+    // Periksa password
     const isValidPass = await compare(password!, user.password!);
-    if (!isValidPass)
-      throw new Error(
-        'incorrect password',
-      );
+    if (!isValidPass) throw new Error('Incorrect password');
 
+    // Buat payload token
     const payload = {
       id: user.id,
       role: user.role,
-      email: user.email
+      email: user.email,
     };
 
-    const token = createToken(payload, '5m');
+    // Buat Access Token (berlaku singkat) dan Refresh Token (berlaku panjang)
+    const accessToken = createAccessToken(payload); // Expires in 15m
+    const refreshToken = createRefreshToken(payload); // Expires in 7d
+    console.log(accessToken, "akses token");
+    console.log(refreshToken, "refresh token");
+    
 
-    return { user, token };
+    // Simpan Refresh Token di database untuk user ini
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { refreshToken }, // Asumsi ada kolom `refreshToken` di tabel `user`
+    });
+
+    return { user, accessToken, refreshToken }; // Kirim kedua token ke client
   } catch (error) {
     throw error;
   }

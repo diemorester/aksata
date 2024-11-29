@@ -8,6 +8,7 @@ import express, {
   Router,
 } from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import { PORT } from './config';
 import { UserRouter } from './routers/auth/user.router';
 import { DecodeRouter } from './routers/decode.router';
@@ -23,7 +24,15 @@ export default class App {
   }
 
   private configure(): void {
-    this.app.use(cors());
+    const corsOptions = {
+      origin: process.env.BASE_URL_WEB,
+      credentials: true, 
+    };
+
+    this.app.use(cors(corsOptions));
+
+    this.app.use(cookieParser());
+    
     this.app.use(json());
     this.app.use(urlencoded({ extended: true }));
   }

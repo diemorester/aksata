@@ -1,4 +1,4 @@
-import { axiosInstance } from "../axios"
+import axiosInstance from "../axios"
 
 export const DecodeTokenFetch = async (token: string) => {
     try {

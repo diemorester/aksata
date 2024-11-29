@@ -7,8 +7,7 @@ const initialState: UserSlice = {
     email: '',
     avatar: null,
     isVerified: false,
-    role: null,
-    token: ''
+    role: null
 }
 
 export const userSlice = createSlice({
@@ -22,7 +21,6 @@ export const userSlice = createSlice({
             state.avatar = action.payload.avatar
             state.isVerified = action.payload.isVerified
             state.role = action.payload.role
-            state.token = action.payload.token
         },
 
         logoutAction: (state) => {
@@ -31,8 +29,7 @@ export const userSlice = createSlice({
             state.email = '',
             state.avatar = null,
             state.isVerified = false,
-            state.role = null,
-            state.token = ''
+            state.role = null
         }
     }
 })

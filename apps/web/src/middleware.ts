@@ -8,7 +8,7 @@ const protectedDashboardGudang = /^\/dashboardGudang(\/[^\/]+)?$/;
 const protectedSuperAdmin = /^\/superAdmin(\/[^\/]+)?$/;
 
 export async function middleware(req: NextRequest) {
-  const token = await getCookie('token');
+  const token = await getCookie('access_token');
   const url = req.nextUrl.pathname;
 
   // Pengecekan tokennya valid atau ngga
