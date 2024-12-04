@@ -12,6 +12,7 @@ import cookieParser from 'cookie-parser';
 import { PORT } from './config';
 import { UserRouter } from './routers/auth/user.router';
 import { DecodeRouter } from './routers/decode.router';
+import path from 'path';
 
 export default class App {
   private app: Express;
@@ -26,15 +27,19 @@ export default class App {
   private configure(): void {
     const corsOptions = {
       origin: process.env.BASE_URL_WEB,
-      credentials: true, 
+      credentials: true,
     };
 
     this.app.use(cors(corsOptions));
 
     this.app.use(cookieParser());
-    
+
     this.app.use(json());
     this.app.use(urlencoded({ extended: true }));
+    this.app.use(
+      '/api/public',
+      express.static(path.join(__dirname, '../public'))
+    );
   }
 
   private handleError(): void {

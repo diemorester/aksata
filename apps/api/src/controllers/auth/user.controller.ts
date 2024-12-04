@@ -1,6 +1,7 @@
 import { createToken } from '@/helpers/createToken';
 import prisma from '@/prisma';
 import {
+  editUserService,
   forgotPasswordService,
   loginUserService,
   RegisterUserService,
@@ -123,6 +124,19 @@ export class UserController {
         status: 'ok',
         msg: 'your password has been reset'
       })      
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async EditUser(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await editUserService(req.body, req.user?.id!, req.file?.filename);
+      return res.status(200).send({
+        status: 'ok',
+        msg: 'user has been edited',
+        user
+      })
     } catch (error) {
       next(error)
     }

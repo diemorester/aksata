@@ -1,6 +1,7 @@
 import { UserController } from '@/controllers/auth/user.controller';
 import { authMiddleware } from '@/middleware/auth.middleware';
 import { refreshTokenMiddleware } from '@/middleware/refreshToken.middleware';
+import { uploader } from '@/services/uploader';
 import { Router } from 'express';
 
 export class UserRouter {
@@ -29,6 +30,11 @@ export class UserRouter {
       '/verify',
       authMiddleware,
       this.userController.VerifyUserController
+    );
+    this.router.patch('/edit-user',
+      authMiddleware,
+      uploader('avatar', '/avatar').single('avatar'),
+      this.userController.EditUser
     );
   }
 

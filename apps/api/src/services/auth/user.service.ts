@@ -8,6 +8,8 @@ import handlebars from 'handlebars';
 import { transporter } from '@/helpers/nodemailer';
 import { compare } from 'bcrypt';
 
+const base_url = process.env.BASE_URL_API || "http://localhost:8000/api";
+
 export const RegisterUserService = async (body: User) => {
   try {
     const { name, email, password } = body;
@@ -174,4 +176,41 @@ export const resetPasswordService = async (password: string, email: string) => {
   } catch (error) {
     throw error;
   }
-}
+};
+
+export const editUserService = async (body: User, id: number, file?: string) => {
+  try {
+    const { name, email, phone } = body;
+    const theUser = await prisma.user.findUnique({
+      where: { id: id}
+    });
+    if (!theUser) throw new Error('user not found');
+    
+    const avatar = file
+    ? `${base_url}/public/avatar/${file}`
+    : theUser!.avatar;
+
+    const updatedUser = await prisma.user.update({
+      where: { id: id},
+      data: {
+        name,
+        email,
+        phone,
+        avatar
+      }
+    });
+
+    const payload = {
+      id: updatedUser.id,
+      role: updatedUser.role,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      phone: updatedUser.phone!
+    };
+
+    const token = createAccessToken(payload);
+    return { updatedUser, token };
+  } catch (error) {
+    throw error;
+  }
+};
