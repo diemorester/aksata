@@ -11,7 +11,7 @@ export async function middleware(req: NextRequest) {
   const token = await getCookie('access_token');
   const url = req.nextUrl.pathname;
 
-  // Pengecekan tokennya valid atau ngga
+  // pengecekan tokennya valid atau ngga
   const isTokenValid = async (token: string | undefined) => {
     if (!token) return null;
     try {
@@ -29,7 +29,7 @@ export async function middleware(req: NextRequest) {
 
   const tokenValid = await isTokenValid(token?.value);
 
-  // Kalo tokennya ga valid, atau udah expired dan lagi ada di page yang di protect bakal diarahin ke "/"
+  // kalo tokennya ga valid, atau udah expired dan lagi ada di page yang diprotect bakal diarahin ke "/"
   if (!tokenValid) {
     if (
       protectedDashboard.test(url) ||
@@ -80,7 +80,7 @@ export async function middleware(req: NextRequest) {
       }
     }
 
-    // Kalo si user mau ke "/" tpi punya token valid bakal diarahkan ke dasboard masing2
+    // kalo si user mau ke "/" tapi punya token valid bakal diarahkan ke dashboard masing2
     if (url === '/') {
       if (role == 'User') {
         return NextResponse.redirect(new URL('/dashboard', req.url));

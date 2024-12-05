@@ -4,8 +4,6 @@ const UserSettings = () => {
 
     return (
         <div className="w-full h-full flex flex-col justify-evenly px-8 text-white rounded-lg shadow-md">
-
-            {/* Username Field */}
             <div className="flex justify-between">
                 <div>
                     <label htmlFor="email" className="block text-sm font-semibold text-gray-400">
@@ -21,8 +19,6 @@ const UserSettings = () => {
                     </p>
                 </button>
             </div>
-
-            {/* Email Field */}
             <div className="flex justify-between">
                 <div>
                     <label htmlFor="email" className="block text-sm font-medium text-gray-400">
@@ -38,8 +34,6 @@ const UserSettings = () => {
                     </p>
                 </button>
             </div>
-
-            {/* Password Field */}
             <div className="flex justify-between">
                 <div>
                     <label htmlFor="email" className="block text-sm font-medium text-gray-400">
