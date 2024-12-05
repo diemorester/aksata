@@ -14,3 +14,16 @@ enum Roles {
     AdminHR,
     AdminGudang
 }
+
+export interface EditUserSlice {
+    name?: string,
+    phone?: string,
+    avatar?: string | null
+}
+
+export interface EditModalProps {
+    isOpen: boolean;
+    isLoading: boolean,
+    onClose: () => void,
+    handleUpdate: (data: EditUserSlice) => void
+}

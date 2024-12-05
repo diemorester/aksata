@@ -180,7 +180,7 @@ export const resetPasswordService = async (password: string, email: string) => {
 
 export const editUserService = async (body: User, id: number, file?: string) => {
   try {
-    const { name, email, phone } = body;
+    const { name, phone } = body;
     const theUser = await prisma.user.findUnique({
       where: { id: id}
     });
@@ -194,7 +194,6 @@ export const editUserService = async (body: User, id: number, file?: string) => 
       where: { id: id},
       data: {
         name,
-        email,
         phone,
         avatar
       }

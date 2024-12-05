@@ -1,3 +1,4 @@
+"use client"
 import clsx from "clsx";
 import { ErrorMessage, Field } from "formik";
 
@@ -25,7 +26,7 @@ const InputEdit: React.FC<InputEditProps> = ({
     return (
         <div>
             {label && (
-                <label>
+                <label className="text-gray-400 font-bold block">
                     {label}
                 </label>
             )}
@@ -37,7 +38,7 @@ const InputEdit: React.FC<InputEditProps> = ({
                 disabled={disabled}
                 error={error}
                 className={clsx(
-                    `px-4 py-3 `,
+                    `px-4 py-3 block w-full rounded-sm outline-none bg-neutral-900`,
                     disabled && `opacity-55`,
                     error 
                     ? `ring-rose-500 ring-offset-rose-500`
@@ -50,9 +51,9 @@ const InputEdit: React.FC<InputEditProps> = ({
                 <ErrorMessage
                     name={name}
                     component="div"
-                    className="text-red-500"
+                    className="mx-4 text-sm text-red-500 font-extralight"
                 />
-            )};
+            )}
         </div>
     )
 };

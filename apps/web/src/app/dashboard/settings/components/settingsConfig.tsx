@@ -1,19 +1,10 @@
 "use client"
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 import Image from "next/image";
 import UserSettings from "./editUser";
 
 export default function SettingsConfig() {
-  const { name, avatar, phone, email } = useAppSelector((user) => user.user);
-  const dispatch = useAppDispatch();
-
-  const handleUpdate = async () => {
-    try {
-
-    } catch (error) {
-
-    }
-  }
+  const { name, avatar } = useAppSelector((user) => user.user);
 
   return (
     <div className="flex flex-col">
