@@ -55,6 +55,11 @@ const UserSettings = () => {
                     </button>
                 </div>
             </div>
+            <div className="w-full flex justify-end">
+                <button className="bg-neutral-300 rounded-3xl w-fit justify-end active:scale-95 px-5 text-black py-3">
+                    Reset Password
+                </button>
+            </div>
         </div>
     );
 };

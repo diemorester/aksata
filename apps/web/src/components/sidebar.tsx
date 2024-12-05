@@ -12,6 +12,7 @@ import { setIsModalOpen } from '@/redux/slices/modalSlice';
 import Button from './buttons/button';
 import { deleteCookie, navigate } from '@/libs/server';
 import { logoutAction } from '@/redux/slices/userslice';
+import img1 from '../../public/company-logo.png'
 
 export function Sidebar({ children }: { children: React.ReactNode }) {
     const router = useRouter();
@@ -91,7 +92,13 @@ export const Logo = () => {
             href="#"
             className="font-normal flex space-x-3 items-center text-sm text-black py-1 relative z-20"
         >
-            <div className="h-7 w-7 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
+            <Image
+                width={40}
+                height={40}
+                src={img1}
+                alt='company-logo'
+                className=''
+            />
             <motion.span
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -105,11 +112,12 @@ export const Logo = () => {
 
 export const LogoIcon = () => {
     return (
-        <Link
-            href="#"
-            className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20"
-        >
-            <div className="h-7 w-7 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
-        </Link>
+        <Image
+            width={36}
+            height={36}
+            src={img1}
+            alt='company-logo'
+            className=''
+        />
     );
 };
