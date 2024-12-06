@@ -66,3 +66,14 @@ export const editUserFetch = async (payload: FormData) => {
     });
     return res
 };
+
+export const removePhoneFetch = async () => {
+    const token = await getCookie('access_token');
+    const res = await axiosInstance.get('/user/remove-phone', {
+        headers: {
+            Authorization: `Bearer ${token?.value}`,
+            "Content-Type": "application/json"
+        }
+    });
+    return res
+};

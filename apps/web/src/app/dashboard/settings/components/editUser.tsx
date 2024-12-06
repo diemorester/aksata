@@ -9,6 +9,8 @@ import toast from "react-hot-toast";
 import { loginAction } from "@/redux/slices/userslice";
 import { AxiosError } from "axios";
 import EditPhoneModal from "./editPhoneModal";
+import ButtonSpan from "@/components/buttons/spanButtons";
+import RemovePhoneModal from "./removePhoneModal";
 
 const UserSettings = () => {
     const { name, email, phone } = useAppSelector(user => user.user)
@@ -59,13 +61,18 @@ const UserSettings = () => {
                     </label>
                     <p className="px-1 rounded-lg">{name}</p>
                 </div>
-                <button onClick={() => setIsModalName(true)} className="flex items-center space-x-2 rounded-3xl px-6 py-3 bg-neutral-700 hover:bg-neutral-600 active:scale-95">
-                    <AiOutlineEdit />
-                    <p
-                        className="text-neutral-100 text-sm">
-                        EDIT
-                    </p>
-                </button>
+                <ButtonSpan
+                    type="button"
+                    fill="bg-neutral-700"
+                    onClick={() => setIsModalName(true)}
+                >
+                    <div className="flex space-x-2 items-center">
+                        <AiOutlineEdit className="text-neutral-100" />
+                        <p className="text-neutral-100 text-sm">
+                            EDIT
+                        </p>
+                    </div>
+                </ButtonSpan>
             </div>
             <div className="flex justify-between">
                 <div>
@@ -74,42 +81,61 @@ const UserSettings = () => {
                     </label>
                     <p className="px-1 rounded-lg">{email}</p>
                 </div>
-                <button className="flex items-center space-x-2 rounded-3xl px-6 py-3 bg-neutral-700 hover:bg-neutral-600 active:scale-95">
-                    <AiOutlineEdit />
-                    <p
-                        className="text-neutral-100 text-sm ">
-                        EDIT
-                    </p>
-                </button>
+                <ButtonSpan
+                    type="button"
+                    fill="bg-neutral-700"
+                    onClick={() => setIsModalEmail(true)}
+                >
+                    <div className="flex space-x-2 items-center">
+                        <AiOutlineEdit className="text-neutral-100" />
+                        <p className="text-neutral-100 text-sm">
+                            EDIT
+                        </p>
+                    </div>
+                </ButtonSpan>
             </div>
             <div className="flex justify-between">
                 <div>
                     <label htmlFor="email" className="block text-sm font-medium text-gray-400">
                         PHONE
                     </label>
-                    <p className="px-1 rounded-lg">{`+62 ${phone}` || '-'}</p>
+                    <p className="px-1 rounded-lg">{phone == null ? '-' : `+62 ${phone}`}</p>
                 </div>
                 <div className="flex items-center space-x-6">
-                    <button className="bg-transparent relative group text-white active:scale-95">
+                    <ButtonSpan
+                        type="submit"
+                        onClick={() => setIsModalRemove(true)}
+                    >
                         remove
-                        <span className="absolute bottom-1 left-1/2 w-0 h-[1px] bg-white transition-all duration-200 group-hover:w-full group-hover:left-0"></span>
-                    </button>
-                    <button onClick={() => setIsModalPhone(true)} className="flex items-center space-x-2 rounded-3xl px-6 py-3 bg-neutral-700 hover:bg-neutral-600 active:scale-95">
-                        <AiOutlineEdit />
-                        <p
-                            className="text-neutral-100 text-sm ">
-                            EDIT
-                        </p>
-                    </button>
+                    </ButtonSpan>
+                    <ButtonSpan
+                        type="button"
+                        fill="bg-neutral-700"
+                        onClick={() => setIsModalPhone(true)}
+                    >
+                        <div className="flex space-x-2 items-center">
+                            <AiOutlineEdit className="text-neutral-100" />
+                            <p className="text-neutral-100 text-sm">
+                                EDIT
+                            </p>
+                        </div>
+                    </ButtonSpan>
                 </div>
             </div>
             <div className="w-full flex justify-end">
-                <button className="bg-neutral-300 rounded-3xl w-fit justify-end active:scale-95 px-5 text-black py-3">
+                {/* <button className="bg-neutral-300 rounded-3xl w-fit justify-end active:scale-95 px-5 text-black py-3">
                     Reset Password
-                </button>
+                </button> */}
+                <ButtonSpan
+                    type="submit"
+                    fill="bg-neutral-300"
+                >
+                    Reset Password
+                </ButtonSpan>
             </div>
             <EditNameModal isOpen={isModalName} onClose={() => setIsModalName(false)} isLoading={isLoading} handleUpdate={handleUpdate} />
             <EditPhoneModal isOpen={isModalPhone} onClose={() => setIsModalPhone(false)} isLoading={isLoading} handleUpdate={handleUpdate} />
+            <RemovePhoneModal isOpen={isModalRemove} onClose={() => setIsModalRemove(false)} />
         </div>
     );
 };

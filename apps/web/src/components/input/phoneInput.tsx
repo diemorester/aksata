@@ -46,8 +46,8 @@ const PhoneInputEdit: React.FC<PhoneInputEditProps> = ({
                     {label}
                 </label>
             )}
-            <div className="flex items-center bg-neutral-900 rounded-l-sm pl-5">
-                <div className="flex items-center gap-1 cursor-pointer active:scale-95 italic bg-neutral-800 pl-2 pr-1 py-1 rounded-md">
+            <div className="flex items-center bg-neutral-900 rounded-md px-1">
+                <div className="flex items-center gap-1 cursor-pointer active:scale-95 italic bg-neutral-800 py-2 rounded-md">
                     +62
                     <MdChevronRight />
                 </div>

@@ -36,6 +36,10 @@ export class UserRouter {
       uploader('avatar', '/avatar').single('avatar'),
       this.userController.EditUser
     );
+    this.router.get('/remove-phone',
+      authMiddleware,
+      this.userController.RemovePhone
+    )
   }
 
   getRouter(): Router {

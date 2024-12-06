@@ -182,7 +182,7 @@ export const editUserService = async (body: User, id: number, file?: string) => 
   try {
     const { name, phone } = body;
     const theUser = await prisma.user.findUnique({
-      where: { id: id}
+      where: { id }
     });
     if (!theUser) throw new Error('user not found');
     
@@ -191,7 +191,7 @@ export const editUserService = async (body: User, id: number, file?: string) => 
     : theUser!.avatar;
 
     const updatedUser = await prisma.user.update({
-      where: { id: id},
+      where: { id },
       data: {
         name,
         phone,
@@ -213,3 +213,20 @@ export const editUserService = async (body: User, id: number, file?: string) => 
     throw error;
   }
 };
+
+export const removePhoneService = async (id: number) => {
+  try {
+    const theUser = await prisma.user.findUnique({
+      where: { id }
+    });
+    if (!theUser) throw new Error('user not found');
+    if (!theUser.phone) throw new Error('number is already empty')
+    const removePhone = await prisma.user.update({
+      where: { id },
+      data: { phone: null}
+    })
+    return removePhone
+  } catch (error) {
+    throw error;
+  }
+}

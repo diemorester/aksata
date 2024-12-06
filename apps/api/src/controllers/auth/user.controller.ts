@@ -5,6 +5,7 @@ import {
   forgotPasswordService,
   loginUserService,
   RegisterUserService,
+  removePhoneService,
   resetPasswordService,
   verifyUserService,
 } from '@/services/auth/user.service';
@@ -127,7 +128,7 @@ export class UserController {
     } catch (error) {
       next(error)
     }
-  }
+  };
 
   async EditUser(req: Request, res: Response, next: NextFunction) {
     try {
@@ -135,6 +136,19 @@ export class UserController {
       return res.status(200).send({
         status: 'ok',
         msg: 'user has been edited',
+        user
+      })
+    } catch (error) {
+      next(error)
+    }
+  };
+
+  async RemovePhone(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await removePhoneService(req.user?.id!);
+      return res.status(200).send({
+        status: 'ok',
+        msg: 'phone number has been removed',
         user
       })
     } catch (error) {

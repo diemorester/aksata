@@ -2,9 +2,17 @@
 import { useAppSelector } from "@/redux/hooks";
 import Image from "next/image";
 import UserSettings from "./editUser";
+import ButtonSpan from "@/components/buttons/spanButtons";
+import AvatarButton from "@/components/buttons/avatarButton";
+import { useState } from "react";
+import EditAvatarModal from "./editAvatarModal";
+import ImageCropper from "@/components/ImageCropper";
 
 export default function SettingsConfig() {
   const { name, avatar } = useAppSelector((user) => user.user);
+  const [isOpenItu, setIsOpenItu] = useState(false);
+  const [image, setImage] = useState<string | null>(null);
+  const [cropImage, setCropImage] = useState<string | null>(null);
 
   return (
     <div className="flex flex-col">
@@ -21,21 +29,17 @@ export default function SettingsConfig() {
                 className="rounded-full w-[120px] h-[120px] object-cover object-top border-[13px] border-[#1a1919]"
               />
               <div className="flex gap-5">
-                <div className="flex">
-                  <button className="relative rounded-3xl hover:border-none min-w-[90px] min-h-[40px] overflow-hidden group active:scale-95 transition-transform duration-300 ease-in-out">
-                    <span className="absolute bg-neutral-300 text-neutral-950 inset-0 flex items-center justify-center transition-transform duration-300 ease-in-out group-hover:translate-x-full group-active:scale-95" >
-                      change
-                    </span>
-                    <span
-                      className="absolute inset-0 flex items-center justify-center transition-transform duration-300 ease-in-out -translate-x-full group-hover:translate-x-0 group-hover:bg-green-400 group-hover:text-black group-active:scale-95" >
-                      upload
-                    </span>
-                  </button>
-                </div>
-                <button className="bg-transparent relative group text-neutral-100 active:scale-95">
-                  delete
-                  <span className="absolute bottom-1 left-1/2 w-0 h-[1px] bg-white transition-all duration-200 group-hover:w-full group-hover:left-0"></span>
-                </button>
+                <ButtonSpan
+                  type="button"
+                  text1="change"
+                  text2="upload"
+                  onClick={() => setIsOpenItu(true)}
+                />
+                <ButtonSpan
+                  type="submit"
+                >
+                  remove
+                </ButtonSpan>
               </div>
               <div className="font-bold text-neutral-50 text-3xl pt-3 absolute right-[77px] text-end">
                 {name}
@@ -49,6 +53,12 @@ export default function SettingsConfig() {
           </div>
         </div>
       </div>
+      <EditAvatarModal setImage={setImage} onClose={() => setIsOpenItu(false)} isOpen={isOpenItu} />
+      <ImageCropper
+        image={image}
+        setImage={setImage}
+        onCropComplete={(crop) => setCropImage(crop)}
+      />
     </div>
   )
 }

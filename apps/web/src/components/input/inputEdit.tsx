@@ -38,7 +38,7 @@ const InputEdit: React.FC<InputEditProps> = ({
                 disabled={disabled}
                 error={error}
                 className={clsx(
-                    `px-4 py-3 block w-full rounded-sm outline-none bg-neutral-900`,
+                    `px-4 py-3 block w-full rounded-md outline-none bg-neutral-900`,
                     disabled && `opacity-55`,
                     error 
                     ? `ring-rose-500 ring-offset-rose-500`

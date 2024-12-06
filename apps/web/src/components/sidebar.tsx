@@ -58,7 +58,7 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
                             ))}
                         </div>
                     </div>
-                    <div className="mb-11 px-1 flex gap-3 justify-start items-center">
+                    <div className="mb-11 px-1 flex gap-3 justify-start items-center text-ellipsis">
                         <Image
                             src={avatar || '/profileplaceholder.png'}
                             width={33}
