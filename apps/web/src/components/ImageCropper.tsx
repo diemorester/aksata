@@ -56,14 +56,15 @@ const ImageCropper: React.FC<ImageCropperProps> = ({
     onCropComplete(croppedImage);
     setImage(null);
   };
+  console.log(image);
 
   return (
     <div>
       {image && (
         <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-gray-600 bg-opacity-75">
-          <div className="rounded-lg bg-black px-5 py-6 shadow-md">
-            <h3 className="mb-2 font-medium text-white">Crop Foto</h3>
-            <div className="relative h-80 w-80 bg-slate-50">
+          <div className="rounded-lg bg-neutral-900 px-5 py-6 shadow-md">
+            <h3 className="mb-2 font-medium text-neutral-100">crop image</h3>
+            <div className="relative h-80 w-80 bg-neutral-300">
               <Cropper
                 image={image}
                 crop={crop}
@@ -75,12 +76,12 @@ const ImageCropper: React.FC<ImageCropperProps> = ({
               />
             </div>
 
-            <div className="mt-5 flex justify-end space-x-2">
+            <div className="mt-5 flex justify-end space-x-5">
               <ButtonSpan type="button" onClick={() => setImage(null)}>
-                <p className="text-white">Batal</p>
+                <p className="">cancel</p>
               </ButtonSpan>
-              <ButtonSpan type="button" onClick={handleCrop}>
-                Simpan
+              <ButtonSpan type="button" fill="bg-neutral-300" onClick={handleCrop}>
+                apply
               </ButtonSpan>
             </div>
           </div>

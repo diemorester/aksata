@@ -44,7 +44,7 @@ const ButtonSpan: React.FC<ButtonSpanProps> = ({
 
         fill == "bg-red-500" && children && !outline && !text1 && !text2 && "bg-red-500 text-neutral-100 hover:bg-red-400 px-4 py-2 w-fit",
 
-        fill == "bg-neutral-700" && children && !outline && !text1 && !text2 && "bg-neutral-700 text-neutral-300 px-4 py-1 text-sm hover:bg-neutral-600 w-fit",
+        fill == "bg-neutral-700" && children && !outline && !text1 && !text2 && "bg-neutral-700 text-neutral-300 px-4 py-2 text-sm hover:bg-neutral-600 w-fit",
 
         text1 && text2 && !children && "min-w-[85px] overflow-hidden"
       )}

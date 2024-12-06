@@ -53,7 +53,7 @@ export default function SettingsConfig() {
           </div>
         </div>
       </div>
-      <EditAvatarModal setImage={setImage} onClose={() => setIsOpenItu(false)} isOpen={isOpenItu} />
+      <EditAvatarModal setImage={setImage} cropImage={cropImage} onClose={() => setIsOpenItu(false)} isOpen={isOpenItu} />
       <ImageCropper
         image={image}
         setImage={setImage}

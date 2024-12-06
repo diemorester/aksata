@@ -1,21 +1,30 @@
-import React from 'react'
+"use client"
+import Image from "next/image";
+import { LuImagePlus } from "react-icons/lu";
 
 interface KasiNamanyaProps {
-    onChange: (e: React.ChangeEvent<HTMLInputElement> ) => void
+    image: string | null,
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const AvatarButton: React.FC<KasiNamanyaProps> = ({onChange}) => {
+const AvatarButton: React.FC<KasiNamanyaProps> = ({ image, onChange }) => {
     return (
-        <label htmlFor="avatar" className='block'>
-            <div className="relative rounded-3xl hover:border-none cursor-pointer min-w-[90px] min-h-[40px] overflow-hidden group active:scale-95 transition-transform duration-300 ease-in-out">
-                <span className="absolute bg-neutral-300 text-neutral-950 inset-0 flex items-center justify-center transition-transform duration-300 ease-in-out group-hover:translate-x-full group-active:scale-95" >
-                    change
-                </span>
-                <span
-                    className="absolute inset-0 flex items-center justify-center transition-transform duration-300 ease-in-out -translate-x-full group-hover:translate-x-0 group-hover:bg-green-400 group-hover:text-black group-active:scale-95" >
-                    upload
-                </span>
-            </div>
+        <label htmlFor="avatar" className='cursor-pointer'>
+            {image ? (
+                <Image
+                    src={image || '/profileplaceholder.png'}
+                    width={40}
+                    height={40}
+                    alt="image-preview"
+                    className="rounded-full w-[165px] h-[165px]"
+                />
+            ) : (
+                <div className="rounded-full border-[3px] border-neutral-300 bg-neutral-300 p-14">
+                    <LuImagePlus
+                        className="w-10 h-10 text-neutral-600"
+                    />
+                </div>
+            )}
             <input type="file" id="avatar" accept="image/*" className="hidden" onChange={onChange} />
         </label>
     )
