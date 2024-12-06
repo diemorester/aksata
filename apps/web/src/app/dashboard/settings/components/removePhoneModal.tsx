@@ -40,8 +40,8 @@ const RemovePhoneModal: React.FC<RemovePhoneModalProps> = ({ isOpen, onClose }) 
         >
             <div className="flex flex-col gap-3 text-neutral-300">
                 <h2 className="text-2xl font-semibold">Remove phone number</h2>
-                <p className='mb-16'>are you sure you want to remove your number?</p>
-                <div className="">
+                <p className='mb-16 font-extralight'>are you sure you want to remove your number?</p>
+                <div className="flex flex-row justify-end px-2 gap-3">
                     <ButtonSpan
                         type="button"
                         onClick={onClose}

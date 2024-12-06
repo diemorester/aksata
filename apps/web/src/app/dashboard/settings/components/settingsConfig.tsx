@@ -15,20 +15,20 @@ export default function SettingsConfig() {
   const [cropImage, setCropImage] = useState<string | null>(null);
 
   return (
-    <div className="flex flex-col">
-      <div className="lg:w-[1190px] mx-6">
-        <h1 className="text-end text-[27px] font-semibold text-neutral-100 px-3 py-6">Settings</h1>
-        <div className="md:w-full relative md:h-36 bg-[linear-gradient(to_bottom,_#0a0a0a_50%,_#1a1919_50%)] rounded-t-3xl">
-          <div className="md:w-full items-center absolute -bottom-6 left-8">
-            <div className="flex items-center gap-5">
+    <div className="flex flex-col relative">
+      <div className="lg:w-[950px] mx-auto min-h-screen min-[1225px]:fixed min-[1225px]:right-[17%]">
+        <h1 className="text-end text-2xl lg:text-[27px] font-semibold text-neutral-100 px-3 lg:py-6 py-3">Settings</h1>
+        <div className="lg:w-full relative h-36 bg-[linear-gradient(to_bottom,_#0a0a0a_50%,_#1a1919_50%)] rounded-t-3xl">
+          <div className="lg:w-full items-center absolute -bottom-6 left-8">
+            <div className="flex items-center gap-3 md:gap-5">
               <Image
                 src={avatar || '/profileplaceholder.png'}
                 width={50}
                 height={50}
                 alt="settings-avatar"
-                className="rounded-full w-[120px] h-[120px] object-cover object-top border-[13px] border-[#1a1919]"
+                className="rounded-full w-24 h-24 md:w-[120px] md:h-[120px] object-cover border-8 md:border-[13px] border-[#1a1919]"
               />
-              <div className="flex gap-5">
+              <div className="flex gap-1 md:gap-5">
                 <ButtonSpan
                   type="button"
                   text1="change"
@@ -41,13 +41,13 @@ export default function SettingsConfig() {
                   remove
                 </ButtonSpan>
               </div>
-              <div className="font-bold text-neutral-50 text-3xl pt-3 absolute right-[77px] text-end">
+              <div className="font-bold text-neutral-50 lg:text-2xl lg:pt-3 max-[1066px]:hidden absolute right-[77px] text-end">
                 {name}
               </div>
             </div>
           </div>
         </div>
-        <div className="md:w-full md:h-[400px] rounded-b-3xl bg-[#1a1919] px-4 pb-4 pt-8">
+        <div className="lg:w-full h-[400px] rounded-b-3xl bg-[#1a1919] px-2 pb-2 pt-4 lg:px-4 lg:pb-4 lg:pt-8">
           <div className="bg-neutral-800 w-full h-full rounded-3xl">
             <UserSettings />
           </div>

@@ -59,7 +59,7 @@ const UserSettings = () => {
                     <label htmlFor="email" className="block text-sm font-semibold text-gray-400">
                         NAME
                     </label>
-                    <p className="px-1 rounded-lg">{name}</p>
+                    <p className="px-1 rounded-lg text-sm">{name}</p>
                 </div>
                 <ButtonSpan
                     type="button"
@@ -68,7 +68,7 @@ const UserSettings = () => {
                 >
                     <div className="flex space-x-2 items-center">
                         <AiOutlineEdit className="text-neutral-100" />
-                        <p className="text-neutral-100 text-sm">
+                        <p className="text-neutral-100 text-xs">
                             EDIT
                         </p>
                     </div>
@@ -79,7 +79,7 @@ const UserSettings = () => {
                     <label htmlFor="email" className="block text-sm font-medium text-gray-400">
                         EMAIL
                     </label>
-                    <p className="px-1 rounded-lg">{email}</p>
+                    <p className="px-1 rounded-lg text-sm">{email}</p>
                 </div>
                 <ButtonSpan
                     type="button"
@@ -88,7 +88,7 @@ const UserSettings = () => {
                 >
                     <div className="flex space-x-2 items-center">
                         <AiOutlineEdit className="text-neutral-100" />
-                        <p className="text-neutral-100 text-sm">
+                        <p className="text-neutral-100 text-xs">
                             EDIT
                         </p>
                     </div>
@@ -99,9 +99,9 @@ const UserSettings = () => {
                     <label htmlFor="email" className="block text-sm font-medium text-gray-400">
                         PHONE
                     </label>
-                    <p className="px-1 rounded-lg">{phone == null ? '-' : `+62 ${phone}`}</p>
+                    <p className="px-1 rounded-lg texts">{phone == null ? '-' : `+62 ${phone}`}</p>
                 </div>
-                <div className="flex items-center space-x-6">
+                <div className="flex items-center gap-7 text-sm">
                     <ButtonSpan
                         type="submit"
                         onClick={() => setIsModalRemove(true)}
@@ -115,7 +115,7 @@ const UserSettings = () => {
                     >
                         <div className="flex space-x-2 items-center">
                             <AiOutlineEdit className="text-neutral-100" />
-                            <p className="text-neutral-100 text-sm">
+                            <p className="text-neutral-100 text-xs">
                                 EDIT
                             </p>
                         </div>
@@ -123,9 +123,6 @@ const UserSettings = () => {
                 </div>
             </div>
             <div className="w-full flex justify-end">
-                {/* <button className="bg-neutral-300 rounded-3xl w-fit justify-end active:scale-95 px-5 text-black py-3">
-                    Reset Password
-                </button> */}
                 <ButtonSpan
                     type="submit"
                     fill="bg-neutral-300"
