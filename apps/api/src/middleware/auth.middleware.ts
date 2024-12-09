@@ -7,7 +7,7 @@ export const authMiddleware = async (
   next: NextFunction,
 ) => {
   try {
-    let token = req.headers.authorization?.replace('Bearer ', '');
+    const token = req.cookies?.accessToken || req.headers.authorization?.replace('Bearer ', '');
     if (!token) throw 'Token empty';
     
     const verifyUser = verify(token, process.env.SECRET_KEY!);

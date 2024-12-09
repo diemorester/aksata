@@ -1,12 +1,24 @@
+import { createToken } from '@/helpers/createToken';
+import prisma from '@/prisma';
 import {
+  changeEmailService,
+  changePasswordService,
+  editUserService,
+  forgotPasswordService,
   loginUserService,
   RegisterUserService,
+  removeAvatarService,
+  removePhoneService,
+  resetPasswordService,
+  sendVerificationChangeMailService,
+  verificationOtpService,
   verifyUserService,
 } from '@/services/auth/user.service';
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, request, Request, Response } from 'express';
+import { verify } from 'jsonwebtoken';
 
 export class UserController {
-  async RegisterUserController(
+  async RegisterUser(
     req: Request,
     res: Response,
     next: NextFunction,
@@ -17,7 +29,7 @@ export class UserController {
         msg: 'User created, please check your email for verification',
         token,
       });
-      
+
     } catch (error) {
       next(error);
     }
@@ -38,15 +50,180 @@ export class UserController {
 
   async LoginUser(req: Request, res: Response, next: NextFunction) {
     try {
-      const { user, token } = await loginUserService(req.body);
+      const { user, accessToken, refreshToken } = await loginUserService(req.body);
+      res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
       return res.status(200).send({
         status: 'ok',
-        msg: 'login succeeded',
+        msg: 'Login succeeded',
         user,
-        token
+        accessToken,
+        refreshToken
+      });
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async RefreshToken(req: Request, res: Response, next: NextFunction) {
+    try {
+      const refreshToken = req.cookies.refreshToken;
+      if (!refreshToken) {
+        return res.status(400).send({
+          status: 'error',
+          msg: 'no refresh token provided',
+        });
+      }
+
+      const decoded = verify(refreshToken, process.env.SECRET_KEY || 'real madrid') as { email: string }
+
+      const user = await prisma.user.findFirst({
+        where: { email: decoded.email },
+      });
+
+      if (!user) {
+        return res.status(400).send({
+          status: 'error',
+          msg: 'user not found',
+        });
+      }
+
+      const payload = {
+        id: user.id,
+        role: user.role,
+        email: user.email
+      };
+      const newAccessToken = createToken(payload, '15m');
+
+      return res.status(200).send({
+        status: 'ok',
+        msg: 'token refreshed',
+        accessToken: newAccessToken
+      })
+
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async ForgotPassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      await forgotPasswordService(req.body.email);
+      return res.status(200).send({
+        status: 'ok',
+        msg: 'reset email has been sent! please check your email'
       })
     } catch (error) {
       next(error)
     }
   }
+
+  async ResetPassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      await resetPasswordService(req.body.password, req.user?.email!);
+      return res.status(200).send({
+        status: 'ok',
+        msg: 'your password has been reset'
+      })
+    } catch (error) {
+      next(error)
+    }
+  };
+
+  async EditUser(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await editUserService(req.body, req.user?.id!, req.file?.filename);
+      return res.status(200).send({
+        status: 'ok',
+        msg: 'user has been edited',
+        user
+      })
+    } catch (error) {
+      next(error)
+    }
+  };
+
+  async RemovePhone(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await removePhoneService(req.user?.id!);
+      return res.status(200).send({
+        status: 'ok',
+        msg: 'phone number has been removed',
+        user
+      })
+    } catch (error) {
+      next(error)
+    }
+  };
+
+  async RemoveAvatar(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await removeAvatarService(req.user?.id!);
+      return res.status(200).send({
+        status: 'ok',
+        msg: 'avatar has been removed',
+        user
+      })
+    } catch (error) {
+      next(error)
+    }
+  };
+
+  async changePassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await changePasswordService(req.user?.id!, req.body.oldpass, req.body.newpass);
+      return res.status(200).send({
+        status: 'ok',
+        msg: 'password has been change',
+        user
+      })
+    } catch (error) {
+      next(error)
+    }
+  };
+
+  async sendVerificationMail(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await sendVerificationChangeMailService(req.user?.email!);
+      return res.status(200).send({
+        status: 'ok',
+        msg: 'email has been send, check your email',
+        user
+      })
+    } catch (error) {
+      next(error)
+    }
+  };
+
+  async verificationOtp(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await verificationOtpService(req.user?.email!, req.body.otp);
+      return res.status(200).send({
+        status: 'ok',
+        msg: 'otp is correct, please enter a new email',
+        user
+      })
+    } catch (error) {
+      next(error)
+    }
+  };
+
+  async changeEmail(req: Request, res: Response, next: NextFunction) {
+    try {
+      const {accessToken, newEmail} = await changeEmailService(req.user?.email!, req.body.email);
+      return res.status(200).send({
+        status: 'ok',
+        msg: 'email has been change',
+        newEmail,
+        accessToken
+      })
+    } catch (error) {
+      next(error)
+    }
+  };
 }

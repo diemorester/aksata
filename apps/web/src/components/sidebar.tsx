@@ -12,6 +12,7 @@ import { setIsModalOpen } from '@/redux/slices/modalSlice';
 import Button from './buttons/button';
 import { deleteCookie, navigate } from '@/libs/server';
 import { logoutAction } from '@/redux/slices/userslice';
+import img1 from '../../public/company-logo.png'
 
 export function Sidebar({ children }: { children: React.ReactNode }) {
     const router = useRouter();
@@ -25,7 +26,8 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
     };
 
     const logOut = () => {
-        deleteCookie('token')
+        deleteCookie('access_token')
+        deleteCookie('refreshToken')
         dispatch(logoutAction())
         dispatch(setIsModalOpen(false))
         localStorage.clear()
@@ -35,7 +37,7 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
     return (
         <div
             className={cn(
-                'flex flex-col md:flex-row bg-gray-100 dark:bg-neutral-800 w-full flex-1 mx-auto border border-neutral-200 dark:border-neutral-700 overflow-hidden',
+                'flex flex-col md:flex-row bg-neutral-900 w-full flex-1 mx-auto overflow-hidden',
                 'h-screen',
             )}
         >
@@ -56,24 +58,26 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
                             ))}
                         </div>
                     </div>
-                    <div className="mb-11 px-1 flex gap-3 justify-start items-center">
+                    <div className="mb-11 px-1 flex gap-3 justify-start items-center text-ellipsis">
                         <Image
                             src={avatar || '/profileplaceholder.png'}
                             width={33}
                             height={33}
                             alt="avatar"
-                            className="rounded-full"
+                            className="rounded-full w-8 h-8"
                         />
                         {open && <p className="text-white text-xl font-medium">{name}</p>}
                     </div>
                 </SidebarBody>
             </SidebarConfig>
-            {children}
+            <div className='overflow-y-auto bg-[#2c2c2c] scrollbar-none w-full'>
+                {children}
+            </div>
             <Modal isOpen={isOpen} onClose={onCLoseModal} backgroundClose>
-                <div className='flex flex-col gap-3 text-neutral-300'>
+                <div className='flex flex-col gap-3 text-neutral-100'>
                     <h2 className='text-2xl font-semibold'>Logout</h2>
                     <p className='mb-16'>are you sure you want to logout?</p>
-                    <div className='flex flex-row justify-end px-2 gap-3 text-neutral-300'>
+                    <div className='flex flex-row justify-end px-2 gap-3 text-neutral-100'>
                         <Button type='submit' onclick={onCLoseModal} transparent>cancel</Button>
                         <Button type='submit' onclick={logOut} danger>YES</Button>
                     </div>
@@ -88,11 +92,17 @@ export const Logo = () => {
             href="#"
             className="font-normal flex space-x-3 items-center text-sm text-black py-1 relative z-20"
         >
-            <div className="h-7 w-7 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
+            <Image
+                width={40}
+                height={40}
+                src={img1}
+                alt='company-logo'
+                className=''
+            />
             <motion.span
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="font-bold text-black dark:text-white text-[26px] px-1 whitespace-pre"
+                className="font-bold text-black dark:text-white md:text-[26px] px-1 whitespace-pre"
             >
                 Ristoan Tri Laras
             </motion.span>
@@ -102,11 +112,12 @@ export const Logo = () => {
 
 export const LogoIcon = () => {
     return (
-        <Link
-            href="#"
-            className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20"
-        >
-            <div className="h-7 w-7 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
-        </Link>
+        <Image
+            width={36}
+            height={36}
+            src={img1}
+            alt='company-logo'
+            className=''
+        />
     );
 };

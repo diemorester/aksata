@@ -2,12 +2,13 @@
 import Button from "@/components/buttons/button";
 import Input from "@/components/input/input";
 import { loginUser, registerUser } from "@/libs/fetch/auth";
-import { createCookie } from "@/libs/server";
+import { createCookie, navigate } from "@/libs/server";
 import { useAppDispatch } from "@/redux/hooks";
 import { loginAction } from "@/redux/slices/userslice";
 import { loginSchema, RegisterSchema } from "@/schemes/authSchema";
 import { AxiosError } from "axios";
 import { Form, Formik, FormikHelpers } from "formik";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
@@ -39,23 +40,24 @@ export default function Home() {
 
     if (variantAuth == "Login") {
       try {
-        const res = await loginUser(data)
-        const earnToken = {
-          ...res.data.user, token: res.data.token
-        }
+        const res = await loginUser(data); // Login API request
+        
+        console.log(res.data);
+        
+        createCookie('access_token', res.data.accessToken); // Menyimpan token di cookie
+        dispatch(loginAction(res.data.user)); // Dispatch action untuk update state Redux dengan user data
+        
         toast.success(res.data.msg)
-        createCookie('token', res.data.token)
-        dispatch(loginAction(earnToken))
-        action.resetForm()
+        action.resetForm();
 
         if (res.data.user.role == "AdminHR") {
-          router.push('/dashboardHR')
+          navigate('/dashboardHR')
         } else if (res.data.user.role == "AdminGudang") {
-          router.push('/dashboardGudang')
+          navigate('/dashboardGudang')
         } else if (res.data.user.role == "SuperAdmin") {
-          router.push('/dashboardAdmin')
+          navigate('/superAdmin')
         } else {
-          router.push('/dashboard')
+          navigate('/dashboard')
         }
 
       } catch (error) {
@@ -110,15 +112,15 @@ export default function Home() {
           return (
             <Form>
               <div
-                className={`flex flex-col gap-24 justify-center ring-2 md:w-[450px] md:h-[480px] ring-white/85 rounded-lg backdrop-blur-sm bg-neutral-800/95 ${variantAuth == "Login" ? "gap-14" : "gap-5"
+                className={`flex flex-col gap-24 justify-center md:w-[450px] md:h-[480px] ring-white/85 rounded-lg backdrop-blur-md bg-neutral-800/85 ${variantAuth == "Login" ? "py-0" : "gap-9"
                   }`}
               >
                 <div>
-                  <h1 className={`text-center text-4xl text-white font-bold ${variantAuth == "Login" ? "pb-0" : "pb-8"} `}>
+                  <h1 className={`text-center text-4xl text-white font-bold ${variantAuth == "Login" ? "pb-0" : "pb-10"} `}>
                     {variantAuth == "Login" ? "LOGIN" : "REGISTER"}
                   </h1>
                 </div>
-                <div className="flex flex-col gap-14">
+                <div className="flex flex-col gap-12">
                   <div
                     className={`flex flex-col items-center ${variantAuth == "Login" ? "gap-12" : "gap-10"
                       }`}
@@ -158,6 +160,7 @@ export default function Home() {
                           <IoEyeOffOutline size={19} />
                         )}
                       </button>
+                      <Link href="/forgot-password" className={`text-sm px-2 text-neutral-300 hover:text-neutral-100 ${variantAuth == "Login" ? "visible" : "hidden"} `}>forgot password?</Link>
                     </div>
                   </div>
                   <div className="flex flex-col gap-3 justify-center px-[54px]">
@@ -165,11 +168,11 @@ export default function Home() {
                       {variantAuth == "Login" ? "LOGIN" : "REGISTER"}
                     </Button>
                     {variantAuth == "Login" && (
-                      <h2 className="text-center text-xs text-white italic">
+                      <h2 className="text-center text-xs text-neutral-300 italic">
                         not registered? Sign Up{" "}
                         <span
                           onClick={ToggleAuth}
-                          className="font-bold cursor-pointer border-b"
+                          className="font-bold cursor-pointer hover:text-neutral-100 border-b"
                         >
                           Here
                         </span>
