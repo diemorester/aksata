@@ -28,6 +28,21 @@ export class UserRouter {
       authMiddleware,
       this.userController.ResetPassword,
     );
+    this.router.post(
+      '/send-otp',
+      authMiddleware,
+      this.userController.sendVerificationMail,
+    );
+    this.router.post(
+      '/verification-otp',
+      authMiddleware,
+      this.userController.verificationOtp,
+    );
+    this.router.patch(
+      '/change-email',
+      authMiddleware,
+      this.userController.changeEmail,
+    );
     this.router.patch(
       '/verify',
       authMiddleware,

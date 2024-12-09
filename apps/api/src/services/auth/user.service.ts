@@ -7,6 +7,7 @@ import fs from 'fs';
 import handlebars from 'handlebars';
 import { transporter } from '@/helpers/nodemailer';
 import { compare } from 'bcrypt';
+import { generateOtp } from '@/helpers/otpGenerate';
 
 const base_url = process.env.BASE_URL_API || "http://localhost:8000/api";
 
@@ -266,6 +267,128 @@ export const changePasswordService = async (id: number, oldPass: string, newPass
     }) 
 
     return newPassword
+  } catch (error) {
+    throw error
+  }
+}
+
+export const sendVerificationChangeMailService = async (email: string) => {
+  try {
+    const theUser = await prisma.user.findUnique({
+      where: { email }
+    });
+
+    if (!theUser) throw new Error('user not found');
+    const { otp } =  generateOtp(email)
+    const otpExpired = new Date()
+    otpExpired.setMinutes(otpExpired.getMinutes() + 2)
+
+    const newOtp = await prisma.user.update({
+      where: {email},
+      data:{
+        otp,
+        otpExpired
+      }
+    })
+
+    const dataMail = {
+      otp: newOtp.otp
+    }
+
+    const templatePath = path.join(__dirname, '../../templates', 'otp.hbs');
+    const templateSource = fs.readFileSync(templatePath, 'utf-8');
+    const compiledTemplate = handlebars.compile(templateSource);
+    const html = compiledTemplate(dataMail);
+
+    await transporter.sendMail({
+      to: email,
+      subject: "OTP",
+      html
+    })
+
+    return newOtp
+  } catch (error) {
+    throw error
+  }
+}
+
+export const verificationOtpService = async (email: string, otp: string) => {
+  try {
+    const theUser = await prisma.user.findUnique({
+      where: { email }
+    });
+
+    if (!theUser) throw new Error('user not found');
+    if(theUser.otpExpired && new Date() > theUser.otpExpired) throw new Error("otp code has expired");
+    if (otp !== theUser.otp) throw new Error("invalid otp code");
+
+    const newData = await prisma.user.update({
+      where: { email },
+      data: {
+        isVerified: true,
+        otp: null,
+        otpExpired: null
+      }
+    })
+
+    return newData;
+  } catch (error) {
+    throw error
+  }
+}
+
+export const changeEmailService = async (email: string, newMail: string) => {
+  try {
+    const theUser = await prisma.user.findUnique({
+      where: { email }
+    });
+
+    if (!theUser) throw new Error('user not found');
+    const { otp } =  generateOtp(email)
+    const otpExpired = new Date()
+    otpExpired.setMinutes(otpExpired.getMinutes() + 2)
+
+    const existingUser = await prisma.user.findUnique({
+      where: { email: newMail },
+    });
+
+    if (existingUser) throw new Error('email already exists');
+    
+    const newEmail = await prisma.user.update({
+      where: { email },
+      data: {
+        email: newMail,
+        otp,
+        otpExpired,
+        isVerified: false
+      }
+    });
+
+
+    const payload = {
+      id: newEmail.id,
+      email: newEmail.email,
+      role: newEmail.role,
+    };
+
+    const accessToken = createAccessToken(payload);
+
+    const dataMail = {
+      otp: newEmail.otp
+    }
+
+    const templatePath = path.join(__dirname, '../../templates', 'otp.hbs');
+    const templateSource = fs.readFileSync(templatePath, 'utf-8');
+    const compiledTemplate = handlebars.compile(templateSource);
+    const html = compiledTemplate(dataMail);
+
+    await transporter.sendMail({
+      to: newMail,
+      subject: "OTP",
+      html
+    })
+
+    return { newEmail, accessToken }
   } catch (error) {
     throw error
   }

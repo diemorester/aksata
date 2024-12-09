@@ -1,6 +1,7 @@
 import { createToken } from '@/helpers/createToken';
 import prisma from '@/prisma';
 import {
+  changeEmailService,
   changePasswordService,
   editUserService,
   forgotPasswordService,
@@ -9,6 +10,8 @@ import {
   removeAvatarService,
   removePhoneService,
   resetPasswordService,
+  sendVerificationChangeMailService,
+  verificationOtpService,
   verifyUserService,
 } from '@/services/auth/user.service';
 import { NextFunction, request, Request, Response } from 'express';
@@ -176,8 +179,48 @@ export class UserController {
       const user = await changePasswordService(req.user?.id!, req.body.oldpass, req.body.newpass);
       return res.status(200).send({
         status: 'ok',
-        msg: 'password has been removed',
+        msg: 'password has been change',
         user
+      })
+    } catch (error) {
+      next(error)
+    }
+  };
+
+  async sendVerificationMail(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await sendVerificationChangeMailService(req.user?.email!);
+      return res.status(200).send({
+        status: 'ok',
+        msg: 'email has been send, check your email',
+        user
+      })
+    } catch (error) {
+      next(error)
+    }
+  };
+
+  async verificationOtp(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await verificationOtpService(req.user?.email!, req.body.otp);
+      return res.status(200).send({
+        status: 'ok',
+        msg: 'otp is correct, please enter a new email',
+        user
+      })
+    } catch (error) {
+      next(error)
+    }
+  };
+
+  async changeEmail(req: Request, res: Response, next: NextFunction) {
+    try {
+      const {accessToken, newEmail} = await changeEmailService(req.user?.email!, req.body.email);
+      return res.status(200).send({
+        status: 'ok',
+        msg: 'email has been change',
+        newEmail,
+        accessToken
       })
     } catch (error) {
       next(error)
