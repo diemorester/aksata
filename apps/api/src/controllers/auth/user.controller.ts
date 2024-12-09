@@ -1,6 +1,7 @@
 import { createToken } from '@/helpers/createToken';
 import prisma from '@/prisma';
 import {
+  changePasswordService,
   editUserService,
   forgotPasswordService,
   loginUserService,
@@ -163,6 +164,19 @@ export class UserController {
       return res.status(200).send({
         status: 'ok',
         msg: 'avatar has been removed',
+        user
+      })
+    } catch (error) {
+      next(error)
+    }
+  };
+
+  async changePassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await changePasswordService(req.user?.id!, req.body.oldpass, req.body.newpass);
+      return res.status(200).send({
+        status: 'ok',
+        msg: 'password has been removed',
         user
       })
     } catch (error) {

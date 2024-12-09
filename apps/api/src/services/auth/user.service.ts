@@ -111,8 +111,6 @@ export const loginUserService = async (body: User) => {
     // Buat Access Token (berlaku singkat) dan Refresh Token (berlaku panjang)
     const accessToken = createAccessToken(payload); // Expires in 15m
     const refreshToken = createRefreshToken(payload); // Expires in 7d
-    console.log(accessToken, "akses token");
-    console.log(refreshToken, "refresh token");
     
 
     // Simpan Refresh Token di database untuk user ini
@@ -247,3 +245,28 @@ export const removeAvatarService = async (id: number) => {
     throw error
   }
 };
+
+export const changePasswordService = async (id: number, oldPass: string, newPass: string) => {
+  try {
+    const theUser = await prisma.user.findUnique({
+      where: { id }
+    });
+
+    if (!theUser) throw new Error('user not found');
+    const isValidPass = await compare(oldPass, theUser.password)
+    if(!isValidPass) throw new Error("old password is incorect")
+
+    const hashNewPass = await hashPassword(newPass)
+
+    const newPassword = await prisma.user.update({
+      where: { id },
+      data: {
+        password: hashNewPass,
+      }
+    }) 
+
+    return newPassword
+  } catch (error) {
+    throw error
+  }
+}
