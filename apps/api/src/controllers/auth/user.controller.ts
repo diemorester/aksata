@@ -5,6 +5,7 @@ import {
   forgotPasswordService,
   loginUserService,
   RegisterUserService,
+  removeAvatarService,
   removePhoneService,
   resetPasswordService,
   verifyUserService,
@@ -24,7 +25,7 @@ export class UserController {
         msg: 'User created, please check your email for verification',
         token,
       });
-      
+
     } catch (error) {
       next(error);
     }
@@ -74,7 +75,7 @@ export class UserController {
           msg: 'no refresh token provided',
         });
       }
-      
+
       const decoded = verify(refreshToken, process.env.SECRET_KEY || 'real madrid') as { email: string }
 
       const user = await prisma.user.findFirst({
@@ -124,7 +125,7 @@ export class UserController {
       return res.status(200).send({
         status: 'ok',
         msg: 'your password has been reset'
-      })      
+      })
     } catch (error) {
       next(error)
     }
@@ -154,5 +155,18 @@ export class UserController {
     } catch (error) {
       next(error)
     }
-  }
+  };
+
+  async RemoveAvatar(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await removeAvatarService(req.user?.id!);
+      return res.status(200).send({
+        status: 'ok',
+        msg: 'avatar has been removed',
+        user
+      })
+    } catch (error) {
+      next(error)
+    }
+  };
 }

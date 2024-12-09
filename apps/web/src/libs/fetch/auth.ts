@@ -77,3 +77,14 @@ export const removePhoneFetch = async () => {
     });
     return res
 };
+
+export const removeAvatarFetch = async () => {
+    const token = await getCookie('access_token');
+    const res = await axiosInstance.get('/user/remove-avatar', {
+        headers: {
+            Authorization: `Bearer ${token?.value}`,
+            "Content-Type": "application/json"
+        }
+    });
+    return res
+};

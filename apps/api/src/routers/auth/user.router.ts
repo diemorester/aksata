@@ -39,7 +39,11 @@ export class UserRouter {
     this.router.get('/remove-phone',
       authMiddleware,
       this.userController.RemovePhone
-    )
+    );
+    this.router.get('/remove-avatar',
+      authMiddleware,
+      this.userController.RemoveAvatar
+    );
   }
 
   getRouter(): Router {

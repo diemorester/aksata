@@ -3,14 +3,15 @@ import { useAppSelector } from "@/redux/hooks";
 import Image from "next/image";
 import UserSettings from "./editUser";
 import ButtonSpan from "@/components/buttons/spanButtons";
-import AvatarButton from "@/components/buttons/avatarButton";
 import { useState } from "react";
 import EditAvatarModal from "./editAvatarModal";
 import ImageCropper from "@/components/ImageCropper";
+import RemoveAvatarModal from "./removeAvatarModal";
 
 export default function SettingsConfig() {
   const { name, avatar } = useAppSelector((user) => user.user);
   const [isOpenItu, setIsOpenItu] = useState(false);
+  const [isRemoveAvatarModal, setIsRemoveAvatarModal] = useState(false);
   const [image, setImage] = useState<string | null>(null);
   const [cropImage, setCropImage] = useState<string | null>(null);
 
@@ -37,6 +38,7 @@ export default function SettingsConfig() {
                 />
                 <ButtonSpan
                   type="submit"
+                  onClick={() => setIsRemoveAvatarModal(true)}
                 >
                   remove
                 </ButtonSpan>
@@ -54,6 +56,7 @@ export default function SettingsConfig() {
         </div>
       </div>
       <EditAvatarModal setImage={setImage} cropImage={cropImage} onClose={() => setIsOpenItu(false)} isOpen={isOpenItu} />
+      <RemoveAvatarModal isOpen={isRemoveAvatarModal} onClose={() => setIsRemoveAvatarModal(false)}/>
       <ImageCropper
         image={image}
         setImage={setImage}

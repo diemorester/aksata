@@ -227,6 +227,23 @@ export const removePhoneService = async (id: number) => {
     })
     return removePhone
   } catch (error) {
-    throw error;
+    throw error
   }
-}
+};
+
+export const removeAvatarService = async (id: number) => {
+  try {
+    const theUser = await prisma.user.findUnique({
+      where: { id }
+    });
+    if (!theUser) throw new Error('user not found');
+    if (!theUser.avatar) throw new Error('image has already been removed');
+    const removeAvatar = await prisma.user.update({
+      where: { id },
+      data: { avatar: null }
+    });
+    return removeAvatar
+  } catch (error) {
+    throw error
+  }
+};

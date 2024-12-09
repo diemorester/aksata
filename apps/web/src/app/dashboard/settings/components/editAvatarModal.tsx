@@ -10,6 +10,7 @@ import { AxiosError } from "axios"
 import { Form, Formik } from "formik"
 import React, { useState } from "react"
 import toast from "react-hot-toast"
+import * as yup from 'yup'
 
 interface EditAvatarModalProps {
     isOpen: boolean,
@@ -28,6 +29,10 @@ const EditAvatarModal: React.FC<EditAvatarModalProps> = ({ isOpen, onClose, setI
     const initialValue: OnValueBebas = {
         avatar: null
     }
+
+    const validation = yup.object().shape({
+        avatar: yup.string().required("file can't be empty")
+    })
 
     const handleImageCropper = (e: React.ChangeEvent<HTMLInputElement>, setFieldValue: any) => {
         const file = e.target.files?.[0]
@@ -72,10 +77,11 @@ const EditAvatarModal: React.FC<EditAvatarModalProps> = ({ isOpen, onClose, setI
             <Formik
                 initialValues={initialValue}
                 onSubmit={(value) => {
-                    handleUpdate(value)
+                    handleUpdate(value)  
                 }}
+                validationSchema={validation}
             >
-                {({ setFieldValue }) => {
+                {({ setFieldValue }) => {                    
                     return (
                         <Form>
                             <div className="text-neutral-300">

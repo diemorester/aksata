@@ -19,7 +19,7 @@ export default function StoreProvider({
     <Provider store={storeRef.current}>
       <PersistGate
         persistor={persistStore(storeRef.current)}
-        loading={<div className="min-h-screen place-content-center text-center bg-black text-white"><p className="animate-bounce text-3xl">loading</p></div>}
+        loading={<div className="min-h-screen place-content-center text-center bg-neutral-950 text-white"><p className="animate-bounce text-3xl">loading</p></div>}
       >
         {children}
       </PersistGate>

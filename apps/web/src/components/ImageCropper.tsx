@@ -56,7 +56,6 @@ const ImageCropper: React.FC<ImageCropperProps> = ({
     onCropComplete(croppedImage);
     setImage(null);
   };
-  console.log(image);
 
   return (
     <div>
