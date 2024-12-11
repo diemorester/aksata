@@ -42,7 +42,7 @@ const PhoneInputEdit: React.FC<PhoneInputEditProps> = ({
     return (
         <div>
             {label && (
-                <label className="text-gray-400 font-bold block">
+                <label className="text-gray-400 font-bold block text-sm">
                     {label}
                 </label>
             )}
