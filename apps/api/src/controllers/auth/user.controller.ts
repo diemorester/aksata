@@ -76,7 +76,7 @@ export class UserController {
       if (!refreshToken) {
         return res.status(400).send({
           status: 'error',
-          msg: 'no refresh token provided',
+          msg: 'No refresh token provided',
         });
       }
 
@@ -89,7 +89,7 @@ export class UserController {
       if (!user) {
         return res.status(400).send({
           status: 'error',
-          msg: 'user not found',
+          msg: 'User not found',
         });
       }
 
@@ -102,7 +102,7 @@ export class UserController {
 
       return res.status(200).send({
         status: 'ok',
-        msg: 'token refreshed',
+        msg: 'Token refreshed',
         accessToken: newAccessToken
       })
 
@@ -116,7 +116,7 @@ export class UserController {
       await forgotPasswordService(req.body.email);
       return res.status(200).send({
         status: 'ok',
-        msg: 'reset email has been sent! please check your email'
+        msg: 'Reset email has been sent! please check your email'
       })
     } catch (error) {
       next(error)
@@ -128,7 +128,7 @@ export class UserController {
       await resetPasswordService(req.body.password, req.user?.email!);
       return res.status(200).send({
         status: 'ok',
-        msg: 'your password has been reset'
+        msg: 'Your password has been reset'
       })
     } catch (error) {
       next(error)
@@ -140,7 +140,7 @@ export class UserController {
       const user = await editUserService(req.body, req.user?.id!, req.file?.filename);
       return res.status(200).send({
         status: 'ok',
-        msg: 'user has been edited',
+        msg: 'User has been edited',
         user
       })
     } catch (error) {
@@ -153,7 +153,7 @@ export class UserController {
       const user = await removePhoneService(req.user?.id!);
       return res.status(200).send({
         status: 'ok',
-        msg: 'phone number has been removed',
+        msg: 'Phone number has been removed',
         user
       })
     } catch (error) {
@@ -166,7 +166,7 @@ export class UserController {
       const user = await removeAvatarService(req.user?.id!);
       return res.status(200).send({
         status: 'ok',
-        msg: 'avatar has been removed',
+        msg: 'Avatar has been removed',
         user
       })
     } catch (error) {
@@ -179,7 +179,7 @@ export class UserController {
       const user = await changePasswordService(req.user?.id!, req.body.oldpass, req.body.newpass);
       return res.status(200).send({
         status: 'ok',
-        msg: 'password has been change',
+        msg: 'Password has been changed',
         user
       })
     } catch (error) {
@@ -192,7 +192,7 @@ export class UserController {
       const user = await sendVerificationChangeMailService(req.user?.email!);
       return res.status(200).send({
         status: 'ok',
-        msg: 'email has been send, check your email',
+        msg: 'Email has been sent! please check your email',
         user
       })
     } catch (error) {
@@ -205,7 +205,7 @@ export class UserController {
       const user = await verificationOtpService(req.user?.email!, req.body.otp);
       return res.status(200).send({
         status: 'ok',
-        msg: 'otp is correct, please enter a new email',
+        msg: 'OTP is correct, please enter a new email',
         user
       })
     } catch (error) {
@@ -218,7 +218,7 @@ export class UserController {
       const {accessToken, newEmail} = await changeEmailService(req.user?.email!, req.body.email);
       return res.status(200).send({
         status: 'ok',
-        msg: 'email has been change',
+        msg: 'Email has been changed',
         newEmail,
         accessToken
       })
