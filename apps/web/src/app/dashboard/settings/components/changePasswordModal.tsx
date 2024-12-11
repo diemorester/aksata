@@ -23,7 +23,9 @@ interface PasswordValue {
 
 const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClose }) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [isPasswordRevealed, setIsPasswordRevealed] = useState(false);
+    const [isOldPasswordRevealed, setIsOldPasswordRevealed] = useState(false);
+    const [isNewPasswordRevealed, setIsNewPasswordRevealed] = useState(false);
+    const [isConfirmPasswordRevealed, setIsConfirmPasswordRevealed] = useState(false);
 
     const handleUpdate = async (values: PasswordValue) => {
         setIsLoading(true)
@@ -71,15 +73,15 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
                                         name="oldpass"
                                         passwordInput
                                         disabled={isLoading}
-                                        type={isPasswordRevealed ? "text" : "password"}
+                                        type={isOldPasswordRevealed ? "text" : "password"}
                                         error={!!errors.oldpass}
                                     />
                                     <button
                                         className="absolute right-2 -bottom-[7px] text-white"
                                         type="button"
-                                        onClick={() => setIsPasswordRevealed(!isPasswordRevealed)}
+                                        onClick={() => setIsOldPasswordRevealed(!isOldPasswordRevealed)}
                                     >
-                                        {isPasswordRevealed ? (
+                                        {isOldPasswordRevealed ? (
                                             <IoEyeOutline size={19} />
                                         ) : (
                                             <IoEyeOffOutline size={19} />
@@ -92,15 +94,15 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
                                         name="newpass"
                                         passwordInput
                                         disabled={isLoading}
-                                        type={isPasswordRevealed ? "text" : "password"}
+                                        type={isNewPasswordRevealed ? "text" : "password"}
                                         error={!!errors.newpass}
                                     />
                                     <button
                                         className="absolute right-2 -bottom-[7px] text-white"
                                         type="button"
-                                        onClick={() => setIsPasswordRevealed(!isPasswordRevealed)}
+                                        onClick={() => setIsNewPasswordRevealed(!isNewPasswordRevealed)}
                                     >
-                                        {isPasswordRevealed ? (
+                                        {isNewPasswordRevealed ? (
                                             <IoEyeOutline size={19} />
                                         ) : (
                                             <IoEyeOffOutline size={19} />
@@ -113,15 +115,15 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
                                         name="confirmpass"
                                         passwordInput
                                         disabled={isLoading}
-                                        type={isPasswordRevealed ? "text" : "password"}
+                                        type={isConfirmPasswordRevealed ? "text" : "password"}
                                         error={!!errors.confirmpass}
                                     />
                                     <button
                                         className="absolute right-2 -bottom-[7px] text-white"
                                         type="button"
-                                        onClick={() => setIsPasswordRevealed(!isPasswordRevealed)}
+                                        onClick={() => setIsConfirmPasswordRevealed(!isConfirmPasswordRevealed)}
                                     >
-                                        {isPasswordRevealed ? (
+                                        {isConfirmPasswordRevealed ? (
                                             <IoEyeOutline size={19} />
                                         ) : (
                                             <IoEyeOffOutline size={19} />

@@ -4,6 +4,7 @@ interface IPayload {
   id?: number;
   email: string;
   role?: string;
+  otp?: string;
 }
 
 const secret = process.env.SECRET_KEY || 'real madrid';

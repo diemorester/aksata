@@ -19,6 +19,8 @@ model User {
   phone        String?     @unique
   isVerified   Boolean     @default(false)
   role         Roles
+  otp          String?
+  otpExpired   DateTime?
   refreshToken String?     @db.Text
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt()
