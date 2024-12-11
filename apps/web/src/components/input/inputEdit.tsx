@@ -28,7 +28,7 @@ const InputEdit: React.FC<InputEditProps> = ({
     error
 }) => {
     return (
-        <div className={clsx(``, passwordInput && `md:h-[35px]`)}>
+        <div className={clsx(``, nameInput && `md:h-[69px]`, passwordInput && `md:h-[35px]`)}>
             {label && (
                 <label className={clsx(
                     `text-gray-400 font-bold block text-sm`,
