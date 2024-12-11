@@ -1,4 +1,5 @@
 "use client"
+import ButtonSpan from "@/components/buttons/spanButtons"
 import PhoneInputEdit from "@/components/input/phoneInput"
 import Modal from "@/components/Modal"
 import { useAppSelector } from "@/redux/hooks"
@@ -41,10 +42,13 @@ const EditPhoneModal: React.FC<EditModalProps> = ({ isOpen, onClose, isLoading, 
                                 <div className="mx-4 text-sm text-red-500 font-extralight">phone can not be same</div>
                             )} */}
                             <p className="text-center text-xs text-neutral-300 font-extralight">phone must be number, can't be same, and can't be empty</p>
-                            <div className="flex justify-end mt-10">
-                                <button disabled={isLoading || !dirty || !values.phone || values.phone.split(' ').join('').length < 9} className="bg-neutral-300 rounded-3xl disabled:active:scale-100 disabled:opacity-55 active:scale-95 px-3 text-black py-2">
-                                    Change Phone
-                                </button>
+                            <div className="flex justify-end gap-6 mt-10">
+                                <ButtonSpan type="button" onClick={onClose}>
+                                    cancel
+                                </ButtonSpan>
+                                <ButtonSpan type="submit" disabled={isLoading || !dirty || !values.phone || values.phone.split(' ').join('').length < 9} fill="bg-neutral-300">
+                                    confirm
+                                </ButtonSpan>
                             </div>
                         </Form>
                     )

@@ -11,6 +11,7 @@ import { AxiosError } from "axios";
 import EditPhoneModal from "./editPhoneModal";
 import ButtonSpan from "@/components/buttons/spanButtons";
 import RemovePhoneModal from "./removePhoneModal";
+import ChangePasswordModal from "./changePasswordModal";
 
 const UserSettings = () => {
     const { name, email, phone } = useAppSelector(user => user.user)
@@ -126,6 +127,7 @@ const UserSettings = () => {
                 <ButtonSpan
                     type="submit"
                     fill="bg-neutral-300"
+                    onClick={() => setIsModalPassword(true)}
                 >
                     Reset Password
                 </ButtonSpan>
@@ -133,6 +135,7 @@ const UserSettings = () => {
             <EditNameModal isOpen={isModalName} onClose={() => setIsModalName(false)} isLoading={isLoading} handleUpdate={handleUpdate} />
             <EditPhoneModal isOpen={isModalPhone} onClose={() => setIsModalPhone(false)} isLoading={isLoading} handleUpdate={handleUpdate} />
             <RemovePhoneModal isOpen={isModalRemove} onClose={() => setIsModalRemove(false)} />
+            <ChangePasswordModal isOpen={isModalPassword} onClose={() => setIsModalPassword(false)} />
         </div>
     );
 };

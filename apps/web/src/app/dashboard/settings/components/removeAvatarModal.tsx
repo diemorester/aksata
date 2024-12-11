@@ -40,7 +40,7 @@ const RemoveAvatarModal: React.FC<RemoveAvatarModalProps> = ({ isOpen, onClose }
             <div className="flex flex-col gap-3 text-neutral-300">
                 <h2 className="text-2xl font-semibold">Remove Avatar</h2>
                 <p className="font-extralight mb-16">are you sure you want to remove your avatar?</p>
-                <div className="flex flex-row justify-end px-2 gap-3">
+                <div className="flex flex-row justify-end px-2 gap-6">
                     <ButtonSpan
                         type="button"
                         onClick={onClose}
