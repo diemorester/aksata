@@ -88,3 +88,17 @@ export const removeAvatarFetch = async () => {
     });
     return res
 };
+
+export const changePasswordFetch = async (payload: { oldpass: string, newpass: string }) => {
+    const token = await getCookie('access_token');
+    const res = await axiosInstance.patch('/user/change-password', {
+        oldpass: payload.oldpass,
+        newpass: payload.newpass
+    }, {
+        headers: {
+            Authorization: `Bearer ${token?.value}`,
+            "Content-Type": "application/json"
+        }
+    });
+    return res
+};

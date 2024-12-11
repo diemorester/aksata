@@ -137,7 +137,7 @@ export class UserController {
       const user = await editUserService(req.body, req.user?.id!, req.file?.filename);
       return res.status(200).send({
         status: 'ok',
-        msg: 'user has been edited',
+        msg: 'change success',
         user
       })
     } catch (error) {
@@ -176,7 +176,7 @@ export class UserController {
       const user = await changePasswordService(req.user?.id!, req.body.oldpass, req.body.newpass);
       return res.status(200).send({
         status: 'ok',
-        msg: 'password has been removed',
+        msg: 'password has been changed',
         user
       })
     } catch (error) {
