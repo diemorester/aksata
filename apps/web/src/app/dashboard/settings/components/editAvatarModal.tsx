@@ -107,7 +107,7 @@ const EditAvatarModal: React.FC<EditAvatarModalProps> = ({
                     onChange={(e) => handleImageCropper(e, setFieldValue)}
                   />
                 </div>
-                <div className="flex justify-end gap-5">
+                <div className="flex justify-end gap-6">
                   <ButtonSpan type="button" onClick={onClose}>
                     cancel
                   </ButtonSpan>

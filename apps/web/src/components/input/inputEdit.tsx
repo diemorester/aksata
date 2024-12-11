@@ -9,7 +9,9 @@ interface InputEditProps {
     id?: string;
     placeholder?: string;
     children?: React.ReactNode;
-    disabled?: boolean;
+    nameInput?: boolean,
+    passwordInput?: boolean,
+    disabled?: boolean,
     error?: boolean
 };
 
@@ -20,13 +22,18 @@ const InputEdit: React.FC<InputEditProps> = ({
     id,
     placeholder,
     children,
+    nameInput,
+    passwordInput,
     disabled,
     error
 }) => {
     return (
-        <div>
+        <div className={clsx(``, nameInput && `md:h-[69px]`, passwordInput && `md:h-[35px]`)}>
             {label && (
-                <label className="text-gray-400 font-bold block">
+                <label className={clsx(
+                    `text-gray-400 font-bold block text-sm`,
+                    passwordInput && `text-xs`
+                )}>
                     {label}
                 </label>
             )}
@@ -36,13 +43,11 @@ const InputEdit: React.FC<InputEditProps> = ({
                 type={type}
                 placeholder={placeholder}
                 disabled={disabled}
-                error={error}
                 className={clsx(
-                    `px-4 py-3 block w-full rounded-md outline-none bg-neutral-900`,
-                    disabled && `opacity-55`,
-                    error 
-                    ? `ring-rose-500 ring-offset-rose-500`
-                    : `hover:ring-rose-600`
+                    `block w-full rounded-md outline-none bg-neutral-900`,
+                    nameInput && `px-4 py-3`,
+                    passwordInput && `py-1 px-4`,
+                    disabled && `opacity-55`
                 )}
             >
                 {children}
@@ -51,7 +56,7 @@ const InputEdit: React.FC<InputEditProps> = ({
                 <ErrorMessage
                     name={name}
                     component="div"
-                    className="mx-4 text-sm text-red-500 font-extralight"
+                    className="text-red-500 px-3 text-end text-xs font-extralight"
                 />
             )}
         </div>

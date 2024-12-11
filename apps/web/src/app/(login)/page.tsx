@@ -41,12 +41,12 @@ export default function Home() {
     if (variantAuth == "Login") {
       try {
         const res = await loginUser(data); // Login API request
-        
+
         console.log(res.data);
-        
+
         createCookie('access_token', res.data.accessToken); // Menyimpan token di cookie
         dispatch(loginAction(res.data.user)); // Dispatch action untuk update state Redux dengan user data
-        
+
         toast.success(res.data.msg)
         action.resetForm();
 
