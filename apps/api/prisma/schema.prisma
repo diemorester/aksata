@@ -11,21 +11,23 @@ datasource db {
 }
 
 model User {
-  id           Int         @id @default(autoincrement())
-  name         String      @unique
-  email        String      @unique
-  password     String
-  avatar       String?
-  phone        String?     @unique
-  isVerified   Boolean     @default(false)
-  role         Roles
-  otp          String?
-  otpExpired   DateTime?
-  refreshToken String?     @db.Text
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt()
-  Absensi      Absensi[]
-  Pengajuan    Pengajuan[]
+  id                    Int         @id @default(autoincrement())
+  name                  String      @unique
+  email                 String      @unique
+  password              String
+  avatar                String?
+  phone                 String?     @unique
+  isVerified            Boolean     @default(false)
+  role                  Roles
+  otp                   String?
+  otpExpired            DateTime?
+  changeEmailExpired    DateTime?
+  changePasswordExpired DateTime?
+  refreshToken          String?     @db.Text
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt()
+  Absensi               Absensi[]
+  Pengajuan             Pengajuan[]
 }
 
 enum Roles {
