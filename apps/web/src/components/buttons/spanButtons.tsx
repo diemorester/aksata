@@ -40,7 +40,7 @@ const ButtonSpan: React.FC<ButtonSpanProps> = ({
         // Edit outline
         outline && children && !text1 && !text2 && "px-2 ring-1 ring-green-400",
         // Edit fill
-        fill == "bg-neutral-300" && children && !outline && !text1 && !text2 && "bg-neutral-300 text-black hover:bg-neutral-100 px-4 py-2 text-sm w-fit",
+        fill == "bg-neutral-300" && children && !outline && !text1 && !text2 && "bg-neutral-300 text-black hover:bg-neutral-100 px-4 py-2 w-fit",
 
         fill == "bg-red-500" && children && !outline && !text1 && !text2 && "bg-red-500 text-neutral-100 hover:bg-red-400 px-4 py-2 w-fit",
 

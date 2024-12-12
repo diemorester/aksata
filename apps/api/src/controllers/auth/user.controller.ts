@@ -215,12 +215,12 @@ export class UserController {
 
   async changeEmail(req: Request, res: Response, next: NextFunction) {
     try {
-      const {accessToken, newEmail} = await changeEmailService(req.user?.email!, req.body.email);
+      const { newEmail, token } = await changeEmailService(req.user?.email!, req.body.email);
       return res.status(200).send({
         status: 'ok',
         msg: 'Email has been changed',
         newEmail,
-        accessToken
+        token
       })
     } catch (error) {
       next(error)

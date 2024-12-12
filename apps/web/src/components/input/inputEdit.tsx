@@ -13,6 +13,7 @@ interface InputEditProps {
     passwordInput?: boolean,
     disabled?: boolean,
     error?: boolean
+    autocomplete?: string
 };
 
 const InputEdit: React.FC<InputEditProps> = ({
@@ -25,7 +26,8 @@ const InputEdit: React.FC<InputEditProps> = ({
     nameInput,
     passwordInput,
     disabled,
-    error
+    error,
+    autocomplete
 }) => {
     return (
         <div className={clsx(``, nameInput && `md:h-[69px]`, passwordInput && `md:h-[35px]`)}>
@@ -43,6 +45,7 @@ const InputEdit: React.FC<InputEditProps> = ({
                 type={type}
                 placeholder={placeholder}
                 disabled={disabled}
+                autoComplete={autocomplete}
                 className={clsx(
                     `block w-full rounded-md outline-none bg-neutral-900`,
                     nameInput && `px-4 py-3`,

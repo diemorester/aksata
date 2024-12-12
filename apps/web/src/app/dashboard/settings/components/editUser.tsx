@@ -12,6 +12,7 @@ import EditPhoneModal from "./editPhoneModal";
 import ButtonSpan from "@/components/buttons/spanButtons";
 import RemovePhoneModal from "./removePhoneModal";
 import ChangePasswordModal from "./changePasswordModal";
+import ChangeEmailModal from "./changeEmailModal";
 
 const UserSettings = () => {
     const { name, email, phone } = useAppSelector(user => user.user)
@@ -135,6 +136,7 @@ const UserSettings = () => {
             <EditNameModal isOpen={isModalName} onClose={() => setIsModalName(false)} isLoading={isLoading} handleUpdate={handleUpdate} />
             <EditPhoneModal isOpen={isModalPhone} onClose={() => setIsModalPhone(false)} isLoading={isLoading} handleUpdate={handleUpdate} />
             <RemovePhoneModal isOpen={isModalRemove} onClose={() => setIsModalRemove(false)} />
+            <ChangeEmailModal isOpen={isModalEmail} setIsChangeEmailModal={setIsModalEmail} />
             <ChangePasswordModal isOpen={isModalPassword} onClose={() => setIsModalPassword(false)} />
         </div>
     );

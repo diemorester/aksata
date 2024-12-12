@@ -249,11 +249,13 @@ export const removeAvatarService = async (id: number) => {
 
 export const changePasswordService = async (id: number, oldPass: string, newPass: string) => {
   try {
+    const now = new Date()
     const theUser = await prisma.user.findUnique({
       where: { id }
     });
 
     if (!theUser) throw new Error('user not found');
+    if (theUser.changePasswordExpired && now.getTime() - theUser.changePasswordExpired.getTime() < 24 * 60 * 60 * 1000) throw new Error("you changed your password too frequent")
     const isValidPass = await compare(oldPass, theUser.password)
     if(!isValidPass) throw new Error("old password is incorect")
 
@@ -263,6 +265,7 @@ export const changePasswordService = async (id: number, oldPass: string, newPass
       where: { id },
       data: {
         password: hashNewPass,
+        changePasswordExpired: new Date()
       }
     }) 
 
@@ -274,11 +277,13 @@ export const changePasswordService = async (id: number, oldPass: string, newPass
 
 export const sendVerificationChangeMailService = async (email: string) => {
   try {
+    const now = new Date()
     const theUser = await prisma.user.findUnique({
       where: { email }
     });
 
     if (!theUser) throw new Error('user not found');
+    if (theUser.changeEmailExpired && now.getTime() - theUser.changeEmailExpired.getTime() < 24 * 60 * 60 * 1000) throw new Error('you changed your email too frequently')
     const { otp } =  generateOtp(email)
     const otpExpired = new Date()
     otpExpired.setMinutes(otpExpired.getMinutes() + 2)
@@ -302,7 +307,7 @@ export const sendVerificationChangeMailService = async (email: string) => {
 
     await transporter.sendMail({
       to: email,
-      subject: "OTP",
+      subject: "Verification Code",
       html
     })
 
@@ -344,10 +349,6 @@ export const changeEmailService = async (email: string, newMail: string) => {
     });
 
     if (!theUser) throw new Error('user not found');
-    const { otp } =  generateOtp(email)
-    const otpExpired = new Date()
-    otpExpired.setMinutes(otpExpired.getMinutes() + 2)
-
     const existingUser = await prisma.user.findUnique({
       where: { email: newMail },
     });
@@ -358,37 +359,19 @@ export const changeEmailService = async (email: string, newMail: string) => {
       where: { email },
       data: {
         email: newMail,
-        otp,
-        otpExpired,
-        isVerified: false
+        changeEmailExpired: new Date()
       }
     });
 
-
     const payload = {
       id: newEmail.id,
-      email: newEmail.email,
       role: newEmail.role,
+      email: newEmail.email,
     };
 
-    const accessToken = createAccessToken(payload);
+    const token = createAccessToken(payload)
 
-    const dataMail = {
-      otp: newEmail.otp
-    }
-
-    const templatePath = path.join(__dirname, '../../templates', 'otp.hbs');
-    const templateSource = fs.readFileSync(templatePath, 'utf-8');
-    const compiledTemplate = handlebars.compile(templateSource);
-    const html = compiledTemplate(dataMail);
-
-    await transporter.sendMail({
-      to: newMail,
-      subject: "OTP",
-      html
-    })
-
-    return { newEmail, accessToken }
+    return { newEmail, token }
   } catch (error) {
     throw error
   }

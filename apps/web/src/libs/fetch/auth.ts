@@ -102,3 +102,38 @@ export const changePasswordFetch = async (payload: { oldpass: string, newpass: s
     });
     return res
 };
+
+export const sendVerificationChangeMailFetch = async () => {
+    const token = await getCookie('access_token');
+    const res = await axiosInstance.post('/user/send-otp', {
+    }, {
+        headers: {
+            Authorization: `Bearer ${token?.value}`,
+        }
+    })
+    return res
+};
+
+export const verificationOtpFetch = async (otp: string) => {
+    const token = await getCookie('access_token');
+    const res = await axiosInstance.post('/user/verification-otp', {
+        otp
+    }, {
+        headers: {
+            Authorization: `Bearer ${token?.value}`
+        }
+    })
+    return res
+};
+
+export const changeEmailFetch = async (email: string) => {
+    const token = await getCookie('access_token');
+    const res = await axiosInstance.patch('/user/change-email', {
+        email
+    }, {
+        headers: {
+            Authorization: `Bearer ${token?.value}`
+        }
+    })
+    return res
+};
