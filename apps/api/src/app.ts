@@ -13,6 +13,7 @@ import { PORT } from './config';
 import { UserRouter } from './routers/auth/user.router';
 import { DecodeRouter } from './routers/decode.router';
 import path from 'path';
+import { AbsensiRouter } from './routers/absensi.route';
 
 export default class App {
   private app: Express;
@@ -38,7 +39,7 @@ export default class App {
     this.app.use(urlencoded({ extended: true }));
     this.app.use(
       '/api/public',
-      express.static(path.join(__dirname, '../public'))
+      express.static(path.join(__dirname, '../public')),
     );
   }
 
@@ -68,14 +69,15 @@ export default class App {
   private routes(): void {
     const userRouter = new UserRouter();
     const decodeRouter = new DecodeRouter();
+    const absensiRouter = new AbsensiRouter();
 
     this.app.get('/api', (req: Request, res: Response) => {
       res.send(`Hello, Purwadhika Student API!`);
     });
 
     this.app.use('/api/user', userRouter.getRouter());
-
-    this.app.use('/api', decodeRouter.getRouter())
+    this.app.use('/api', decodeRouter.getRouter());
+    this.app.use('/api/absensi', absensiRouter.getRouter());
   }
 
   public start(): void {

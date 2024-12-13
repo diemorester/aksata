@@ -38,15 +38,15 @@ enum Roles {
 }
 
 model Absensi {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
-  clockIn   DateTime
-  clockOut  DateTime
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt()
+  clockIn   DateTime?
+  clockOut  DateTime?
   location  String?
-  status    Status
-  date      DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
+  status    Status?
+  date      DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id])
   userId    Int
 }
 
