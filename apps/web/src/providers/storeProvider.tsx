@@ -19,7 +19,16 @@ export default function StoreProvider({
     <Provider store={storeRef.current}>
       <PersistGate
         persistor={persistStore(storeRef.current)}
-        loading={<div className="min-h-screen place-content-center text-center bg-neutral-950 text-white"><p className="animate-bounce text-3xl">loading</p></div>}
+        loading={
+          <div className="min-h-screen place-content-center items-center flex bg-black text-white">
+            <video 
+              src="/loading.mp4"
+              autoPlay
+              muted
+              loop
+              className="w-[450px] h-[450px]"
+            />
+          </div>}
       >
         {children}
       </PersistGate>
