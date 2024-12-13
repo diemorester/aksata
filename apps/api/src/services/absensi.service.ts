@@ -75,3 +75,13 @@ export const clockOutService = async (userId: number) => {
     throw error;
   }
 };
+
+export const getAllAttendaceService = async () => {
+  try {
+    const attendace = await prisma.absensi.findMany();
+
+    return attendace
+  } catch (error) {
+    throw error;
+  }
+};
