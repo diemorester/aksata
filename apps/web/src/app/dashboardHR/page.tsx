@@ -1,7 +1,9 @@
+import ListAbsensi from "./components/listAbsensi";
+
 export default function DashboardHR() {
     return (
         <div>
-            dashboard HR
+            <ListAbsensi />
         </div>
     )
 }

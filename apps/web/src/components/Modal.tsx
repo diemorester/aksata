@@ -1,5 +1,5 @@
 'use client';
-
+import clsx from 'clsx';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { IoClose } from 'react-icons/io5';
@@ -9,6 +9,10 @@ interface ModalProps {
   onClose: () => void;
   children: React.ReactNode;
   backgroundClose?: boolean;
+  aksata?: boolean;
+  ristoan?: boolean;
+  hayan?: boolean;
+  sirius?: boolean
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -16,6 +20,10 @@ const Modal: React.FC<ModalProps> = ({
   onClose,
   children,
   backgroundClose,
+  aksata,
+  ristoan,
+  hayan,
+  sirius
 }) => {
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -43,7 +51,10 @@ const Modal: React.FC<ModalProps> = ({
               leaveFrom="opacity-100 translate-y-0  sm:scale-100 "
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative w-full transform overflow-hidden rounded-2xl bg-neutral-800 px-4 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+              <Dialog.Panel className={clsx(`relative w-full transform overflow-hidden px-4 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6`,
+                aksata && `rounded-md bg-off-white`,
+                ristoan && `rounded-2xl bg-neutral-800`
+              )}>
                 {backgroundClose && (
                   <div className="absolute right-0 top-0 z-10 hidden pr-4 pt-4 sm:block">
                     <button

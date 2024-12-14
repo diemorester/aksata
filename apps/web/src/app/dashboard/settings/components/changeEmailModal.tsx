@@ -88,6 +88,7 @@ const ChangeEmailModal: React.FC<ChangeEmailModalProps> = ({ isOpen, setIsChange
         <Modal
             isOpen={isOpen}
             onClose={onClose}
+            ristoan
             backgroundClose
         >
             <SendOTP isLoading={isLoading} onClose={onClose} handleSendOTP={handleSendOTP} isOpen={isSendEmail} />

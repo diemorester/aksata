@@ -1,33 +1,33 @@
-"use client"
-import ButtonSpan from "@/components/buttons/spanButtons"
-import InputEdit from "@/components/input/inputEdit"
-import Modal from "@/components/Modal"
-import { changePasswordFetch } from "@/libs/fetch/auth"
-import { changePasswordSchema } from "@/schemes/authSchema"
-import { AxiosError } from "axios"
-import { Form, Formik } from "formik"
-import { useState } from "react"
+'use client'
+import ButtonSpan from "@/components/buttons/spanButtons";
+import InputEdit from "@/components/input/inputEdit";
+import Modal from "@/components/Modal";
+import { changePasswordFetch } from "@/libs/fetch/auth";
+import { changePasswordSchema } from "@/schemes/authSchema";
+import { AxiosError } from "axios";
+import { Formik, Form } from "formik";
+import { useState } from "react";
 import toast from "react-hot-toast"
-import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5"
+import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 
-interface ChangePasswordModalProps {
-    isOpen: boolean,
+interface ChangePasswordModalHRProps {
+    isOpen: boolean;
     onClose: () => void
 }
 
-interface PasswordValue {
-    oldpass: string,
+interface PasswordHRValue {
+    oldpass: string;
     newpass: string,
-    confirmpass?: string
+    confirmpass: string
 }
 
-const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClose }) => {
+const ChangePasswordModalHR: React.FC<ChangePasswordModalHRProps> = ({ isOpen, onClose }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isOldPasswordRevealed, setIsOldPasswordRevealed] = useState(false);
     const [isNewPasswordRevealed, setIsNewPasswordRevealed] = useState(false);
     const [isConfirmPasswordRevealed, setIsConfirmPasswordRevealed] = useState(false);
 
-    const handleUpdate = async (values: PasswordValue) => {
+    const handleUpdate = async (values: PasswordHRValue) => {
         setIsLoading(true)
         try {
             const res = await changePasswordFetch(values)
@@ -42,11 +42,11 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
         }
     }
 
-    return (
-        <Modal
+  return (
+    <Modal
             isOpen={isOpen}
             onClose={onClose}
-            ristoan
+            aksata
             backgroundClose
         >
             <Formik
@@ -60,9 +60,9 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
                 }}
                 validationSchema={changePasswordSchema}
             >
-                {({ errors, dirty, values }) => {
+                {({ errors }) => {
                     return (
-                        <Form className="text-neutral-300 flex flex-col gap-8 justify-between">
+                        <Form className="text-black flex flex-col gap-8 justify-between">
                             <div>
                                 <h1 className="text-center mt-1 text-2xl font-bold">Change Password</h1>
                                 <p className="text-center mb-6 font-extralight text-sm">enter your new password here</p>
@@ -72,13 +72,13 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
                                     <InputEdit
                                         label="CURRENT PASSWORD"
                                         name="oldpass"
-                                        passwordInput
+                                        aksata
                                         disabled={isLoading}
                                         type={isOldPasswordRevealed ? "text" : "password"}
                                         error={!!errors.oldpass}
                                     />
                                     <button
-                                        className="absolute right-2 -bottom-[7px] text-white"
+                                        className="absolute right-2 -bottom-[7px] text-black"
                                         type="button"
                                         onClick={() => setIsOldPasswordRevealed(!isOldPasswordRevealed)}
                                     >
@@ -93,13 +93,13 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
                                     <InputEdit
                                         label="NEW PASSWORD"
                                         name="newpass"
-                                        passwordInput
+                                        aksata
                                         disabled={isLoading}
                                         type={isNewPasswordRevealed ? "text" : "password"}
                                         error={!!errors.newpass}
                                     />
                                     <button
-                                        className="absolute right-2 -bottom-[7px] text-white"
+                                        className="absolute right-2 -bottom-[7px] text-black"
                                         type="button"
                                         onClick={() => setIsNewPasswordRevealed(!isNewPasswordRevealed)}
                                     >
@@ -114,13 +114,13 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
                                     <InputEdit
                                         label="CONFIRM PASSWORD"
                                         name="confirmpass"
-                                        passwordInput
+                                        aksata
                                         disabled={isLoading}
                                         type={isConfirmPasswordRevealed ? "text" : "password"}
                                         error={!!errors.confirmpass}
                                     />
                                     <button
-                                        className="absolute right-2 -bottom-[7px] text-white"
+                                        className="absolute right-2 -bottom-[7px] text-black"
                                         type="button"
                                         onClick={() => setIsConfirmPasswordRevealed(!isConfirmPasswordRevealed)}
                                     >
@@ -133,14 +133,14 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
                                 </div>
                             </div>
                             <div className="flex justify-end gap-6 mt-10">
-                                <ButtonSpan type="button" onClick={onClose} ristoan>
+                                <ButtonSpan type="button" onClick={onClose} aksata>
                                     cancel
                                 </ButtonSpan>
                                 <ButtonSpan
                                     type="submit"
                                     disabled={isLoading}
-                                    ristoan
-                                    fill="bg-neutral-300"
+                                    aksata
+                                    fill="bg-black"
                                 >
                                     confirm
                                 </ButtonSpan>
@@ -150,6 +150,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
                 }}
             </Formik>
         </Modal>
-    )
+  )
 }
-export default ChangePasswordModal
+
+export default ChangePasswordModalHR

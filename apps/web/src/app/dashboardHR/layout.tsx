@@ -1,4 +1,4 @@
-import { Sidebar } from "@/components/sidebar";
+import { SidebarHR } from "./components/sidebarHR";
 
 export default function RootLayout({
     children,
@@ -7,11 +7,11 @@ export default function RootLayout({
 }) {
     return (
         <div>
-            <Sidebar>
-                <div className="w-full h-full text-neutral-300">
+            <SidebarHR>
+                <div className="w-full h-full">
                     {children}
                 </div>
-            </Sidebar>
+            </SidebarHR>
         </div>
-    );
+    )
 }

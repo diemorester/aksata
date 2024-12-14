@@ -34,10 +34,12 @@ export default function SettingsConfig() {
                   type="button"
                   text1="change"
                   text2="upload"
+                  ristoan
                   onClick={() => setIsOpenItu(true)}
                 />
                 <ButtonSpan
                   type="submit"
+                  ristoan
                   onClick={() => setIsRemoveAvatarModal(true)}
                 >
                   remove
