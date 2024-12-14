@@ -11,6 +11,7 @@ interface InputEditProps {
     children?: React.ReactNode;
     nameInput?: boolean,
     passwordInput?: boolean,
+    aksata?: boolean,
     disabled?: boolean,
     error?: boolean
     autocomplete?: string
@@ -25,16 +26,18 @@ const InputEdit: React.FC<InputEditProps> = ({
     children,
     nameInput,
     passwordInput,
+    aksata,
     disabled,
     error,
     autocomplete
 }) => {
     return (
-        <div className={clsx(``, nameInput && `md:h-[69px]`, passwordInput && `md:h-[35px]`)}>
+        <div className={clsx(``, nameInput && `md:h-[69px]`, passwordInput && `md:h-[35px]`, aksata && `md:h-[35px]`)}>
             {label && (
                 <label className={clsx(
                     `text-gray-400 font-bold block text-sm`,
-                    passwordInput && `text-xs`
+                    passwordInput && `text-xs`,
+                    aksata && 'text-xs text-neutral-700'
                 )}>
                     {label}
                 </label>
@@ -47,9 +50,10 @@ const InputEdit: React.FC<InputEditProps> = ({
                 disabled={disabled}
                 autoComplete={autocomplete}
                 className={clsx(
-                    `block w-full rounded-md outline-none bg-neutral-900`,
-                    nameInput && `px-4 py-3`,
-                    passwordInput && `py-1 px-4`,
+                    `block w-full rounded-md outline-none`,
+                    nameInput && `px-4 py-3 bg-neutral-900`,
+                    passwordInput && `py-1 px-4 bg-neutral-900`,
+                    aksata && `bg-[#DDE1E4] py-1 px-4`,
                     disabled && `opacity-55`
                 )}
             >

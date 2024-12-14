@@ -1,21 +1,21 @@
 'use client';
 import React, { useState } from 'react';
-import { SidebarBody, SidebarConfig, SidebarLink } from './ui/sidebarconfig';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { cn } from '../libs/utils';
+import { cn } from '../../../libs/utils';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import useRouter from '@/hooks/useRouters';
-import Modal from './Modal';
 import { setIsModalOpen } from '@/redux/slices/modalSlice';
 import { deleteCookie, navigate } from '@/libs/server';
 import { logoutAction } from '@/redux/slices/userslice';
-import img1 from '../../public/company-logo.png'
-import ButtonSpan from './buttons/spanButtons';
+import img1 from '../../../../public/aksata-logo.png'
+import useRouterHR from '../hooks/useRoutersHR';
+import { SidebarBodyHR, SidebarConfigHR, SidebarLinkHR } from './sidebarHRconfig';
+import Modal from '@/components/Modal';
+import ButtonSpan from '@/components/buttons/spanButtons';
 
-export function Sidebar({ children }: { children: React.ReactNode }) {
-    const router = useRouter();
+export function SidebarHR({ children }: { children: React.ReactNode }) {
+    const router = useRouterHR();
     const { name, avatar } = useAppSelector((user) => user.user);
     const { isOpen } = useAppSelector((state) => state.modal);
     const [open, setOpen] = useState(false);
@@ -37,17 +37,19 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
     return (
         <div
             className={cn(
-                'flex flex-col md:flex-row bg-neutral-900 w-full flex-1 mx-auto overflow-hidden',
+                'flex flex-col md:flex-row bg-off-white w-full flex-1 mx-auto overflow-hidden',
                 'h-screen',
             )}
         >
-            <SidebarConfig open={open} setOpen={setOpen}>
-                <SidebarBody className="justify-between gap-2">
+            <SidebarConfigHR open={open} setOpen={setOpen} animate={false}>
+                <SidebarBodyHR className="justify-between gap-2">
                     <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-                        {open ? <Logo /> : <LogoIcon />}
+                        <>
+                            <Logo />
+                        </>
                         <div className="mt-10 flex flex-col gap-5">
                             {router.map((link, idx) => (
-                                <SidebarLink
+                                <SidebarLinkHR
                                     key={idx}
                                     href={link.href}
                                     label={link.label}
@@ -66,20 +68,20 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
                             alt="avatar"
                             className="rounded-full w-8 h-8"
                         />
-                        {open && <p className="text-white text-xl font-medium">{name}</p>}
+                        <p className="text-black text-xl font-medium">{name}</p>
                     </div>
-                </SidebarBody>
-            </SidebarConfig>
-            <div className='overflow-y-auto bg-[#2c2c2c] scrollbar-none w-full'>
+                </SidebarBodyHR>
+            </SidebarConfigHR>
+            <div className='overflow-y-auto bg-[#E8EBEF] scrollbar-none w-full'>
                 {children}
             </div>
-            <Modal isOpen={isOpen} onClose={onCLoseModal} backgroundClose>
-                <div className='flex flex-col gap-3 text-neutral-100'>
+            <Modal isOpen={isOpen} onClose={onCLoseModal} backgroundClose aksata>
+                <div className='flex flex-col gap-3 text-black'>
                     <h2 className='text-2xl font-semibold'>Logout</h2>
                     <p className='mb-16'>are you sure you want to logout?</p>
-                    <div className='flex flex-row justify-end px-2 gap-6 text-neutral-100'>
-                        <ButtonSpan type='button' onClick={onCLoseModal}>cancel</ButtonSpan>
-                        <ButtonSpan type='button' onClick={logOut} fill='bg-red-500'>log out</ButtonSpan>
+                    <div className='flex flex-row justify-end px-2 gap-6 text-black'>
+                        <ButtonSpan type='button' onClick={onCLoseModal} aksata>cancel</ButtonSpan>
+                        <ButtonSpan type='button' onClick={logOut} fill='bg-red-500' aksata>log out</ButtonSpan>
                     </div>
                 </div>
             </Modal>
@@ -96,28 +98,16 @@ export const Logo = () => {
                 width={40}
                 height={40}
                 src={img1}
-                alt='company-logo'
+                alt='aksata-logo'
                 className=''
             />
             <motion.span
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="font-bold text-black dark:text-white md:text-[26px] px-1 whitespace-pre"
+                className="font-bold text-black md:text-[26px] px-1"
             >
-                Ristoan Tri Laras
+                AKSATA
             </motion.span>
         </Link>
-    );
-};
-
-export const LogoIcon = () => {
-    return (
-        <Image
-            width={36}
-            height={36}
-            src={img1}
-            alt='company-logo'
-            className=''
-        />
     );
 };

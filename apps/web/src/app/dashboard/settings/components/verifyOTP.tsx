@@ -40,12 +40,14 @@ const VerifyOTP: React.FC<VerifyOTPprops> = ({ isOpen, handleOTP, isLoading, onC
                 <div className="flex justify-end gap-6 mt-10">
                     <ButtonSpan
                         type="button"
+                        ristoan
                         onClick={onClose}
                     >
                         cancel
                     </ButtonSpan>
                     <ButtonSpan
                         type="submit"
+                        ristoan
                         disabled={isLoading}
                         fill="bg-neutral-300"
                     >

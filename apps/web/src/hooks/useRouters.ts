@@ -1,3 +1,4 @@
+'use client'
 import { useAppDispatch } from "@/redux/hooks"
 import { setIsModalOpen } from "@/redux/slices/modalSlice"
 import { usePathname } from "next/navigation"

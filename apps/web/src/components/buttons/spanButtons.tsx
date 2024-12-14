@@ -12,8 +12,12 @@ interface ButtonSpanProps {
   onClick?: () => void;
   danger?: boolean;
   outline?: boolean;
-  fill?: "bg-neutral-300" | "bg-neutral-700" | "bg-red-500";
+  fill?: "bg-neutral-300" | "bg-neutral-700" | "bg-red-500" | "bg-green-500" | "bg-black";
   rounded?: "lg" | "xl" | "2xl" | "3xl";
+  aksata?: boolean;
+  ristoan?: boolean;
+  hayan?: boolean;
+  sirius?: boolean
 }
 
 const ButtonSpan: React.FC<ButtonSpanProps> = ({
@@ -27,6 +31,10 @@ const ButtonSpan: React.FC<ButtonSpanProps> = ({
   outline,
   fill,
   rounded,
+  aksata,
+  ristoan,
+  hayan,
+  sirius
 }) => {
   return (
     <button
@@ -45,6 +53,10 @@ const ButtonSpan: React.FC<ButtonSpanProps> = ({
         fill == "bg-red-500" && children && !outline && !text1 && !text2 && "bg-red-500 text-neutral-100 hover:bg-red-400 px-4 py-2 w-fit",
 
         fill == "bg-neutral-700" && children && !outline && !text1 && !text2 && "bg-neutral-700 text-neutral-300 px-4 py-2 text-sm hover:bg-neutral-600 w-fit",
+        
+        fill == "bg-black" && children && !outline && !text1 && !text2 && "bg-black text-neutral-300 rounded-lg px-4 py-2 text-sm hover:bg-neutral-700 w-fit",
+
+        fill == "bg-green-500" && children && !outline && !text1 && !text2 && "bg-green-500 text-neutral-100 px-6 py-3 rounded-md hover:bg-green-600 w-fit hover:text-neutral-50",
 
         text1 && text2 && !children && "min-w-[85px] overflow-hidden"
       )}
@@ -53,9 +65,11 @@ const ButtonSpan: React.FC<ButtonSpanProps> = ({
         <>
           <span
             className={clsx(
-              "absolute inset-0 flex items-center justify-center bg-neutral-300 text-neutral-950 transition-transform duration-300 ease-in-out",
+              "absolute inset-0 flex items-center justify-center transition-transform duration-300 ease-in-out",
+              aksata && 'bg-black text-white rounded-lg',
+              ristoan && 'bg-neutral-300 text-black',
               disabled
-                ? "group-hover:translate-x-0"
+                ? "group-hover:translate-x-0 "
                 : "group-hover:translate-x-full group-active:scale-95",
             )}
           >
@@ -78,7 +92,10 @@ const ButtonSpan: React.FC<ButtonSpanProps> = ({
       )}
       {children}
       {children && !disabled && !outline && !fill && (
-        <span className="absolute bottom-1 left-1/2 h-[1px] w-0 bg-white transition-all duration-150 group-hover:left-0 group-hover:w-full" />
+        <span className={clsx(`absolute bottom-1 left-1/2 h-[1px] w-0 transition-all duration-150 group-hover:left-0 group-hover:w-full`,
+          aksata && 'bg-black',
+          ristoan && 'bg-neutral-100'
+        )} />
       )}
     </button>
   );

@@ -36,6 +36,7 @@ const RemovePhoneModal: React.FC<RemovePhoneModalProps> = ({ isOpen, onClose }) 
         <Modal
             isOpen={isOpen}
             onClose={onClose}
+            ristoan
             backgroundClose
         >
             <div className="flex flex-col gap-3 text-neutral-300">
@@ -46,12 +47,14 @@ const RemovePhoneModal: React.FC<RemovePhoneModalProps> = ({ isOpen, onClose }) 
                 <div className="flex flex-row justify-end px-2 gap-6">
                     <ButtonSpan
                         type="button"
+                        ristoan
                         onClick={onClose}
                     >
                         cancel
                     </ButtonSpan>
                     <ButtonSpan
                         type="submit"
+                        ristoan
                         onClick={handleRemove}
                         fill="bg-red-500"
                         disabled={isLoading}

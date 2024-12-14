@@ -13,6 +13,9 @@ module.exports = {
       backgroundImage: {
         'custom-image': `url(/splash.png)`,
       },
+      colors: {
+        "off-white": '#F0F4F8'
+      }
     },
   },
   plugins: [],

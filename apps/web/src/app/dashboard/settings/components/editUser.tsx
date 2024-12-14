@@ -66,6 +66,7 @@ const UserSettings = () => {
                 <ButtonSpan
                     type="button"
                     fill="bg-neutral-700"
+                    ristoan
                     onClick={() => setIsModalName(true)}
                 >
                     <div className="flex space-x-2 items-center">
@@ -86,6 +87,7 @@ const UserSettings = () => {
                 <ButtonSpan
                     type="button"
                     fill="bg-neutral-700"
+                    ristoan
                     onClick={() => setIsModalEmail(true)}
                 >
                     <div className="flex space-x-2 items-center">
@@ -106,6 +108,7 @@ const UserSettings = () => {
                 <div className="flex items-center gap-7 text-sm">
                     <ButtonSpan
                         type="submit"
+                        ristoan
                         onClick={() => setIsModalRemove(true)}
                     >
                         remove
@@ -113,6 +116,7 @@ const UserSettings = () => {
                     <ButtonSpan
                         type="button"
                         fill="bg-neutral-700"
+                        ristoan
                         onClick={() => setIsModalPhone(true)}
                     >
                         <div className="flex space-x-2 items-center">
@@ -128,6 +132,7 @@ const UserSettings = () => {
                 <ButtonSpan
                     type="submit"
                     fill="bg-neutral-300"
+                    ristoan
                     onClick={() => setIsModalPassword(true)}
                 >
                     Reset Password
