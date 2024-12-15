@@ -1,4 +1,4 @@
-import { AbsensiController } from '@/controllers/absensi.controller';
+import { AbsensiController } from '@/controllers/absensi/absensi.controller';
 import { authMiddleware } from '@/middleware/auth.middleware';
 import { Router } from 'express';
 

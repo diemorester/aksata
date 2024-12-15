@@ -13,7 +13,7 @@ import { PORT } from './config';
 import { UserRouter } from './routers/auth/user.router';
 import { DecodeRouter } from './routers/decode.router';
 import path from 'path';
-import { AbsensiRouter } from './routers/absensi.route';
+import { AbsensiRouter } from './routers/absensi/absensi.route';
 
 export default class App {
   private app: Express;

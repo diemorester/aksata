@@ -1,4 +1,4 @@
-import { clockInService, clockOutService } from '@/services/absensi.service';
+import { clockInService, clockOutService } from '@/services/absensi/absensi.service';
 import { NextFunction, Request, Response } from 'express';
 
 export class AbsensiController {
