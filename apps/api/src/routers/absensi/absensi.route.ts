@@ -1,5 +1,5 @@
-import { AbsensiController } from '@/controllers/absensi.controller';
-import { accessAdminHr, authMiddleware } from '@/middleware/auth.middleware';
+import { AbsensiController } from '@/controllers/absensi/absensi.controller';
+import { authMiddleware } from '@/middleware/auth.middleware';
 import { Router } from 'express';
 
 export class AbsensiRouter {
@@ -22,12 +22,6 @@ export class AbsensiRouter {
       '/clock-out',
       authMiddleware,
       this.absensiController.clockOut,
-    );
-    this.router.get(
-      '/getall-attendace',
-      authMiddleware,
-      accessAdminHr,
-      this.absensiController.getAllAttendace,
     );
   }
 

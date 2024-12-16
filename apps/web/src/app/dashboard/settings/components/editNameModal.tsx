@@ -17,6 +17,7 @@ const EditNameModal: React.FC<EditModalProps> = ({ isOpen, onClose, isLoading, h
         <Modal
             isOpen={isOpen}
             onClose={onClose}
+            ristoan
             backgroundClose
         >
             <Formik
@@ -47,10 +48,10 @@ const EditNameModal: React.FC<EditModalProps> = ({ isOpen, onClose, isLoading, h
                                 )}
                             </div>
                             <div className="flex justify-end gap-6 mt-10">
-                                <ButtonSpan type="button" onClick={onClose}>
+                                <ButtonSpan type="button" onClick={onClose} ristoan>
                                     cancel
                                 </ButtonSpan>
-                                <ButtonSpan type="submit" disabled={isLoading || !dirty} fill="bg-neutral-300">
+                                <ButtonSpan type="submit" disabled={isLoading || !dirty} fill="bg-neutral-300" ristoan>
                                     confirm
                                 </ButtonSpan>
                             </div>

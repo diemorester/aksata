@@ -86,7 +86,7 @@ const EditAvatarModal: React.FC<EditAvatarModalProps> = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={() => {}}>
+    <Modal isOpen={isOpen} onClose={() => {}} ristoan>
       <Formik
         initialValues={initialValue}
         onSubmit={(value) => {
@@ -108,12 +108,13 @@ const EditAvatarModal: React.FC<EditAvatarModalProps> = ({
                   />
                 </div>
                 <div className="flex justify-end gap-6">
-                  <ButtonSpan type="button" onClick={onClose}>
+                  <ButtonSpan type="button" onClick={onClose} ristoan>
                     cancel
                   </ButtonSpan>
                   <ButtonSpan
                     type="submit"
                     disabled={isLoading}
+                    ristoan
                     fill="bg-neutral-300"
                   >
                     Upload

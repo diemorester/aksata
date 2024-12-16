@@ -1,8 +1,4 @@
-import {
-  clockInService,
-  clockOutService,
-  getAllAttendaceService,
-} from '@/services/absensi.service';
+import { clockInService, clockOutService } from '@/services/absensi/absensi.service';
 import { NextFunction, Request, Response } from 'express';
 
 export class AbsensiController {
@@ -31,18 +27,6 @@ export class AbsensiController {
       const response = await clockOutService(req.user?.id!);
       return res.status(200).send({
         msg: `Anda clock-out pada jam ${time}`,
-        response,
-      });
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  async getAllAttendace(req: Request, res: Response, next: NextFunction) {
-    try {
-      const response = await getAllAttendaceService();
-      return res.status(200).send({
-        msg: 'Succes',
         response,
       });
     } catch (error) {

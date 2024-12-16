@@ -35,11 +35,12 @@ const ChangeEmailField: React.FC<ChangeEmailFieldProps> = ({ isOpen, handleEmail
                     />
                 </div>
                 <div className="flex justify-end gap-6">
-                    <ButtonSpan type="button" onClick={onClose}>
+                    <ButtonSpan type="button" onClick={onClose} ristoan>
                         cancel
                     </ButtonSpan>
                     <ButtonSpan
                         type="submit"
+                        ristoan
                         disabled={isLoading}
                         fill="bg-neutral-300"
                     >

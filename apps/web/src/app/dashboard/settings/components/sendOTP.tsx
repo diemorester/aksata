@@ -22,12 +22,13 @@ const SendOTP: React.FC<SendOTPprops> = ({ isLoading, onClose, handleSendOTP, is
                 <p className="text-center mb-6 font-extralight">we'll need to verify your old email address, <span className="font-medium">{email}</span>, in order to change it.</p>
             </div>
             <div className="flex justify-end gap-6">
-                <ButtonSpan type="button" onClick={onClose}>
+                <ButtonSpan type="button" onClick={onClose} ristoan>
                     cancel
                 </ButtonSpan>
                 <ButtonSpan
                     type="submit"
                     disabled={isLoading}
+                    ristoan
                     fill="bg-neutral-300"
                     onClick={handleSendOTP}
                 >
