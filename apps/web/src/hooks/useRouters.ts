@@ -2,7 +2,7 @@
 import { useAppDispatch } from "@/redux/hooks"
 import { setIsModalOpen } from "@/redux/slices/modalSlice"
 import { usePathname } from "next/navigation"
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 import { LuUpload } from "react-icons/lu"
 import { RiCalendarCheckLine } from "react-icons/ri";
 import { FaProjectDiagram } from "react-icons/fa";

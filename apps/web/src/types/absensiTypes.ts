@@ -1,8 +1,16 @@
-export interface IAbsensi {
-    name: string,
-    status: Status,
-    clockIn?: Date | null,
-    clockOut?: Date | null
+export interface UserAbsensi {
+    id: number,
+    name: string
+}
+
+export interface Absensi {
+    id: string,
+    user: UserAbsensi,
+    clockIn: string,
+    clockOut: string,
+    location: string,
+    date: string,
+    status: Status
 }
 
 enum Status {
@@ -14,15 +22,9 @@ enum Status {
     Alpha
 }
 
-export interface AbsensiResponse {
-    absensi: IAbsensi[];
-    hasNextPage: boolean;
-    hasPrevPage: boolean;
-}
-
-export interface UseAbsensiParams {
-    userId: number;
-    page: number;
-    limit: number;
-    search?: string;
+export interface AbsensiParams {
+    total: number,
+    page: number,
+    take: number,
+    totalPages: number
 }

@@ -1,28 +1,30 @@
 'use client'
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { fetchAbsensi } from "@/libs/fetch/absensi";
-import { UseAbsensiParams } from "@/types/absensiTypes";
-import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Absensi, AbsensiParams } from "@/types/absensiTypes";
+import axiosInstance from "@/libs/axios";
 
-export const useAbsensi = ({ userId, page, limit, search }: UseAbsensiParams) => {
-    const queryKey = useMemo(
-        () => ["absensi", userId, page, limit, search],
-        [userId, page, limit, search]
-    );
+interface AbsensiResponse {
+    meta: AbsensiParams,
+    attendance: Absensi[]
+}
 
-    const queryFn = async () => fetchAbsensi(userId, page, limit, search);
+interface AbsensiQueryParams {
+    search?: string,
+    page?: number,
+    take?: number
+}
 
-    const { data, isLoading, error } = useQuery({
-        queryKey,
-        queryFn,
-        // keepPreviousData: true
-    });
-
-    return {
-        absensi: data?.absensi || [],
-        hasNextPage: data?.hasNextPage ?? false,
-        hasPreviousPage: data?.hasPrevPage ?? false,
-        isLoading,
-        error,
-    };
-};
+export const useAbsensi = (queryParams: AbsensiQueryParams) => {
+    
+    return useQuery({
+        queryKey: ['absensi'],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get<AbsensiResponse>('/absensi/getall-attendace', {
+                params: queryParams
+            })
+            console.log(data, 'console log dede');
+            return data
+            
+        }
+    })
+}
