@@ -1,4 +1,5 @@
 import prisma from '@/prisma';
+import { AbsensiQuery } from '@/types/absensi';
 
 const now = new Date();
 const startDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -73,6 +74,59 @@ export const clockOutService = async (userId: number) => {
     });
 
     return clockOut;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAllAttendanceService = async (query: AbsensiQuery) => {
+  try {
+    const { search, take = 10, page = 1 } = query;
+
+    const skip = (page - 1) * take;
+
+    const attendace = await prisma.absensi.findMany({
+      where: {
+        user: {
+          name: {
+            contains: search,
+          },
+        },
+      },
+      orderBy: {
+        date: 'desc',
+      },
+      skip,
+      take,
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    const total = await prisma.absensi.count({
+      where: {
+        user: {
+          name: {
+            contains: search,
+          },
+        },
+      },
+    });
+
+    return {
+      meta: {
+        total,
+        page,
+        take,
+        totalPages: Math.ceil(total / take),
+      },
+      attendace,
+    };
   } catch (error) {
     throw error;
   }
