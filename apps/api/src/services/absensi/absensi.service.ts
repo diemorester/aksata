@@ -11,7 +11,7 @@ export const clockInService = async (userId: number) => {
       where: { id: userId },
     });
 
-    if (!user) throw new Error('user not found!');
+    if (!user) throw new Error('user not found');
 
     const existingAttendace = await prisma.absensi.findFirst({
       where: {
@@ -23,7 +23,7 @@ export const clockInService = async (userId: number) => {
       },
     });
 
-    if (existingAttendace) throw new Error('Anda sudah clock-in hari ini');
+    if (existingAttendace) throw new Error('anda sudah clock-in hari ini');
 
     const clockIn = await prisma.absensi.create({
       data: {
@@ -44,12 +44,11 @@ export const clockOutService = async (userId: number) => {
       where: { id: userId },
     });
 
-    if (!user) throw new Error('user not found!');
+    if (!user) throw new Error('user not found');
 
-    const attendace = await prisma.absensi.findFirst({
+    const attendance = await prisma.absensi.findFirst({
       where: {
         userId,
-        clockOut: null,
         clockIn: {
           gte: startDay,
           lte: endDay,
@@ -57,12 +56,15 @@ export const clockOutService = async (userId: number) => {
       },
     });
 
-    if (!attendace)
-      throw new Error('anda belum clock-in hari ini atau sudah clock-out');
+    if (!attendance) throw new Error('Anda belum clock-in hari ini.');
+
+    if (attendance.clockOut !== null) {
+      throw new Error('Anda sudah melakukan clock-out hari ini.');
+    }
 
     const clockOut = await prisma.absensi.update({
       where: {
-        id: attendace.id,
+        id: attendance.id,
       },
       data: {
         userId,

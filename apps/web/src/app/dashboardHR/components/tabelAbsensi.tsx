@@ -2,8 +2,14 @@
 
 import ButtonSpan from "@/components/buttons/spanButtons"
 import SearchBar from "./searchBarHR"
+import { IAbsensi } from "@/types/absensiTypes"
 
-const ListAbsensi = () => {
+const TabelAbsensi = ({
+    name,
+    status,
+    clockIn,
+    clockOut
+}: IAbsensi) => {
     return (
         <div className="flex flex-col">
             <div className="w-full min-h-screen mx-auto">
@@ -15,20 +21,20 @@ const ListAbsensi = () => {
                     <table className="mt-2 md:w-full">
                         <thead className="pb-5 text-black">
                             <tr className="border-b-[2px] text-start border-black">
-                                <th className="p-3 text-start font-semibold">Nama</th>
+                                <th className="p-3 text-start font-semibold">{name}</th>
                                 <th className="hidden p-3 text-start md:table-cell font-semibold">Waktu Check-In</th>
                                 <th className="hidden p-3 text-start md:table-cell font-semibold">Waktu Check-Out</th>
-                                <th className="hidden p-3 text-start md:table-cell font-semibold">Status</th>
+                                <th className="p-3">Status</th>
                             </tr>
                         </thead>
                     </table>
                     <div className="flex justify-end items-center px-3 pb-6">
-                            <ButtonSpan
-                                type="submit"
-                                fill="bg-green-500"
-                            >
-                                PRINT
-                            </ButtonSpan>
+                        <ButtonSpan
+                            type="submit"
+                            fill="bg-green-500"
+                        >
+                            PRINT
+                        </ButtonSpan>
                     </div>
                 </div>
             </div>
@@ -36,4 +42,4 @@ const ListAbsensi = () => {
     )
 }
 
-export default ListAbsensi
+export default TabelAbsensi
