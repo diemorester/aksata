@@ -13,3 +13,16 @@ enum Status {
     Izin,
     Alpha
 }
+
+export interface AbsensiResponse {
+    absensi: IAbsensi[];
+    hasNextPage: boolean;
+    hasPrevPage: boolean;
+}
+
+export interface UseAbsensiParams {
+    userId: number;
+    page: number;
+    limit: number;
+    search?: string;
+}
