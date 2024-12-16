@@ -1,5 +1,4 @@
 'use client';
-
 import { dateNow, timeNow } from '@/libs/date';
 import { clockInFetch, clockOutFetch } from '@/libs/fetch/absensi';
 import { AxiosError } from 'axios';

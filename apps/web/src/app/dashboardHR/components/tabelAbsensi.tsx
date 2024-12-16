@@ -3,7 +3,7 @@
 import ButtonSpan from "@/components/buttons/spanButtons"
 import SearchBar from "./searchBarHR"
 
-const ListAbsensi = () => {
+const TabelAbsensi = () => {
     return (
         <div className="flex flex-col">
             <div className="w-full min-h-screen mx-auto">
@@ -36,4 +36,4 @@ const ListAbsensi = () => {
     )
 }
 
-export default ListAbsensi
+export default TabelAbsensi
