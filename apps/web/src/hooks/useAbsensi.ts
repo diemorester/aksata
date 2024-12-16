@@ -1,30 +1,40 @@
-'use client'
-import { useQuery } from "@tanstack/react-query";
-import { Absensi, AbsensiParams } from "@/types/absensiTypes";
-import axiosInstance from "@/libs/axios";
+'use client';
+
+import { useQuery } from '@tanstack/react-query';
+import { Absensi, AbsensiParams } from '@/types/absensiTypes';
+import axiosInstance from '@/libs/axios';
+import { getCookie } from '@/libs/server';
 
 interface AbsensiResponse {
-    meta: AbsensiParams,
-    attendance: Absensi[]
+  data: {
+    meta: AbsensiParams;
+    attendance: Absensi[];
+  };
 }
 
 interface AbsensiQueryParams {
-    search?: string,
-    page?: number,
-    take?: number
+  search?: string;
+  page?: number;
+  take?: number;
 }
 
-export const useAbsensi = (queryParams: AbsensiQueryParams) => {
-    
-    return useQuery({
-        queryKey: ['absensi'],
-        queryFn: async () => {
-            const { data } = await axiosInstance.get<AbsensiResponse>('/absensi/getall-attendace', {
-                params: queryParams
-            })
-            console.log(data, 'console log dede');
-            return data
-            
-        }
-    })
-}
+const useAbsensi = (queryParams: AbsensiQueryParams) => {
+  return useQuery({
+    queryKey: ['absensi'],
+    queryFn: async () => {
+      const token = await getCookie('access_token');
+      const { data } = await axiosInstance.get<AbsensiResponse>(
+        '/absensi/getall-attendace',
+        {
+          params: queryParams,
+          headers: {
+            Authorization: `Bearer ${token?.value}`,
+          },
+        },
+      );
+      return data.data;
+    },
+  });
+};
+
+export default useAbsensi;

@@ -1,17 +1,17 @@
-'use client'
-import { useAbsensi } from "@/hooks/useAbsensi"
-import { useState } from "react"
+'use client';
+import useAbsensi from '@/hooks/useAbsensi';
+import { useState } from 'react';
 
 export default function DashboardHR() {
-    const [kosong, setKosong] = useState('');
-    const [kosong2, setKosong2] = useState(1);
-    const testing = useAbsensi({ page: kosong2, take: 10})
-    console.log(testing);
-    
-    
-    return (
-        <div>
-            {/* {testing.data?.attendance.clockIn} */}
-        </div>
-    )
+  const [page, setPage] = useState(1);
+
+  const absensi = useAbsensi({ page, take: 10 });
+
+  return (
+    <div>
+      {absensi.data?.attendance?.map((absen) => {
+        return <div>{absen.user.name}</div>;
+      })}
+    </div>
+  );
 }
