@@ -1,4 +1,3 @@
-import { AbsensiResponse } from '@/types/absensiTypes';
 import axiosInstance from '../axios';
 import { getCookie } from '../server';
 
@@ -32,16 +31,4 @@ export const clockOutFetch = async () => {
   );
 
   return res;
-};
-
-export const fetchAbsensi = async ( userId: number, page: number, limit: number, search?: string): Promise<AbsensiResponse> => {
-  const res = await axiosInstance.get<AbsensiResponse>("/getall-attendace", {
-    params: {
-      userId,
-      page,
-      limit,
-      ...(search && { search })
-    }
-  });
-  return res.data
 };
