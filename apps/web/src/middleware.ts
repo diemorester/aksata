@@ -11,7 +11,6 @@ export async function middleware(req: NextRequest) {
   const token = await getCookie('access_token');
   const url = req.nextUrl.pathname;
 
-  // pengecekan tokennya valid atau ngga
   const isTokenValid = async (token: string | undefined) => {
     if (!token) return null;
     try {
@@ -41,39 +40,39 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  // Kalo tokennya valid bakal ngejalanin kondisi dibawah
+  // Kalo tokennya valid bakal ngejalanin kondisi di bawah
   if (tokenValid) {
     const { role } = tokenValid;
 
-    // Protect untuk superadmin kalo mau ke "/dashboard"
+    // Protection untuk superadmin kalo mau ke "/dashboard"
     if (protectedDashboard.test(url) || url === '/dashboard') {
       if (role === 'SuperAdmin') {
         return NextResponse.redirect(new URL('/', req.url));
       }
     }
 
-    // Protect untuk rolenya bukan user,
+    // Protection untuk rolenya bukan user,
     if (protectedDashboard.test(url)) {
       if (role !== 'User') {
         return NextResponse.redirect(new URL('/', req.url));
       }
     }
 
-    // Protect untuk yang rolenya bukan AdminHr dan SuperAdmin
+    // Protection untuk yang rolenya bukan AdminHr dan SuperAdmin
     if (protectedDashboardHR.test(url)) {
       if (role !== 'AdminHR' && role !== 'SuperAdmin') {
         return NextResponse.redirect(new URL('/', req.url));
       }
     }
 
-    // Protect untuk yang rolenya bukan AdminGudang dan SuperAdmin
+    // Protection untuk yang rolenya bukan AdminGudang dan SuperAdmin
     if (protectedDashboardGudang.test(url)) {
       if (role !== 'AdminGudang' && role !== 'SuperAdmin') {
         return NextResponse.redirect(new URL('/', req.url));
       }
     }
 
-    // Protect untuk yang rolenya bukan SuperAdmin
+    // Protection untuk yang rolenya bukan SuperAdmin
     if (protectedSuperAdmin.test(url)) {
       if (role !== 'SuperAdmin') {
         return NextResponse.redirect(new URL('/', req.url));
