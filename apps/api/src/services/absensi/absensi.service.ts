@@ -85,7 +85,7 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
 
     const skip = (page - 1) * take;
 
-    const attendace = await prisma.absensi.findMany({
+    const attendance = await prisma.absensi.findMany({
       where: {
         user: {
           name: {
@@ -125,7 +125,7 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
         take,
         totalPages: Math.ceil(total / take),
       },
-      attendace,
+      attendance,
     };
   } catch (error) {
     throw error;
