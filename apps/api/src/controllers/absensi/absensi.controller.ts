@@ -43,8 +43,8 @@ export class AbsensiController {
       const { page, take, search } = req.query;
 
       const data = await getAllAttendanceService({
-        page: Number(page as string) | 1,
-        take: Number(take as string) | 10,
+        page: Number(page as string) || 1,
+        take: Number(take as string) || 10,
         search: search as string,
       });
       return res.status(200).send({

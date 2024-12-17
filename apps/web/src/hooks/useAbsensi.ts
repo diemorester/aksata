@@ -24,7 +24,7 @@ const useAbsensi = (queryParams: AbsensiQueryParams) => {
     queryFn: async () => {
       const token = await getCookie('access_token');
       const { data } = await axiosInstance.get<AbsensiResponse>(
-        '/absensi/getall-attendace',
+        '/absensi/getall-attendance',
         {
           params: queryParams,
           headers: {
