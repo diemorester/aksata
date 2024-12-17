@@ -167,7 +167,7 @@ export default function Home() {
                     <Button disable={isLoading} type="submit" auth>
                       {variantAuth == "Login" ? "LOGIN" : "REGISTER"}
                     </Button>
-                    {/* {variantAuth == "Login" && (
+                    {variantAuth == "Login" && (
                       <h2 className="text-center text-xs text-neutral-300 italic">
                         not registered? Sign Up{" "}
                         <span
@@ -177,7 +177,7 @@ export default function Home() {
                           Here
                         </span>
                       </h2>
-                    )} */}
+                    )}
                   </div>
                 </div>
               </div>

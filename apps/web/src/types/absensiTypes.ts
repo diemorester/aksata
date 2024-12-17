@@ -10,7 +10,7 @@ export interface Absensi {
     clockOut: string,
     location: string,
     date: string,
-    status: Status
+    status: 'Hadir' | 'Terlambat' | 'Sakit' | 'Cuti' | 'Izin' | 'Alpha'
 }
 
 enum Status {

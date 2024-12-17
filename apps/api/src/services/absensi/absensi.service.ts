@@ -23,13 +23,18 @@ export const clockInService = async (userId: number) => {
         },
       },
     });
-
+    
     if (existingAttendace) throw new Error('anda sudah clock-in hari ini');
+
+    const batasJamMasuk = new Date();
+    batasJamMasuk.setHours(8, 30, 0, 0)
+    const status = now <= batasJamMasuk? 'Hadir' : 'Terlambat'
 
     const clockIn = await prisma.absensi.create({
       data: {
         userId,
         clockIn: new Date(),
+        status
       },
     });
 
@@ -81,7 +86,7 @@ export const clockOutService = async (userId: number) => {
 
 export const getAllAttendanceService = async (query: AbsensiQuery) => {
   try {
-    const { search, take = 10, page = 1 } = query;
+    const { search, take = 9, page = 1 } = query;
 
     const skip = (page - 1) * take;
 
