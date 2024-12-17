@@ -20,7 +20,7 @@ interface AbsensiQueryParams {
 
 const useAbsensi = (queryParams: AbsensiQueryParams) => {
   return useQuery({
-    queryKey: ['absensi', queryParams.page, queryParams.take, queryParams.take],
+    queryKey: ['absensi', queryParams.page, queryParams.take, queryParams.search],
     queryFn: async () => {
       const token = await getCookie('access_token');
       const { data } = await axiosInstance.get<AbsensiResponse>(

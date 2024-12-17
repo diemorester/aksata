@@ -16,7 +16,7 @@ const Pagination: React.FC<PaginationProps> = ({ total, onPageChange }) => {
             pageCount={total}
             containerClassName="flex gap-5 w-fit"
             pageLinkClassName="px-4 py-2 rounded-lg text-neutral-600"
-            activeLinkClassName="text-black bg-black"
+            activeLinkClassName="text-white bg-black"
             onPageChange={onPageChange}
             renderOnZeroPageCount={null}
         />

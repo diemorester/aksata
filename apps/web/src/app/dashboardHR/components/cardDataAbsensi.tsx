@@ -19,10 +19,13 @@ const CardDataAbsensi: React.FC<CardAbsensiProps>  = ({ name, clockIn, clockOut,
             <th className="px-3 py-1 text-center font-extralight">{clockIn ? hourFormat(clockIn) : "--/--"}</th>
             <th className="px-3 py-1 text-center font-extralight">{clockOut ? hourFormat(clockOut) : `--/--`}</th>
             <th className="px-3 py-1 text-center font-extralight">{dayFormat(date)}</th>
-            <th className="mx-3 py-1 flex items-center justify-center font-extralight">
-                <p className={clsx(`text-center py-2 w-24 text-white rounded-lg px-3`,
+            <th className="mx-3 py-1 flex items-center justify-center font-light">
+                <p className={clsx(`text-center py-2 w-24 text-black rounded-lg px-3`,
                     status == "Hadir" && "bg-green-500/85",
-                    status == "Terlambat" && "bg-amber-500/80",
+                    status == "Terlambat" && "bg-amber-500/85",
+                    status == "Sakit" && "bg-[#FFFF33]",
+                    status == "Cuti" && "bg-[#87CEFA]",
+                    status == "Alpha" && "bg-[#FF4500]"
                 )}>{status}</p>
             </th>
         </tr>
