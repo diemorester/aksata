@@ -73,13 +73,13 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
             <div className='overflow-y-auto bg-[#2c2c2c] scrollbar-none w-full'>
                 {children}
             </div>
-            <Modal isOpen={isOpen} onClose={onCLoseModal} backgroundClose>
+            <Modal isOpen={isOpen} onClose={onCLoseModal} ristoan backgroundClose>
                 <div className='flex flex-col gap-3 text-neutral-100'>
                     <h2 className='text-2xl font-semibold'>Logout</h2>
                     <p className='mb-16'>are you sure you want to logout?</p>
                     <div className='flex flex-row justify-end px-2 gap-6 text-neutral-100'>
-                        <ButtonSpan type='button' onClick={onCLoseModal}>cancel</ButtonSpan>
-                        <ButtonSpan type='button' onClick={logOut} fill='bg-red-500'>log out</ButtonSpan>
+                        <ButtonSpan type='button' ristoan onClick={onCLoseModal}>cancel</ButtonSpan>
+                        <ButtonSpan type='button' ristoan onClick={logOut} fill='bg-red-500'>log out</ButtonSpan>
                     </div>
                 </div>
             </Modal>

@@ -10,17 +10,17 @@ const Dashboard = () => {
         <div className="bg-neutral-900 p-3 h-[535px] rounded-lg text-center flex flex-col gap-3">
           <div className="flex gap-3">
             <div className="bg-neutral-600 w-2/6 h-[248px] place-content-center rounded-lg">
-              kotak kanan
+              
             </div>
             <div className="bg-neutral-600 w-4/6 h-[248px] place-content-center rounded-lg">
-              kotak kiri
+              
             </div>
           </div>
           <div className="flex gap-3">
             <div className="bg-neutral-600 w-4/6 h-[248px] place-content-center rounded-lg">
-              kotak kiri
+              
             </div>
-            <div className="bg-neutral-600 w-2/6 h-[248px] py-4 px-5 rounded-lg">
+            <div className="bg-neutral-600 w-2/6 h-[248px] rounded-lg">
               <Absensi />
             </div>
           </div>

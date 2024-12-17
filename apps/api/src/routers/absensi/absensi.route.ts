@@ -24,7 +24,7 @@ export class AbsensiRouter {
       this.absensiController.clockOut,
     );
     this.router.get(
-      '/getall-attendace',
+      '/getall-attendance',
       authMiddleware,
       accessAdminHr,
       this.absensiController.getAllAttendance,
