@@ -4,11 +4,10 @@ import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
 
 interface PaginationProps {
     total: number;
-    take: number;
     onPageChange: ({ selected }: { selected: number }) => void;
 }
 
-const Pagination: React.FC<PaginationProps> = ({ total, take, onPageChange }) => {
+const Pagination: React.FC<PaginationProps> = ({ total, onPageChange }) => {
     return (
         <ReactPaginate
             breakLabel={<span>...</span>}

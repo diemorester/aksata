@@ -3,15 +3,6 @@
 import { dayFormat, hourFormat } from "@/libs/date"
 import clsx from "clsx"
 
-enum Status {
-    Hadir,
-    Terlambat,
-    Sakit,
-    Cuti,
-    Izin,
-    Alpha
-}
-
 interface CardAbsensiProps {
     name: string,
     clockIn: string,
@@ -21,6 +12,7 @@ interface CardAbsensiProps {
 }
 
 const CardDataAbsensi: React.FC<CardAbsensiProps>  = ({ name, clockIn, clockOut, status, date }) => {
+    
     return (
         <tr className="border-b border-black/10">
             <th className="px-3 py-1 text-start font-extralight">{name}</th>
