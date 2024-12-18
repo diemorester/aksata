@@ -5,8 +5,8 @@ import './globals.css';
 import ToastComp from '@/components/toasts';
 import StoreProvider from '@/providers/storeProvider';
 import useAutoRefreshToken from '@/hooks/useAutoRefreshToken';
-import { useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import useDocumentMeta from '@/hooks/useDocumentMeta';
 
 const inter = Inter({ subsets: ['latin'] });
 const queryClient = new QueryClient();
@@ -17,15 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   useAutoRefreshToken();
-
-  useEffect(() => {
-    document.title = "ERP Aksata";
-
-    const favicon = document.querySelector('link[rel="icon"]') as HTMLLinkElement | null;
-    if (favicon) {
-      favicon.href = '/favicon.ico?v=4';
-    }
-  }, [])
+  useDocumentMeta();
 
   return (
     <html lang="en">

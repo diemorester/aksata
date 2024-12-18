@@ -1,3 +1,5 @@
+"use client"
+
 import axiosInstance from '@/libs/axios';
 import { createCookie } from '@/libs/server';
 import { useEffect } from 'react';
@@ -16,7 +18,7 @@ const useAutoRefreshToken = () => {
           console.error('Failed to refresh token', error);
         }
       },
-      14 * 60 * 1000,
+      13 * 60 * 1000,
     );
 
     return () => clearInterval(refreshInterval); 
