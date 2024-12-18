@@ -37,9 +37,9 @@ const Absensi = () => {
   };
 
   return (
-    <div className='bg-neutral-900 flex flex-col justify-between p-3 rounded-lg h-full'>
+    <div className='flex flex-col justify-between p-3  rounded-lg h-full'>
       {/* <p className="text-end text-sm">{dateNow()}</p> */}
-      <p className="text-5xl pt-10 font-semibold text-center">
+      <p className="text-4xl pt-10 font-semibold text-center">
         {timeNow(new Date())}
       </p>
 

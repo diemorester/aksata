@@ -25,6 +25,7 @@ const CardDataAbsensi: React.FC<CardAbsensiProps>  = ({ name, clockIn, clockOut,
                     status == "Terlambat" && "bg-amber-500/85",
                     status == "Sakit" && "bg-[#FFFF33]",
                     status == "Cuti" && "bg-[#87CEFA]",
+                    status == "Izin" && "bg-violet-400",
                     status == "Alpha" && "bg-[#FF4500]"
                 )}>{status}</p>
             </th>
