@@ -23,18 +23,18 @@ export const clockInService = async (userId: number) => {
         },
       },
     });
-    
+
     if (existingAttendace) throw new Error('anda sudah clock-in hari ini');
 
     const batasJamMasuk = new Date();
-    batasJamMasuk.setHours(8, 30, 0, 0)
-    const status = now <= batasJamMasuk? 'Hadir' : 'Terlambat'
+    batasJamMasuk.setHours(8, 30, 0, 0);
+    const status = now <= batasJamMasuk ? 'Hadir' : 'Terlambat';
 
     const clockIn = await prisma.absensi.create({
       data: {
         userId,
         clockIn: new Date(),
-        status
+        status,
       },
     });
 
@@ -132,6 +132,39 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
       },
       attendance,
     };
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const autoAlphaAttendance = async () => {
+  try {
+    const users = await prisma.user.findMany();
+
+    for (const user of users) {
+      const existingAttendace = await prisma.absensi.findFirst({
+        where: {
+          userId: user.id,
+          clockIn: {
+            gte: startDay,
+            lte: endDay,
+          },
+        },
+      });
+
+      if (!existingAttendace) {
+        await prisma.absensi.create({
+          data: {
+            userId: user.id,
+            clockIn: null,
+            clockOut: null,
+            status: 'Alpha',
+          },
+        });
+      }
+    }
+
+    console.log('Auto set alpha completed');
   } catch (error) {
     throw error;
   }

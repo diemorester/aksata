@@ -14,6 +14,7 @@ import { UserRouter } from './routers/auth/user.router';
 import { DecodeRouter } from './routers/decode.router';
 import path from 'path';
 import { AbsensiRouter } from './routers/absensi/absensi.route';
+import "./jobs/autoAlphaJob"
 
 export default class App {
   private app: Express;
