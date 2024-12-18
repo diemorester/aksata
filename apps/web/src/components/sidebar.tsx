@@ -37,7 +37,7 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
     return (
         <div
             className={cn(
-                'flex flex-col md:flex-row bg-neutral-900 w-full flex-1 mx-auto overflow-hidden',
+                'flex flex-col md:flex-row bg-neutral-950 w-full flex-1 mx-auto overflow-hidden',
                 'h-screen',
             )}
         >
@@ -102,7 +102,7 @@ export const Logo = () => {
             <motion.span
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="font-bold text-black dark:text-white md:text-[26px] px-1 whitespace-pre"
+                className="font-bold text-off-white md:text-[26px] px-1 whitespace-pre"
             >
                 Ristoan Tri Laras
             </motion.span>
