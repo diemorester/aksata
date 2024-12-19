@@ -24,7 +24,7 @@ export const clockInService = async (userId: number) => {
       },
     });
 
-    if (existingAttendace) throw new Error('anda sudah clock-in hari ini');
+    if (existingAttendace) throw new Error('Anda sudah melakukan clock-in hari ini');
 
     const batasJamMasuk = new Date();
     batasJamMasuk.setHours(8, 30, 0, 0);
@@ -62,7 +62,7 @@ export const clockOutService = async (userId: number) => {
       },
     });
 
-    if (!attendance) throw new Error('Anda belum clock-in hari ini.');
+    if (!attendance) throw new Error('Anda belum melakukan clock-in hari ini.');
 
     if (attendance.clockOut !== null) {
       throw new Error('Anda sudah melakukan clock-out hari ini.');

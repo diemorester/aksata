@@ -14,7 +14,7 @@ export class AbsensiController {
       const time = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
       const response = await clockInService(req.user?.id!);
       return res.status(200).send({
-        msg: `Anda clock-in pada jam ${time}`,
+        msg: `Anda melakukan clock-in pada jam ${time}`,
         response,
       });
     } catch (error) {
@@ -30,7 +30,7 @@ export class AbsensiController {
       const time = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
       const response = await clockOutService(req.user?.id!);
       return res.status(200).send({
-        msg: `Anda clock-out pada jam ${time}`,
+        msg: `Anda melakukan clock-out pada jam ${time}`,
         response,
       });
     } catch (error) {
