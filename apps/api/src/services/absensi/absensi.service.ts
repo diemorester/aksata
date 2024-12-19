@@ -1,7 +1,10 @@
+import { convertDate } from '@/helpers/convertDate';
 import { durationCounter } from '@/helpers/durationCounter';
 import prisma from '@/prisma';
 import { AbsensiQuery } from '@/types/absensi';
-import ExcelJS from 'exceljs'
+import * as ExcelJS from 'exceljs';
+import fs from 'fs';
+import path from 'path';
 
 const now = new Date();
 const startDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -26,7 +29,8 @@ export const clockInService = async (userId: number) => {
       },
     });
 
-    if (existingAttendace) throw new Error('Anda sudah melakukan clock-in hari ini');
+    if (existingAttendace)
+      throw new Error('Anda sudah melakukan clock-in hari ini');
 
     const batasJamMasuk = new Date();
     batasJamMasuk.setHours(8, 30, 0, 0);
@@ -80,15 +84,18 @@ export const clockOutService = async (userId: number) => {
       },
     });
 
-    const duration = durationCounter(updateClockOut.clockIn, updateClockOut.clockOut);
+    const duration = durationCounter(
+      updateClockOut.clockIn,
+      updateClockOut.clockOut,
+    );
     const clockOut = await prisma.absensi.update({
       where: {
         id: attendance.id,
       },
       data: {
-        duration
-      }
-    })
+        duration,
+      },
+    });
 
     return clockOut;
   } catch (error) {
@@ -102,56 +109,25 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
     const now = new Date();
     const skip = (page - 1) * take;
 
-    const workbook = new ExcelJS.Workbook();
-    const sheet = workbook.addWorksheet('Absensi')
-
-    sheet.columns = [
-      {
-        header: 'Nama',
-        key: 'name',
-        width: 10
-      },
-      {
-        header: 'Waktu Check-In',
-        key: 'clockIn',
-        width: 10
-      },
-      {
-        header: 'Waktu check-Out',
-        key: 'clockOut',
-        width: 10
-      },
-      {
-        header: 'Durasi',
-        key: 'duration',
-        width: 10
-      },
-      {
-        header: 'Status',
-        key: 'status',
-        width: 10
-      }
-    ]
-
-    let startDate: Date | undefined
-    let endDate: Date | undefined
+    let startDate: Date | undefined;
+    let endDate: Date | undefined;
 
     if (filterBy === 'daily') {
       startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
       endDate = new Date(startDate);
-      endDate.setDate(startDate.getDate() + 1)
+      endDate.setDate(startDate.getDate() + 1);
     } else if (filterBy === 'weekly') {
       const dayOfWeek = now.getDay();
       startDate = new Date(now);
       startDate.setDate(now.getDate() - dayOfWeek);
-      startDate.setHours(0, 0, 0, 0)
+      startDate.setHours(0, 0, 0, 0);
       endDate = new Date(startDate);
-      endDate.setDate(startDate.getDate() + 7)
+      endDate.setDate(startDate.getDate() + 7);
     } else if (filterBy === 'monthly') {
       startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-      endDate = new Date(now.getFullYear(), now.getMonth() + 1, 1)
+      endDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
     } else if (filterBy === 'yearly') {
-      startDate = new Date(now.getFullYear(), 0, 1)
+      startDate = new Date(now.getFullYear(), 0, 1);
       endDate = new Date(now.getFullYear() + 1, 0, 1);
     }
 
@@ -164,8 +140,8 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
         },
         date: {
           lte: endDate,
-          gte: startDate
-        }
+          gte: startDate,
+        },
       },
       orderBy: {
         date: 'desc',
@@ -182,16 +158,6 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
       },
     });
 
-    attendance.forEach((attend) => {
-      sheet.addRow({
-        name: attend.user.name,
-        clockIn: attend.clockIn,
-        clockOut: attend.clockOut,
-        duration: attend.duration,
-        status: attend.status
-      })
-    })
-
     const total = await prisma.absensi.count({
       where: {
         user: {
@@ -201,12 +167,10 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
         },
         date: {
           gte: startDate,
-          lte: endDate
-        }
+          lte: endDate,
+        },
       },
     });
-
-    const buffer = await workbook.xlsx.writeFile()
 
     return {
       meta: {
@@ -216,7 +180,6 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
         totalPages: Math.ceil(total / take),
       },
       attendance,
-      buffer
     };
   } catch (error) {
     throw error;
@@ -238,7 +201,7 @@ export const autoAlphaAttendance = async () => {
         },
       });
 
-      if (!existingAttendace && user.role === "User") {
+      if (!existingAttendace && user.role === 'User') {
         await prisma.absensi.create({
           data: {
             userId: user.id,
@@ -262,13 +225,13 @@ export const autoClockOutAttendance = async () => {
       where: {
         clockOut: null,
         user: {
-          role: 'User'
+          role: 'User',
         },
         clockIn: {
-          not: null
-        }
-      }
-    })
+          not: null,
+        },
+      },
+    });
 
     for (const attend of attendance) {
       const durationTime = await prisma.absensi.update({
@@ -277,21 +240,89 @@ export const autoClockOutAttendance = async () => {
         },
         data: {
           clockOut: new Date(),
-        }
-      })
+        },
+      });
 
-      const duration = durationCounter(durationTime.clockIn, durationTime.clockOut)
+      const duration = durationCounter(
+        durationTime.clockIn,
+        durationTime.clockOut,
+      );
 
       await prisma.absensi.update({
         where: {
-          id: attend.id
+          id: attend.id,
         },
         data: {
-          duration
-        }
-      })
+          duration,
+        },
+      });
     }
-    console.log('Auto Clock-out complete');    
+    console.log('Auto Clock-out complete');
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const exportExcelService = async () => {
+  try {
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet('Absensi');
+
+    sheet.columns = [
+      {
+        header: 'No',
+        key: 'no',
+        width: 5,
+      },
+      {
+        header: 'Nama',
+        key: 'name',
+        width: 10,
+      },
+      {
+        header: 'Waktu Check-In',
+        key: 'clockIn',
+        width: 40,
+      },
+      {
+        header: 'Waktu check-Out',
+        key: 'clockOut',
+        width: 40,
+      },
+      {
+        header: 'Durasi',
+        key: 'duration',
+        width: 20,
+      },
+      {
+        header: 'Status',
+        key: 'status',
+        width: 20,
+      },
+    ];
+
+    const attendance = await prisma.absensi.findMany({
+      include: {
+        user: true,
+      },
+    });
+
+    attendance.forEach((attend, idx) => {
+      return sheet.addRow({
+        no: idx + 1,
+        name: attend.user.name,
+        clockIn: convertDate(attend.clockIn),
+        clockOut: convertDate(attend.clockOut),
+        duration: attend.duration || "-",
+        status: attend.status,
+      });
+    });
+
+    const buffer = await workbook.xlsx.writeBuffer();
+    const templatePath = path.join(__dirname, '../../../public/excel', 'absensi.xlsx');
+    fs.writeFileSync(templatePath, buffer as any);
+
+    return buffer
   } catch (error) {
     throw error;
   }

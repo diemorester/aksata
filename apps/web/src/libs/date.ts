@@ -33,7 +33,7 @@ export const dayFormat = (date: string) => {
     'Minggu',
     'Senin',
     'Selasa',
-    'Rabu',
+    'Rabu', 
     'Kamis',
     'Jumat',
     'Sabtu'

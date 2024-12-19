@@ -1,6 +1,7 @@
 import {
   clockInService,
   clockOutService,
+  exportExcelService,
   getAllAttendanceService,
 } from '@/services/absensi/absensi.service';
 import { NextFunction, Request, Response } from 'express';
@@ -46,15 +47,37 @@ export class AbsensiController {
         page: Number(page as string) || 1,
         take: Number(take as string) || 9,
         search: search as string,
-        filterBy: filterBy as 'daily' | 'weekly' | 'monthly' | 'yearly' || 'daily'
+        filterBy:
+          (filterBy as 'daily' | 'weekly' | 'monthly' | 'yearly') || 'daily',
       });
-
-      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-      res.setHeader('Content-Disposition', 'attachment; filename=ERP-aksata.xlsx');
 
       return res.status(200).send({
         status: 'ok',
         data,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async exportExcel(req: Request, res: Response, next: NextFunction) {
+    try {
+      const excelFile = await exportExcelService();
+
+      res.setHeader(
+        'Content-Type',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      );
+      res.setHeader(
+        'Content-Disposition',
+        'attachment; filename=ERP-aksata.xlsx',
+      );
+
+      // res.download(excelFile as any)
+
+      return res.status(200).send({
+        status: 'ok',
+        excelFile,
       });
     } catch (error) {
       next(error);

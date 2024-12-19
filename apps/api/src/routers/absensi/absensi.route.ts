@@ -23,6 +23,7 @@ export class AbsensiRouter {
       authMiddleware,
       this.absensiController.clockOut,
     );
+    this.router.post('/export-excel', this.absensiController.exportExcel);
     this.router.get(
       '/getall-attendance',
       // authMiddleware,
