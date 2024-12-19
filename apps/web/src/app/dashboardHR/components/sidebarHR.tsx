@@ -54,7 +54,7 @@ export function SidebarHR({ children }: { children: React.ReactNode }) {
                                     href={link.href}
                                     label={link.label}
                                     icon={link.icon}
-                                    active={link.active}
+                                    active={link.active!}
                                     onClick={link.onClick!}
                                 />
                             ))}

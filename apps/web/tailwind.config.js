@@ -14,7 +14,8 @@ module.exports = {
         'custom-image': `url(/splash.png)`,
       },
       colors: {
-        "off-white": '#F0F4F8'
+        "off-white": '#F0F4F8',
+        "broken-white": '#E8EBEF'
       }
     },
   },
