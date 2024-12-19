@@ -86,9 +86,31 @@ export const clockOutService = async (userId: number) => {
 
 export const getAllAttendanceService = async (query: AbsensiQuery) => {
   try {
-    const { search, take = 9, page = 1 } = query;
-
+    const { search, take = 9, page = 1, filterBy } = query;
+    const now = new Date();
     const skip = (page - 1) * take;
+
+    let startDate: Date | undefined
+    let endDate: Date | undefined
+
+    if (filterBy === 'daily') {
+      startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      endDate = new Date(startDate);
+      endDate.setDate(startDate.getDate() + 1)
+    } else if (filterBy === 'weekly') {
+      const dayOfWeek = now.getDay();
+      startDate = new Date(now);
+      startDate.setDate(now.getDate() - dayOfWeek);
+      startDate.setHours(0, 0, 0, 0)
+      endDate = new Date(startDate);
+      endDate.setDate(startDate.getDate() + 7)
+    } else if (filterBy === 'monthly') {
+      startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+      endDate = new Date(now.getFullYear(), now.getMonth() + 1, 1)
+    } else if (filterBy === 'yearly') {
+      startDate = new Date(now.getFullYear(), 0, 1)
+      endDate = new Date(now.getFullYear() + 1, 0, 1);
+    }
 
     const attendance = await prisma.absensi.findMany({
       where: {
@@ -97,6 +119,10 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
             contains: search,
           },
         },
+        date: {
+          lte: endDate,
+          gte: startDate
+        }
       },
       orderBy: {
         date: 'desc',
@@ -120,6 +146,10 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
             contains: search,
           },
         },
+        date: {
+          gte: startDate,
+          lte: endDate
+        }
       },
     });
 
@@ -152,7 +182,7 @@ export const autoAlphaAttendance = async () => {
         },
       });
 
-      if (!existingAttendace) {
+      if (!existingAttendace && user.role === "User") {
         await prisma.absensi.create({
           data: {
             userId: user.id,

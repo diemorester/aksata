@@ -8,13 +8,40 @@ import SearchBarInput from './searchBarHR';
 import useDebounce from '@/hooks/useDebounce';
 import SkeletonAbsensi from './skeletonAbsensi';
 import Image from 'next/image';
+import DropDown from '@/components/dropdowns/dropDown';
 
 const TabelAbsensi = () => {
     const [search, setSearch] = useState('');
-
+    const [filterBy, setFilterBy] = useState('');
     const [page, setPage] = useState(1);
-    const hooksDebounce = useDebounce(search, 300)
-    const { data, isPending } = useAbsensi({ page, take: 9, search: hooksDebounce });
+
+    const filterDebounce = useDebounce(filterBy, 300);
+    const searchDebounce = useDebounce(search, 300);
+    const { data, isPending } = useAbsensi({ page, take: 9, search: searchDebounce, filterBy: filterDebounce });
+
+    const option = [
+        {
+            label: 'Filter: Harian',
+            value: 'daily'
+        },
+        {
+            label: 'Filter: Mingguan',
+            value: 'weekly'
+        },
+        {
+            label: 'Filter: Bulanan',
+            value: 'monthly'
+        },
+        {
+            label: 'Filter: Tahunan',
+            value: 'yearly'
+        }
+    ]
+
+    const handleSelect = (value: string) => {
+        setFilterBy(value)
+
+    }
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearch(e.target.value)
@@ -44,8 +71,10 @@ const TabelAbsensi = () => {
                                 <th className="hidden p-3 text-center md:table-cell font-semibold">
                                     Waktu Check-Out
                                 </th>
-                                <th className="hidden p-3 text-center md:table-cell font-semibold">
-                                    Hari
+                                <th className="hidden p-3 md:table-cell font-semibold">
+                                    <div className='flex justify-center'>
+                                        <DropDown onSelect={handleSelect} options={option} />
+                                    </div>
                                 </th>
                                 <th className="p-3 text-center">Status</th>
                             </tr>

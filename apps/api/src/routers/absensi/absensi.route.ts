@@ -25,8 +25,8 @@ export class AbsensiRouter {
     );
     this.router.get(
       '/getall-attendance',
-      authMiddleware,
-      accessAdminHr,
+      // authMiddleware,
+      // accessAdminHr,
       this.absensiController.getAllAttendance,
     );
   }
