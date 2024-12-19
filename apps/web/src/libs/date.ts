@@ -40,18 +40,18 @@ export const dayFormat = (date: string) => {
   ];
 
   const month = [
-    'Januari',
-    'Februari',
-    'Maret',
-    'April',
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
     'Mei',
-    'Juni',
-    'Juli',
-    'Agustus',
-    'September',
-    'Oktober',
-    'November',
-    'Desember',
+    'jun',
+    'Jul',
+    'Agu',
+    'Sep',
+    'Okt',
+    'Nov',
+    'Des',
   ];
   
   const time = new Date(date);
@@ -60,7 +60,7 @@ export const dayFormat = (date: string) => {
   const tahun = time.getFullYear();
   const hari = time.getDay()
 
-  return `${day[hari]}, ${tanggal} ${month[bulan]} ${tahun}`
+  return `${day[hari]}, ${tanggal} ${month[bulan]}`
 }
 
 export const hourFormat = (date: string) => {

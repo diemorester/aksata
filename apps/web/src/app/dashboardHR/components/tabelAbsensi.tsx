@@ -6,7 +6,6 @@ import { useState } from 'react';
 import useAbsensi from '@/hooks/useAbsensi';
 import SearchBarInput from './searchBarHR';
 import useDebounce from '@/hooks/useDebounce';
-import SkeletonAbsensi from './skeletonAbsensi';
 import Image from 'next/image';
 import DropDown from '@/components/dropdowns/dropDown';
 
@@ -21,19 +20,19 @@ const TabelAbsensi = () => {
 
     const option = [
         {
-            label: 'Filter: Harian',
+            label: 'Harian',
             value: 'daily'
         },
         {
-            label: 'Filter: Mingguan',
+            label: 'Mingguan',
             value: 'weekly'
         },
         {
-            label: 'Filter: Bulanan',
+            label: 'Bulanan',
             value: 'monthly'
         },
         {
-            label: 'Filter: Tahunan',
+            label: 'Tahunan',
             value: 'yearly'
         }
     ]
