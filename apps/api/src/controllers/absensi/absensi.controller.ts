@@ -48,6 +48,10 @@ export class AbsensiController {
         search: search as string,
         filterBy: filterBy as 'daily' | 'weekly' | 'monthly' | 'yearly' || 'daily'
       });
+
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', 'attachment; filename=ERP-aksata.xlsx');
+
       return res.status(200).send({
         status: 'ok',
         data,

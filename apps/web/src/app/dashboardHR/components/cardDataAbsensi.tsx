@@ -8,18 +8,24 @@ interface CardAbsensiProps {
     clockIn: string,
     clockOut: string,
     date: string,
+    duration: string,
     activeBackground: boolean,
     status: 'Hadir' | 'Terlambat' | 'Sakit' | 'Cuti' | 'Izin' | 'Alpha'
 }
 
-const CardDataAbsensi: React.FC<CardAbsensiProps> = ({ name, clockIn, clockOut, status, date, activeBackground }) => {
+const CardDataAbsensi: React.FC<CardAbsensiProps> = ({ name, clockIn, clockOut, status, date, duration, activeBackground }) => {
+    console.log(duration);
+    console.log(duration?.split(':'));
+    
+    const hours = duration?.split(':')[0];
+    const minutes = duration?.split(':')[1];
 
     return (
         <tr className={clsx("border-b border-black/10", activeBackground && "bg-broken-white/50")}>
             <th className="px-3 py-1 text-start font-extralight">{name}</th>
             <th className="px-3 py-1 text-center font-extralight">{clockIn ? hourFormat(clockIn) : "--/--"}</th>
             <th className="px-3 py-1 text-center font-extralight">{clockOut ? hourFormat(clockOut) : `--/--`}</th>
-            <th className="px-3 py-1 text-center font-extralight">{clockOut ? hourFormat(clockOut) : `--/--`}</th>
+            <th className="px-3 py-1 text-center font-extralight">{duration ? `${hours}h ${minutes}m` : `--/--`}</th>
             <th className="px-3 py-1 text-center font-extralight">{dayFormat(date)}</th>
             <th className="py-1 flex items-center justify-center font-light">
                 <p className={clsx(`text-center py-2  w-full text-black rounded-lg `,

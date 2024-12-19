@@ -38,6 +38,7 @@ const ListCardAbsensi: React.FC<ListCardAbsensiProps> = ({
                         clockIn={absen.clockIn}
                         clockOut={absen.clockOut}
                         status={absen.status}
+                        duration={absen.duration}
                         activeBackground={index % 2 == 1}
                     />
                 );
