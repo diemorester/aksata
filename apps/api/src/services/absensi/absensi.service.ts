@@ -1,3 +1,4 @@
+import { durationCounter } from '@/helpers/durationCounter';
 import prisma from '@/prisma';
 import { AbsensiQuery } from '@/types/absensi';
 
@@ -68,7 +69,7 @@ export const clockOutService = async (userId: number) => {
       throw new Error('Anda sudah melakukan clock-out hari ini.');
     }
 
-    const clockOut = await prisma.absensi.update({
+    const updateClockOut = await prisma.absensi.update({
       where: {
         id: attendance.id,
       },
@@ -77,6 +78,16 @@ export const clockOutService = async (userId: number) => {
         clockOut: new Date(),
       },
     });
+
+    const duration = durationCounter(updateClockOut.clockIn, updateClockOut.clockOut);
+    const clockOut = await prisma.absensi.update({
+      where: {
+        id: attendance.id, 
+      },
+      data: {
+        duration
+      }
+    })
 
     return clockOut;
   } catch (error) {
@@ -199,3 +210,31 @@ export const autoAlphaAttendance = async () => {
     throw error;
   }
 };
+
+// export const autoClockOutAttendance = async () => {
+//   try {
+//     const users = await prisma.user.findMany();
+
+//     for (const user of users) {
+//       const attendance = await prisma.absensi.findFirst({
+//         where: {
+//           userId: user.id,
+//           clockOut: {
+//             gte: startDay,
+//             lte: endDay
+//           },
+//         }
+//       })
+
+    //   if (!attendance && user.role == 'User') {
+    //     await prisma.absensi.update({
+    //       where: {
+    //         id: attendance.id
+    //       },
+    //     })
+    //   }
+    // }
+//   } catch (error) {
+//     throw error;
+//   }
+// };

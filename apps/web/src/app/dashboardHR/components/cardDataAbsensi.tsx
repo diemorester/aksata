@@ -8,15 +8,17 @@ interface CardAbsensiProps {
     clockIn: string,
     clockOut: string,
     date: string,
+    activeBackground: boolean,
     status: 'Hadir' | 'Terlambat' | 'Sakit' | 'Cuti' | 'Izin' | 'Alpha'
 }
 
-const CardDataAbsensi: React.FC<CardAbsensiProps>  = ({ name, clockIn, clockOut, status, date }) => {
-    
+const CardDataAbsensi: React.FC<CardAbsensiProps> = ({ name, clockIn, clockOut, status, date, activeBackground }) => {
+
     return (
-        <tr className="border-b border-black/10">
+        <tr className={clsx("border-b border-black/10", activeBackground && "bg-broken-white/50")}>
             <th className="px-3 py-1 text-start font-extralight">{name}</th>
             <th className="px-3 py-1 text-center font-extralight">{clockIn ? hourFormat(clockIn) : "--/--"}</th>
+            <th className="px-3 py-1 text-center font-extralight">{clockOut ? hourFormat(clockOut) : `--/--`}</th>
             <th className="px-3 py-1 text-center font-extralight">{clockOut ? hourFormat(clockOut) : `--/--`}</th>
             <th className="px-3 py-1 text-center font-extralight">{dayFormat(date)}</th>
             <th className="py-1 flex items-center justify-center font-light">

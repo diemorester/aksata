@@ -43,6 +43,7 @@ model Absensi {
   updatedAt DateTime  @updatedAt()
   clockIn   DateTime?
   clockOut  DateTime?
+  duration  String?
   location  String?
   status    Status?
   date      DateTime  @default(now())

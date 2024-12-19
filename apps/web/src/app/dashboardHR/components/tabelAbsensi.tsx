@@ -70,6 +70,9 @@ const TabelAbsensi = () => {
                                 <th className="hidden p-3 text-center md:table-cell font-semibold">
                                     Waktu Check-Out
                                 </th>
+                                <th className="hidden p-3 text-center md:table-cell font-semibold">
+                                    Durasi
+                                </th>
                                 <th className="hidden p-3 md:table-cell font-semibold">
                                     <div className='flex justify-center'>
                                         <DropDown onSelect={handleSelect} options={option} />
