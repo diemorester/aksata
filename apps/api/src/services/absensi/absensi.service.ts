@@ -266,40 +266,40 @@ export const autoClockOutAttendance = async () => {
 export const exportExcelService = async () => {
   try {
     const workbook = new ExcelJS.Workbook();
-    const sheet = workbook.addWorksheet('Absensi');
+    const sheet: ExcelJS.Worksheet = workbook.addWorksheet('Absensi');
 
-    sheet.columns = [
-      {
-        header: 'No',
-        key: 'no',
-        width: 5,
-      },
-      {
-        header: 'Nama',
-        key: 'name',
-        width: 10,
-      },
-      {
-        header: 'Waktu Check-In',
-        key: 'clockIn',
-        width: 40,
-      },
-      {
-        header: 'Waktu check-Out',
-        key: 'clockOut',
-        width: 40,
-      },
-      {
-        header: 'Durasi',
-        key: 'duration',
-        width: 20,
-      },
-      {
-        header: 'Status',
-        key: 'status',
-        width: 20,
-      },
+    const now = new Date();
+    const startDate = new Date(now.getFullYear(), now.getMonth(), 20);
+    const endDate = new Date(startDate);
+    endDate.setMonth(endDate.getMonth() + 1);
+    endDate.setDate(19);
+
+    const dates: Date[] = [];
+    let currentDate = new Date(startDate);
+    while (currentDate <= endDate) {
+      dates.push(new Date(currentDate));
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    const monthYear = `${startDate.toLocaleString('default', { month: 'long' })} ${startDate.getFullYear()} - ${endDate.toLocaleString('default', { month: 'long' })} ${endDate.getFullYear()}`;
+
+    sheet.getCell('B1').value = monthYear;
+    sheet.getCell('B1').alignment = { horizontal: 'center' };
+    sheet.getRow(1).font = { bold: true };
+    sheet.getRow(1).alignment = { horizontal : 'center' };
+
+    const columns = [
+      { header: 'Nama', key: 'name', width: 20 },
+      ...dates.map((date, i) => ({
+        header: `${date.getDate()}`,
+        key: `day${i + 1}`,
+        width: 7,
+      })),
+      { header: 'Jumlah Hari Kerja', key: 'workDays', width: 15 },
+      { header: 'Keterangan', key: 'remarks', width: 20 },
     ];
+
+    sheet.columns = columns;
 
     const attendance = await prisma.absensi.findMany({
       include: {
@@ -307,22 +307,46 @@ export const exportExcelService = async () => {
       },
     });
 
-    attendance.forEach((attend, idx) => {
-      return sheet.addRow({
-        no: idx + 1,
-        name: attend.user.name,
-        clockIn: convertDate(attend.clockIn),
-        clockOut: convertDate(attend.clockOut),
-        duration: attend.duration || "-",
-        status: attend.status,
-      });
+    const userRows: Record<string, any> = {};
+
+    attendance.forEach((attend) => {
+      const userId = attend.user.id;
+      if (!userRows[userId]) {
+        userRows[userId] = {
+          name: attend.user.name,
+          workDays: 0,
+          remarks: '',
+        };
+        dates.forEach((_, i) => {
+          userRows[userId][`day${i + 1}`] = '-';
+        });
+      }
+
+      const attendDate = new Date(attend.clockIn!);
+      const dayIndex = dates.findIndex(date => date.toDateString() === attendDate.toDateString());
+      if (dayIndex !== -1) {
+        userRows[userId][`day${dayIndex + 1}`] = attend.status;
+        if (attend.status === 'Hadir' || attend.status === 'Terlambat') {
+          userRows[userId].workDays += 1;
+        }
+      }
     });
+
+    Object.values(userRows).forEach((row: string[], index: number) => {
+      const rowIndex = index + 2;
+      sheet.addRow(row).commit();
+      const rowCells = sheet.getRow(rowIndex);
+      rowCells.alignment = { horizontal: 'center' };
+    });
+
+    // sheet.getRow(2).alignment = { horizontal: 'center' };
+    sheet.getColumn(1).alignment = { horizontal: 'left' };
 
     const buffer = await workbook.xlsx.writeBuffer();
     const templatePath = path.join(__dirname, '../../../public/excel', 'absensi.xlsx');
     fs.writeFileSync(templatePath, buffer as any);
 
-    return buffer
+    return buffer;
   } catch (error) {
     throw error;
   }

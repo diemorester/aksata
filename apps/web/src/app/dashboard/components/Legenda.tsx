@@ -2,7 +2,7 @@ import React from 'react'
 
 const Legenda = () => {
     return (
-        <div className='w-1/3 px-6 text-neutral-950'>
+        <div className='w-1/3 px-6 text-neutral-200'>
             <div className='mb-5 px-2 text-start text-lg font-bold'>
                 <h1>Keterangan</h1>
             </div>
