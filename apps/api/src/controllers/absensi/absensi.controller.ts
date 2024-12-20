@@ -62,7 +62,8 @@ export class AbsensiController {
 
   async exportExcel(req: Request, res: Response, next: NextFunction) {
     try {
-      const excelFile = await exportExcelService();
+      const {startDate, endDate} = req.body
+      const excelFile = await exportExcelService(startDate, endDate);
 
       res.setHeader(
         'Content-Type',
@@ -73,12 +74,7 @@ export class AbsensiController {
         'attachment; filename=ERP-aksata.xlsx',
       );
 
-      // res.download(excelFile as any)
-
-      return res.status(200).send({
-        status: 'ok',
-        excelFile,
-      });
+      return res.status(200).send(excelFile);
     } catch (error) {
       next(error);
     }

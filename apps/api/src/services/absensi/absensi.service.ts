@@ -263,87 +263,379 @@ export const autoClockOutAttendance = async () => {
   }
 };
 
-export const exportExcelService = async () => {
+export const exportExcelService = async (
+  startDate: string | Date,
+  endDate: string | Date,
+) => {
   try {
     const workbook = new ExcelJS.Workbook();
     const sheet: ExcelJS.Worksheet = workbook.addWorksheet('Absensi');
 
+    const newStartDate = new Date(startDate);
+    const newEndDate = new Date(endDate);
     const now = new Date();
-    const startDate = new Date(now.getFullYear(), now.getMonth(), 20);
-    const endDate = new Date(startDate);
-    endDate.setMonth(endDate.getMonth() + 1);
-    endDate.setDate(19);
 
-    const dates: Date[] = [];
-    let currentDate = new Date(startDate);
-    while (currentDate <= endDate) {
-      dates.push(new Date(currentDate));
-      currentDate.setDate(currentDate.getDate() + 1);
+    // Judul
+    sheet.mergeCells('A1:AM1');
+    sheet.getCell('A1').value = 'Absensi Karyawan';
+    sheet.getCell('A1').alignment = {
+      horizontal: 'center',
+      vertical: 'middle',
+    };
+    sheet.getCell('A1').font = { bold: true, size: 12 };
+
+    // Tanggal dan bulan absensi
+    sheet.mergeCells('A2:AM2');
+    sheet.getCell('A2').value = `${convertDate(now)}`;
+
+    // No
+    sheet.mergeCells('A3:A4');
+    sheet.getCell('A3').value = 'No';
+    sheet.getCell('A3').alignment = {
+      horizontal: 'center',
+      vertical: 'middle',
+    };
+    sheet.getCell('A3').font = { bold: true, size: 11 };
+    sheet.getColumn('A').width = 4;
+    sheet.getCell('A3').border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' },
+    };
+
+    // Nama
+    sheet.mergeCells('B3:B4');
+    sheet.getCell('B3').value = 'Nama';
+    sheet.getCell('B3').alignment = {
+      horizontal: 'center',
+      vertical: 'middle',
+    };
+    sheet.getCell('B3').font = { bold: true, size: 11 };
+    sheet.getColumn('B').width = 20;
+    sheet.getCell('B3').border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' },
+    };
+
+    // Tanggal header
+    sheet.mergeCells('C3:AG3');
+    sheet.getCell('C3').value = 'Tanggal';
+    sheet.getCell('C3').alignment = {
+      horizontal: 'center',
+      vertical: 'middle',
+    };
+    sheet.getCell('C3').font = { bold: true, size: 11 };
+    sheet.getCell('C3').border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' },
+    };
+
+    const daysInRange = Math.floor(
+      (newEndDate.getTime() - newStartDate.getTime()) / (1000 * 60 * 60 * 24) +
+        1,
+    );
+
+    // Day
+    for (let i = 0; i < daysInRange; i++) {
+      const currentDate = new Date(newStartDate);
+      currentDate.setDate(newStartDate.getDate() + i);
+
+      const cell = sheet.getRow(4).getCell(i + 3);
+      cell.value = currentDate.getDate();
+      cell.alignment = {
+        horizontal: 'center',
+        vertical: 'middle',
+      };
+      cell.font = { bold: true, size: 11 };
+      cell.border = {
+        top: { style: 'thin' },
+        left: { style: 'thin' },
+        bottom: { style: 'thin' },
+        right: { style: 'thin' },
+      };
+      sheet.getColumn(i + 3).width = 3;
     }
 
-    const monthYear = `${startDate.toLocaleString('default', { month: 'long' })} ${startDate.getFullYear()} - ${endDate.toLocaleString('default', { month: 'long' })} ${endDate.getFullYear()}`;
+    // Jumlah jam kerja
+    sheet.mergeCells('AH3:AH4');
+    sheet.getCell('AH3').value = 'Jumlah Hari Kerja';
+    sheet.getCell('AH3').alignment = {
+      wrapText: true,
+      vertical: 'middle',
+      horizontal: 'center',
+    };
+    sheet.getCell('AH3').font = { bold: true, size: 11 };
+    sheet.getColumn('AH').width = 10;
+    sheet.getCell('AH3').border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' },
+    };
 
-    sheet.getCell('B1').value = monthYear;
-    sheet.getCell('B1').alignment = { horizontal: 'center' };
-    sheet.getRow(1).font = { bold: true };
-    sheet.getRow(1).alignment = { horizontal : 'center' };
+    // Keterangan
+    sheet.mergeCells('AI3:AM3');
+    sheet.getCell('AI3').value = 'Keterangan';
+    sheet.getCell('AI3').alignment = {
+      horizontal: 'center',
+      vertical: 'middle',
+    };
+    sheet.getCell('AI3').font = { bold: true, size: 11 };
+    sheet.getCell('AI3').border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' },
+    };
 
-    const columns = [
-      { header: 'Nama', key: 'name', width: 20 },
-      ...dates.map((date, i) => ({
-        header: `${date.getDate()}`,
-        key: `day${i + 1}`,
-        width: 7,
-      })),
-      { header: 'Jumlah Hari Kerja', key: 'workDays', width: 15 },
-      { header: 'Keterangan', key: 'remarks', width: 20 },
-    ];
+    // Cell ket, Masuk,sakit, izin, alpha, cuti
+    sheet.getCell('AI4').value = 'Masuk';
+    sheet.getCell('AJ4').value = 'Sakit';
+    sheet.getCell('AK4').value = 'Cuti';
+    sheet.getCell('AL4').value = 'Izin';
+    sheet.getCell('AM4').value = 'Alpha';
 
-    sheet.columns = columns;
+    // Border  ket
+    sheet.getCell('AI4').border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' },
+    };
+    sheet.getCell('AJ4').border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' },
+    };
+    sheet.getCell('AK4').border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' },
+    };
+    sheet.getCell('AL4').border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' },
+    };
+    sheet.getCell('AM4').border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' },
+    };
 
+    // Center text
+    sheet.getCell('AI4').alignment = {
+      horizontal: 'center',
+      vertical: 'middle',
+    };
+    sheet.getCell('AJ4').alignment = {
+      horizontal: 'center',
+      vertical: 'middle',
+    };
+    sheet.getCell('AK4').alignment = {
+      horizontal: 'center',
+      vertical: 'middle',
+    };
+    sheet.getCell('AL4').alignment = {
+      horizontal: 'center',
+      vertical: 'middle',
+    };
+    sheet.getCell('AM4').alignment = {
+      horizontal: 'center',
+      vertical: 'middle',
+    };
+
+    // Color bg
+    sheet.getCell('AI4').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FF00FF00' },
+    };
+    sheet.getCell('AJ4').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFFF00' },
+    };
+    sheet.getCell('AK4').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: '7F00FF' },
+    };
+    sheet.getCell('AL4').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: '0080FF' },
+    };
+    sheet.getCell('AM4').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FF0000' },
+    };
+
+    // Content
     const attendance = await prisma.absensi.findMany({
+      where: {
+        date: {
+          gte: newStartDate,
+          lte: newEndDate,
+        },
+        user: {
+          role: 'User',
+        },
+      },
+      orderBy: {
+        date: 'asc',
+      },
       include: {
         user: true,
       },
     });
 
-    const userRows: Record<string, any> = {};
+    const uniqueUsers = Array.from(
+      new Map(attendance.map((a) => [a.user.id, a.user])).values(),
+    );
 
-    attendance.forEach((attend) => {
-      const userId = attend.user.id;
-      if (!userRows[userId]) {
-        userRows[userId] = {
-          name: attend.user.name,
-          workDays: 0,
-          remarks: '',
+    uniqueUsers.forEach((user, idx) => {
+      const row = sheet.getRow(idx + 5);
+
+      // No
+      const cellNo = row.getCell(1);
+      cellNo.value = idx + 1;
+      cellNo.alignment = {
+        horizontal: 'center',
+        vertical: 'middle',
+      };
+      cellNo.border = {
+        top: { style: 'thin' },
+        left: { style: 'thin' },
+        bottom: { style: 'thin' },
+        right: { style: 'thin' },
+      };
+
+      // Nama
+      const cellNama = row.getCell(2);
+      cellNama.value = user.name;
+      cellNama.border = {
+        top: { style: 'thin' },
+        left: { style: 'thin' },
+        bottom: { style: 'thin' },
+        right: { style: 'thin' },
+      };
+
+      for (let i = 0; i < daysInRange; i++) {
+        const currentDate = new Date(newStartDate);
+        currentDate.setDate(newStartDate.getDate() + i);
+
+        const attendanceRecord = attendance.find(
+          (a) =>
+            a.user.id === user.id &&
+            new Date(a.date).toDateString() === currentDate.toDateString(),
+        );
+
+        const cellDay = row.getCell(i + 3);
+        cellDay.value = attendanceRecord ? '✓' : '';
+        cellDay.alignment = {
+          horizontal: 'center',
+          vertical: 'middle',
         };
-        dates.forEach((_, i) => {
-          userRows[userId][`day${i + 1}`] = '-';
-        });
-      }
-
-      const attendDate = new Date(attend.clockIn!);
-      const dayIndex = dates.findIndex(date => date.toDateString() === attendDate.toDateString());
-      if (dayIndex !== -1) {
-        userRows[userId][`day${dayIndex + 1}`] = attend.status;
-        if (attend.status === 'Hadir' || attend.status === 'Terlambat') {
-          userRows[userId].workDays += 1;
-        }
+        cellDay.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
       }
     });
 
-    Object.values(userRows).forEach((row: string[], index: number) => {
-      const rowIndex = index + 2;
-      sheet.addRow(row).commit();
-      const rowCells = sheet.getRow(rowIndex);
-      rowCells.alignment = { horizontal: 'center' };
-    });
+    // const now = new Date();
+    // const startDate = new Date(now.getFullYear(), now.getMonth(), 20);
+    // const endDate = new Date(startDate);
+    // endDate.setMonth(endDate.getMonth() + 1);
+    // endDate.setDate(19);
 
-    // sheet.getRow(2).alignment = { horizontal: 'center' };
-    sheet.getColumn(1).alignment = { horizontal: 'left' };
+    // const dates: Date[] = [];
+    // let currentDate = new Date(startDate);
+    // while (currentDate <= endDate) {
+    //   dates.push(new Date(currentDate));
+    //   currentDate.setDate(currentDate.getDate() + 1);
+    // }
+
+    // const monthYear = `${startDate.toLocaleString('default', { month: 'long' })} ${startDate.getFullYear()} - ${endDate.toLocaleString('default', { month: 'long' })} ${endDate.getFullYear()}`;
+
+    // sheet.getCell('B1').value = monthYear;
+    // sheet.getCell('B1').alignment = { horizontal: 'center' };
+    // sheet.getRow(1).font = { bold: true };
+    // sheet.getRow(1).alignment = { horizontal : 'center' };
+
+    // const columns = [
+    //   { header: 'Nama', key: 'name', width: 20 },
+    //   ...dates.map((date, i) => ({
+    //     header: `${date.getDate()}`,
+    //     key: `day${i + 1}`,
+    //     width: 7,
+    //   })),
+    //   { header: 'Jumlah Hari Kerja', key: 'workDays', width: 15 },
+    //   { header: 'Keterangan', key: 'remarks', width: 20 },
+    // ];
+
+    // sheet.columns = columns;
+
+    // const attendance = await prisma.absensi.findMany({
+    //   include: {
+    //     user: true,
+    //   },
+    // });
+
+    // const userRows: Record<string, any> = {};
+
+    // attendance.forEach((attend) => {
+    //   const userId = attend.user.id;
+    //   if (!userRows[userId]) {
+    //     userRows[userId] = {
+    //       name: attend.user.name,
+    //       workDays: 0,
+    //       remarks: '',
+    //     };
+    //     dates.forEach((_, i) => {
+    //       userRows[userId][`day${i + 1}`] = '-';
+    //     });
+    //   }
+
+    //   const attendDate = new Date(attend.clockIn!);
+    //   const dayIndex = dates.findIndex(date => date.toDateString() === attendDate.toDateString());
+    //   if (dayIndex !== -1) {
+    //     userRows[userId][`day${dayIndex + 1}`] = attend.status;
+    //     if (attend.status === 'Hadir' || attend.status === 'Terlambat') {
+    //       userRows[userId].workDays += 1;
+    //     }
+    //   }
+    // });
+
+    // Object.values(userRows).forEach((row: string[], index: number) => {
+    //   const rowIndex = index + 2;
+    //   sheet.addRow(row).commit();
+    //   const rowCells = sheet.getRow(rowIndex);
+    //   rowCells.alignment = { horizontal: 'center' };
+    // });
+
+    // // sheet.getRow(2).alignment = { horizontal: 'center' };
+    // sheet.getColumn(1).alignment = { horizontal: 'left' };
 
     const buffer = await workbook.xlsx.writeBuffer();
-    const templatePath = path.join(__dirname, '../../../public/excel', 'absensi.xlsx');
+    const templatePath = path.join(
+      __dirname,
+      '../../../public/excel',
+      'absensi.xlsx',
+    );
     fs.writeFileSync(templatePath, buffer as any);
 
     return buffer;
