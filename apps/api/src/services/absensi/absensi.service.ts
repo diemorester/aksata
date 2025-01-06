@@ -1,4 +1,4 @@
-import { convertDate } from '@/helpers/convertDate';
+import { convertDate, hourFormat } from '@/helpers/convertDate';
 import { durationCounter } from '@/helpers/durationCounter';
 import prisma from '@/prisma';
 import { AbsensiQuery } from '@/types/absensi';
@@ -32,15 +32,11 @@ export const clockInService = async (userId: number) => {
     if (existingAttendace)
       throw new Error('Anda sudah melakukan clock-in hari ini');
 
-    const batasJamMasuk = new Date();
-    batasJamMasuk.setHours(8, 30, 0, 0);
-    const status = now <= batasJamMasuk ? 'Hadir' : 'Terlambat';
-
     const clockIn = await prisma.absensi.create({
       data: {
         userId,
         clockIn: new Date(),
-        status,
+        status: 'Hadir',
       },
     });
 
@@ -194,13 +190,13 @@ export const autoAlphaAttendance = async () => {
       const existingAttendace = await prisma.absensi.findFirst({
         where: {
           userId: user.id,
-          clockIn: {
+          date: {
             gte: startDay,
             lte: endDay,
           },
         },
       });
-
+      
       if (!existingAttendace && user.role === 'User') {
         await prisma.absensi.create({
           data: {
@@ -263,41 +259,20 @@ export const autoClockOutAttendance = async () => {
   }
 };
 
-export const exportExcelService = async (
-  startDate: string | Date,
-  endDate: string | Date,
-) => {
+export const exportExcelService = async () => {
   try {
     const workbook = new ExcelJS.Workbook();
     const sheet: ExcelJS.Worksheet = workbook.addWorksheet('Absensi');
 
-    const newStartDate = new Date(startDate);
-    const newEndDate = new Date(endDate);
-    const now = new Date();
-
-    // Judul
-    sheet.mergeCells('A1:AM1');
-    sheet.getCell('A1').value = 'Absensi Karyawan';
+    // No.
+    sheet.getCell('A1').font = { bold: true, size: 12 };
+    sheet.getCell('A1').value = 'No.'
     sheet.getCell('A1').alignment = {
       horizontal: 'center',
       vertical: 'middle',
     };
-    sheet.getCell('A1').font = { bold: true, size: 12 };
-
-    // Tanggal dan bulan absensi
-    sheet.mergeCells('A2:AM2');
-    sheet.getCell('A2').value = `${convertDate(now)}`;
-
-    // No
-    sheet.mergeCells('A3:A4');
-    sheet.getCell('A3').value = 'No';
-    sheet.getCell('A3').alignment = {
-      horizontal: 'center',
-      vertical: 'middle',
-    };
-    sheet.getCell('A3').font = { bold: true, size: 11 };
-    sheet.getColumn('A').width = 4;
-    sheet.getCell('A3').border = {
+    sheet.getColumn('A').width = 5
+    sheet.getCell('A1').border = {
       top: { style: 'thin' },
       left: { style: 'thin' },
       bottom: { style: 'thin' },
@@ -305,73 +280,89 @@ export const exportExcelService = async (
     };
 
     // Nama
-    sheet.mergeCells('B3:B4');
-    sheet.getCell('B3').value = 'Nama';
-    sheet.getCell('B3').alignment = {
+    sheet.getCell('B1').font = { bold: true, size: 12 }
+    sheet.getCell('B1').value = 'Nama'
+    sheet.getCell('B1').alignment = {
       horizontal: 'center',
       vertical: 'middle',
     };
-    sheet.getCell('B3').font = { bold: true, size: 11 };
-    sheet.getColumn('B').width = 20;
-    sheet.getCell('B3').border = {
+    sheet.getColumn('B').width = 15
+    sheet.getCell('B1').border = {
       top: { style: 'thin' },
       left: { style: 'thin' },
       bottom: { style: 'thin' },
       right: { style: 'thin' },
     };
 
-    // Tanggal header
-    sheet.mergeCells('C3:AG3');
-    sheet.getCell('C3').value = 'Tanggal';
-    sheet.getCell('C3').alignment = {
+    // Tanggal
+    sheet.getCell('C1').font = { bold: true, size: 12 };
+    sheet.getCell('C1').value = 'Tanggal'
+    sheet.getCell('C1').alignment = {
       horizontal: 'center',
       vertical: 'middle',
     };
-    sheet.getCell('C3').font = { bold: true, size: 11 };
-    sheet.getCell('C3').border = {
+    sheet.getColumn('C').width = 15
+    sheet.getCell('C1').border = {
       top: { style: 'thin' },
       left: { style: 'thin' },
       bottom: { style: 'thin' },
       right: { style: 'thin' },
     };
 
-    const daysInRange = Math.floor(
-      (newEndDate.getTime() - newStartDate.getTime()) / (1000 * 60 * 60 * 24) +
-        1,
-    );
-
-    // Day
-    for (let i = 0; i < daysInRange; i++) {
-      const currentDate = new Date(newStartDate);
-      currentDate.setDate(newStartDate.getDate() + i);
-
-      const cell = sheet.getRow(4).getCell(i + 3);
-      cell.value = currentDate.getDate();
-      cell.alignment = {
-        horizontal: 'center',
-        vertical: 'middle',
-      };
-      cell.font = { bold: true, size: 11 };
-      cell.border = {
-        top: { style: 'thin' },
-        left: { style: 'thin' },
-        bottom: { style: 'thin' },
-        right: { style: 'thin' },
-      };
-      sheet.getColumn(i + 3).width = 3;
-    }
-
-    // Jumlah jam kerja
-    sheet.mergeCells('AH3:AH4');
-    sheet.getCell('AH3').value = 'Jumlah Hari Kerja';
-    sheet.getCell('AH3').alignment = {
-      wrapText: true,
-      vertical: 'middle',
+    // Jam Masuk
+    sheet.getCell('D1').font = { bold: true, size: 12 };
+    sheet.getCell('D1').value = 'Jam Masuk'
+    sheet.getCell('D1').alignment = {
       horizontal: 'center',
+      vertical: 'middle',
     };
-    sheet.getCell('AH3').font = { bold: true, size: 11 };
-    sheet.getColumn('AH').width = 10;
-    sheet.getCell('AH3').border = {
+    sheet.getColumn('D').width = 15
+    sheet.getCell('D1').border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' },
+    };
+
+    // Jam Pulang
+    sheet.getCell('E1').font = { bold: true, size: 12 };
+    sheet.getCell('E1').value = 'Jam Pulang'
+    sheet.getCell('E1').alignment = {
+      horizontal: 'center',
+      vertical: 'middle',
+    };
+    sheet.getColumn('E').width = 15
+    sheet.getCell('E1').border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' },
+    };
+
+    // Durasi
+    sheet.getCell('F1').font = { bold: true, size: 12 };
+    sheet.getCell('F1').value = 'Durasi'
+    sheet.getCell('F1').alignment = {
+      horizontal: 'center',
+      vertical: 'middle',
+    };
+    sheet.getColumn('F').width = 15
+    sheet.getCell('F1').border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' },
+    };
+
+    // Status
+    sheet.getCell('G1').font = { bold: true, size: 12 };
+    sheet.getCell('G1').value = 'Status'
+    sheet.getCell('G1').alignment = {
+      horizontal: 'center',
+      vertical: 'middle',
+    };
+    sheet.getColumn('G').width = 18
+    sheet.getCell('G1').border = {
       top: { style: 'thin' },
       left: { style: 'thin' },
       bottom: { style: 'thin' },
@@ -379,266 +370,190 @@ export const exportExcelService = async (
     };
 
     // Keterangan
-    sheet.mergeCells('AI3:AM3');
-    sheet.getCell('AI3').value = 'Keterangan';
-    sheet.getCell('AI3').alignment = {
+    sheet.getCell('H1').font = { bold: true, size: 12 };
+    sheet.getCell('H1').value = 'Keterangan'
+    sheet.getCell('H1').alignment = {
       horizontal: 'center',
       vertical: 'middle',
     };
-    sheet.getCell('AI3').font = { bold: true, size: 11 };
-    sheet.getCell('AI3').border = {
+    sheet.getColumn('H').width = 30
+    sheet.getCell('H1').border = {
       top: { style: 'thin' },
       left: { style: 'thin' },
       bottom: { style: 'thin' },
       right: { style: 'thin' },
     };
 
-    // Cell ket, Masuk,sakit, izin, alpha, cuti
-    sheet.getCell('AI4').value = 'Masuk';
-    sheet.getCell('AJ4').value = 'Sakit';
-    sheet.getCell('AK4').value = 'Cuti';
-    sheet.getCell('AL4').value = 'Izin';
-    sheet.getCell('AM4').value = 'Alpha';
-
-    // Border  ket
-    sheet.getCell('AI4').border = {
-      top: { style: 'thin' },
-      left: { style: 'thin' },
-      bottom: { style: 'thin' },
-      right: { style: 'thin' },
-    };
-    sheet.getCell('AJ4').border = {
-      top: { style: 'thin' },
-      left: { style: 'thin' },
-      bottom: { style: 'thin' },
-      right: { style: 'thin' },
-    };
-    sheet.getCell('AK4').border = {
-      top: { style: 'thin' },
-      left: { style: 'thin' },
-      bottom: { style: 'thin' },
-      right: { style: 'thin' },
-    };
-    sheet.getCell('AL4').border = {
-      top: { style: 'thin' },
-      left: { style: 'thin' },
-      bottom: { style: 'thin' },
-      right: { style: 'thin' },
-    };
-    sheet.getCell('AM4').border = {
-      top: { style: 'thin' },
-      left: { style: 'thin' },
-      bottom: { style: 'thin' },
-      right: { style: 'thin' },
-    };
-
-    // Center text
-    sheet.getCell('AI4').alignment = {
-      horizontal: 'center',
-      vertical: 'middle',
-    };
-    sheet.getCell('AJ4').alignment = {
-      horizontal: 'center',
-      vertical: 'middle',
-    };
-    sheet.getCell('AK4').alignment = {
-      horizontal: 'center',
-      vertical: 'middle',
-    };
-    sheet.getCell('AL4').alignment = {
-      horizontal: 'center',
-      vertical: 'middle',
-    };
-    sheet.getCell('AM4').alignment = {
-      horizontal: 'center',
-      vertical: 'middle',
-    };
-
-    // Color bg
-    sheet.getCell('AI4').fill = {
-      type: 'pattern',
-      pattern: 'solid',
-      fgColor: { argb: 'FF00FF00' },
-    };
-    sheet.getCell('AJ4').fill = {
-      type: 'pattern',
-      pattern: 'solid',
-      fgColor: { argb: 'FFFF00' },
-    };
-    sheet.getCell('AK4').fill = {
-      type: 'pattern',
-      pattern: 'solid',
-      fgColor: { argb: '7F00FF' },
-    };
-    sheet.getCell('AL4').fill = {
-      type: 'pattern',
-      pattern: 'solid',
-      fgColor: { argb: '0080FF' },
-    };
-    sheet.getCell('AM4').fill = {
-      type: 'pattern',
-      pattern: 'solid',
-      fgColor: { argb: 'FF0000' },
-    };
-
-    // Content
-    const attendance = await prisma.absensi.findMany({
-      where: {
-        date: {
-          gte: newStartDate,
-          lte: newEndDate,
-        },
+    const data = await prisma.absensi.findMany({
+      include: {
         user: {
-          role: 'User',
-        },
+          select: {
+            name: true
+          }
+        }
       },
       orderBy: {
-        date: 'asc',
-      },
-      include: {
-        user: true,
-      },
-    });
-
-    const uniqueUsers = Array.from(
-      new Map(attendance.map((a) => [a.user.id, a.user])).values(),
-    );
-
-    uniqueUsers.forEach((user, idx) => {
-      const row = sheet.getRow(idx + 5);
-
-      // No
-      const cellNo = row.getCell(1);
-      cellNo.value = idx + 1;
-      cellNo.alignment = {
-        horizontal: 'center',
-        vertical: 'middle',
-      };
-      cellNo.border = {
-        top: { style: 'thin' },
-        left: { style: 'thin' },
-        bottom: { style: 'thin' },
-        right: { style: 'thin' },
-      };
-
-      // Nama
-      const cellNama = row.getCell(2);
-      cellNama.value = user.name;
-      cellNama.border = {
-        top: { style: 'thin' },
-        left: { style: 'thin' },
-        bottom: { style: 'thin' },
-        right: { style: 'thin' },
-      };
-
-      for (let i = 0; i < daysInRange; i++) {
-        const currentDate = new Date(newStartDate);
-        currentDate.setDate(newStartDate.getDate() + i);
-
-        const attendanceRecord = attendance.find(
-          (a) =>
-            a.user.id === user.id &&
-            new Date(a.date).toDateString() === currentDate.toDateString(),
-        );
-
-        const cellDay = row.getCell(i + 3);
-        cellDay.value = attendanceRecord ? '✓' : '';
-        cellDay.alignment = {
-          horizontal: 'center',
-          vertical: 'middle',
-        };
-        cellDay.border = {
-          top: { style: 'thin' },
-          left: { style: 'thin' },
-          bottom: { style: 'thin' },
-          right: { style: 'thin' },
-        };
+        user: {
+          name: 'asc'
+        }
       }
-    });
+    })
 
-    // const now = new Date();
-    // const startDate = new Date(now.getFullYear(), now.getMonth(), 20);
-    // const endDate = new Date(startDate);
-    // endDate.setMonth(endDate.getMonth() + 1);
-    // endDate.setDate(19);
+    data.forEach ((item, index, array) => {
+      const customRow = sheet.getRow(index + 2);
+      const lastRow = sheet.getRow((array.length - 1) + 2)
 
-    // const dates: Date[] = [];
-    // let currentDate = new Date(startDate);
-    // while (currentDate <= endDate) {
-    //   dates.push(new Date(currentDate));
-    //   currentDate.setDate(currentDate.getDate() + 1);
-    // }
+      // nomer
+      const cellNumber = customRow.getCell(1);
+      const lastNumber = lastRow.getCell(1);
+      cellNumber.value = index + 1
+      cellNumber.alignment = {
+        horizontal: 'center',
+        vertical: 'middle'
+      }
+      cellNumber.border = {
+        left: { style: 'thin' },
+        right: { style: 'thin' }
+      }
+      lastNumber.border = {
+        left: { style: 'thin' },
+        right: { style: 'thin' },
+        bottom: { style: 'thin' }
+      }
 
-    // const monthYear = `${startDate.toLocaleString('default', { month: 'long' })} ${startDate.getFullYear()} - ${endDate.toLocaleString('default', { month: 'long' })} ${endDate.getFullYear()}`;
+      // nama
+      const cellName = customRow.getCell(2);
+      const lastName = lastRow.getCell(2);
+      cellName.value = item.user.name
+      cellName.border = {
+        left: { style: 'thin' },
+        right: { style: 'thin' }
+      }
+      lastName.border = {
+        left: { style: 'thin' },
+        right: { style: 'thin' },
+        bottom: { style: 'thin' }
+      }
 
-    // sheet.getCell('B1').value = monthYear;
-    // sheet.getCell('B1').alignment = { horizontal: 'center' };
-    // sheet.getRow(1).font = { bold: true };
-    // sheet.getRow(1).alignment = { horizontal : 'center' };
+      // tanggal
+      const cellDate = customRow.getCell(3);
+      const lastDate = lastRow.getCell(3);
+      cellDate.value = item.date
+      cellDate.alignment = {
+        horizontal: 'center',
+        vertical: 'middle'
+      }
+      cellDate.border = {
+        left: { style: 'thin' },
+        right: { style: 'thin' }
+      }
+      lastDate.border = {
+        left: { style: 'thin' },
+        right: { style: 'thin' },
+        bottom: { style: 'thin' }
+      }
 
-    // const columns = [
-    //   { header: 'Nama', key: 'name', width: 20 },
-    //   ...dates.map((date, i) => ({
-    //     header: `${date.getDate()}`,
-    //     key: `day${i + 1}`,
-    //     width: 7,
-    //   })),
-    //   { header: 'Jumlah Hari Kerja', key: 'workDays', width: 15 },
-    //   { header: 'Keterangan', key: 'remarks', width: 20 },
-    // ];
+      // jam masuk
+      const cellClockIn = customRow.getCell(4);
+      const lastClockIn = lastRow.getCell(4);
+      cellClockIn.value = hourFormat(item.clockIn);
+      cellClockIn.alignment = {
+        horizontal: 'center',
+        vertical: 'middle'
+      }
+      cellClockIn.border = {
+        left: { style: 'thin' },
+        right: { style: 'thin' }
+      }
+      lastClockIn.border = {
+        left: { style: 'thin' },
+        right: { style: 'thin' },
+        bottom: { style: 'thin' }
+      }
 
-    // sheet.columns = columns;
+      // jam keluar
+      const cellClockOut = customRow.getCell(5);
+      const lastClockOut = lastRow.getCell(5);
+      cellClockOut.value = hourFormat(item.clockOut);
+      cellClockOut.alignment = {
+        horizontal: 'center',
+        vertical: 'middle'
+      }
+      cellClockOut.border = {
+        left: { style: 'thin' },
+        right: { style: 'thin' }
+      }
+      lastClockOut.border = {
+        left: { style: 'thin' },
+        right: { style: 'thin' },
+        bottom: { style: 'thin' }
+      }
 
-    // const attendance = await prisma.absensi.findMany({
-    //   include: {
-    //     user: true,
-    //   },
-    // });
+      // durasi
+      const cellDuration = customRow.getCell(6);
+      const lastDuration = lastRow.getCell(6);
+      cellDuration.value = item.duration ? `${item.duration?.split(':')[0]} jam ${item.duration?.split(':')[1]} menit` : '-';
+      cellDuration.alignment = {
+        horizontal: 'center',
+        vertical: 'middle'
+      }
+      cellDuration.border = {
+        left: { style: 'thin' },
+        right: { style: 'thin' }
+      }
+      lastDuration.border = {
+        left: { style: 'thin' },
+        right: { style: 'thin' },
+        bottom: { style: 'thin' }
+      }
 
-    // const userRows: Record<string, any> = {};
+      // status
+      const cellStatus = customRow.getCell(7);
+      const lastStatus = lastRow.getCell(7);
+      cellStatus.value = item.status;
+      cellStatus.alignment = {
+        horizontal: 'center',
+        vertical: 'middle'
+      }
+      cellStatus.border = {
+        left: { style: 'thin' },
+        right: { style: 'thin' }
+      }
+      lastStatus.border = {
+        left: { style: 'thin' },
+        right: { style: 'thin' },
+        bottom: { style: 'thin' }
+      }
 
-    // attendance.forEach((attend) => {
-    //   const userId = attend.user.id;
-    //   if (!userRows[userId]) {
-    //     userRows[userId] = {
-    //       name: attend.user.name,
-    //       workDays: 0,
-    //       remarks: '',
-    //     };
-    //     dates.forEach((_, i) => {
-    //       userRows[userId][`day${i + 1}`] = '-';
-    //     });
-    //   }
-
-    //   const attendDate = new Date(attend.clockIn!);
-    //   const dayIndex = dates.findIndex(date => date.toDateString() === attendDate.toDateString());
-    //   if (dayIndex !== -1) {
-    //     userRows[userId][`day${dayIndex + 1}`] = attend.status;
-    //     if (attend.status === 'Hadir' || attend.status === 'Terlambat') {
-    //       userRows[userId].workDays += 1;
-    //     }
-    //   }
-    // });
-
-    // Object.values(userRows).forEach((row: string[], index: number) => {
-    //   const rowIndex = index + 2;
-    //   sheet.addRow(row).commit();
-    //   const rowCells = sheet.getRow(rowIndex);
-    //   rowCells.alignment = { horizontal: 'center' };
-    // });
-
-    // // sheet.getRow(2).alignment = { horizontal: 'center' };
-    // sheet.getColumn(1).alignment = { horizontal: 'left' };
+      // keterangan
+      const cellKeterangan = customRow.getCell(8);
+      const lastKeterangan = lastRow.getCell(8);
+      cellKeterangan.value = item.keterangan || '-';
+      cellKeterangan.alignment = {
+        horizontal: 'center',
+        vertical: 'middle'
+      }
+      cellKeterangan.border = {
+        left: { style: 'thin' },
+        right: { style: 'thin' }
+      }
+      lastKeterangan.border = {
+        left: { style: 'thin' },
+        right: { style: 'thin' },
+        bottom: { style: 'thin' }
+      }
+    })
 
     const buffer = await workbook.xlsx.writeBuffer();
-    const templatePath = path.join(
-      __dirname,
-      '../../../public/excel',
-      'absensi.xlsx',
-    );
-    fs.writeFileSync(templatePath, buffer as any);
+    // const templatePath = path.join(
+    //   __dirname,
+    //   '../../../public/excel',
+    //   'absensi.xlsx',
+    // );
+    // fs.writeFileSync(templatePath, buffer as any);
 
     return buffer;
+
   } catch (error) {
     throw error;
   }

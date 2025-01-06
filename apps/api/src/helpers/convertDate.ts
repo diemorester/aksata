@@ -29,3 +29,16 @@ export const convertDate = (date: Date | null) => {
 
   return `${day[hari]}, ${tanggal} ${month[bulan]} ${tahun}`;
 };
+
+// 08.00
+export const hourFormat = (date: Date | null) => {
+  if (date == null) {
+    return '-';
+  }
+
+  const time = new Date(date)
+  const hours = time.getHours().toString().padStart(2, '0');
+  const minute = time.getMinutes().toString().padStart(2, '0');
+
+  return `${hours}:${minute}`;
+}

@@ -63,7 +63,7 @@ export class AbsensiController {
   async exportExcel(req: Request, res: Response, next: NextFunction) {
     try {
       const {startDate, endDate} = req.body
-      const excelFile = await exportExcelService(startDate, endDate);
+      const excelFile = await exportExcelService();
 
       res.setHeader(
         'Content-Type',

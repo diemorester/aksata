@@ -8,10 +8,15 @@ import SearchBarInput from './searchBarHR';
 import useDebounce from '@/hooks/useDebounce';
 import Image from 'next/image';
 import DropDown from '@/components/dropdowns/dropDown';
+import { AxiosError } from 'axios';
+import toast from 'react-hot-toast';
+import { excelFetch } from '@/libs/fetch/absensi';
 
 const TabelAbsensi = () => {
     const [search, setSearch] = useState('');
     const [filterBy, setFilterBy] = useState('');
+    const [isLoading,setIsLoading] = useState(false);
+
     const [page, setPage] = useState(1);
 
     const filterDebounce = useDebounce(filterBy, 300);
@@ -49,6 +54,26 @@ const TabelAbsensi = () => {
     const handleChange = ({ selected }: { selected: number }) => {
         setPage(selected + 1);
     };
+
+    const handleDownload = async () => {
+        setIsLoading(true);
+        try {
+            const res = await excelFetch();
+            const link = document.createElement('a');
+            const url = window.URL.createObjectURL(new Blob([res.data]));
+            link.href = url
+            link.setAttribute('download', 'Data-Absensi.xlsx')
+            document.body.appendChild(link);
+            link.click()
+            link.parentNode?.removeChild(link)
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                toast.error('download failed')
+            }
+        } finally {
+            setIsLoading(false)
+        }
+    }
 
     return (
         <div className="flex flex-col">
@@ -107,7 +132,7 @@ const TabelAbsensi = () => {
                     </div>
                 </div>
                 <div className="flex justify-end  items-center px-8 pt-[11px]">
-                    <ButtonSpan type="submit" fill="bg-green-500">
+                    <ButtonSpan type="submit" fill="bg-green-500" onClick={handleDownload} disabled={isLoading}>
                         PRINT
                     </ButtonSpan>
                 </div>
