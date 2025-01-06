@@ -12,6 +12,10 @@ const Absensi = () => {
   const dispatch = useAppDispatch();
   const { clockIn, clockOut } = useAppSelector((state) => state.absen);
 
+  const now = new Date()
+  const disableHours = new Date()
+  disableHours.setHours(13, 0, 0, 0)
+
   useEffect(() => {
     const now = new Date();
     const resetTime = new Date();
@@ -95,8 +99,8 @@ const Absensi = () => {
           <button
             type="button"
             onClick={handleClockOut}
-            disabled={isLoading}
-            className="active:scale-95 text-sm bg-red-400 text-white hover:bg-red-400/60 py-2 px-2 rounded-md w-full"
+            disabled={isLoading || now <= disableHours}
+            className="active:scale-95 text-sm bg-red-400 text-white disabled:cursor-not-allowed disabled:active:scale-100 hover:bg-red-400/60 py-2 px-2 rounded-md w-full"
           >
             Clock Out
           </button>

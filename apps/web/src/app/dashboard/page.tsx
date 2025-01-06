@@ -8,17 +8,17 @@ const Dashboard = () => {
         <h1 className="text-[24px] font-semibold text-end text-neutral-200 px-3 py-6">
           Absensi
         </h1>
-        <div className="p-3 h-[535px] rounded-lg text-center bg-neutral-950 flex flex-col gap-3">
+        <div className="p-3 h-[535px] rounded-lg text-center flex flex-col gap-3">
           <div className="flex gap-3">
-            <div className="bg-neutral-200 w-2/6 h-[248px] place-content-center rounded-lg">
+            <div className="bg-neutral-950 w-2/6 h-[248px] place-content-center rounded-lg">
 
             </div>
-            <div className="bg-neutral-200 w-4/6 h-[248px] place-content-center rounded-lg">
+            <div className="bg-neutral-950 w-4/6 h-[248px] place-content-center rounded-lg">
 
             </div>
           </div>
           <div className="flex gap-3">
-            <div className="bg-neutral-200 w-4/6 h-[248px] place-content-center rounded-lg">
+            <div className="bg-neutral-950 w-4/6 h-[248px] place-content-center rounded-lg">
               <div className='flex justify-between'>
                 <Legenda />
                 <div className='flex items-center text-center justify-center w-full'>kalender</div>

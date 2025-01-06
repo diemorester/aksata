@@ -1,6 +1,7 @@
 import {
   clockInService,
   clockOutService,
+  exportExcelService,
   getAllAttendanceService,
 } from '@/services/absensi/absensi.service';
 import { NextFunction, Request, Response } from 'express';
@@ -14,7 +15,7 @@ export class AbsensiController {
       const time = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
       const response = await clockInService(req.user?.id!);
       return res.status(200).send({
-        msg: `Anda clock-in pada jam ${time}`,
+        msg: `Anda melakukan clock-in pada jam ${time}`,
         response,
       });
     } catch (error) {
@@ -30,7 +31,7 @@ export class AbsensiController {
       const time = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
       const response = await clockOutService(req.user?.id!);
       return res.status(200).send({
-        msg: `Anda clock-out pada jam ${time}`,
+        msg: `Anda melakukan clock-out pada jam ${time}`,
         response,
       });
     } catch (error) {
@@ -40,17 +41,40 @@ export class AbsensiController {
 
   async getAllAttendance(req: Request, res: Response, next: NextFunction) {
     try {
-      const { page, take, search } = req.query;
+      const { page, take, search, filterBy } = req.query;
 
       const data = await getAllAttendanceService({
         page: Number(page as string) || 1,
         take: Number(take as string) || 9,
         search: search as string,
+        filterBy:
+          (filterBy as 'daily' | 'weekly' | 'monthly' | 'yearly') || 'daily',
       });
+
       return res.status(200).send({
         status: 'ok',
         data,
       });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async exportExcel(req: Request, res: Response, next: NextFunction) {
+    try {
+      const {startDate, endDate} = req.body
+      const excelFile = await exportExcelService();
+
+      res.setHeader(
+        'Content-Type',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      );
+      res.setHeader(
+        'Content-Disposition',
+        'attachment; filename=ERP-aksata.xlsx',
+      );
+
+      return res.status(200).send(excelFile);
     } catch (error) {
       next(error);
     }

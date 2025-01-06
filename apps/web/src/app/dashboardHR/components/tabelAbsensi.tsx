@@ -6,15 +6,46 @@ import { useState } from 'react';
 import useAbsensi from '@/hooks/useAbsensi';
 import SearchBarInput from './searchBarHR';
 import useDebounce from '@/hooks/useDebounce';
-import SkeletonAbsensi from './skeletonAbsensi';
 import Image from 'next/image';
+import DropDown from '@/components/dropdowns/dropDown';
+import { AxiosError } from 'axios';
+import toast from 'react-hot-toast';
+import { excelFetch } from '@/libs/fetch/absensi';
 
 const TabelAbsensi = () => {
     const [search, setSearch] = useState('');
+    const [filterBy, setFilterBy] = useState('');
+    const [isLoading,setIsLoading] = useState(false);
 
     const [page, setPage] = useState(1);
-    const hooksDebounce = useDebounce(search, 300)
-    const { data, isPending } = useAbsensi({ page, take: 9, search: hooksDebounce });
+
+    const filterDebounce = useDebounce(filterBy, 300);
+    const searchDebounce = useDebounce(search, 300);
+    const { data, isPending } = useAbsensi({ page, take: 9, search: searchDebounce, filterBy: filterDebounce });
+
+    const option = [
+        {
+            label: 'Harian',
+            value: 'daily'
+        },
+        {
+            label: 'Mingguan',
+            value: 'weekly'
+        },
+        {
+            label: 'Bulanan',
+            value: 'monthly'
+        },
+        {
+            label: 'Tahunan',
+            value: 'yearly'
+        }
+    ]
+
+    const handleSelect = (value: string) => {
+        setFilterBy(value)
+
+    }
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearch(e.target.value)
@@ -23,6 +54,26 @@ const TabelAbsensi = () => {
     const handleChange = ({ selected }: { selected: number }) => {
         setPage(selected + 1);
     };
+
+    const handleDownload = async () => {
+        setIsLoading(true);
+        try {
+            const res = await excelFetch();
+            const link = document.createElement('a');
+            const url = window.URL.createObjectURL(new Blob([res.data]));
+            link.href = url
+            link.setAttribute('download', 'Data-Absensi.xlsx')
+            document.body.appendChild(link);
+            link.click()
+            link.parentNode?.removeChild(link)
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                toast.error('download failed')
+            }
+        } finally {
+            setIsLoading(false)
+        }
+    }
 
     return (
         <div className="flex flex-col">
@@ -45,7 +96,12 @@ const TabelAbsensi = () => {
                                     Waktu Check-Out
                                 </th>
                                 <th className="hidden p-3 text-center md:table-cell font-semibold">
-                                    Hari
+                                    Durasi
+                                </th>
+                                <th className="hidden p-3 md:table-cell font-semibold">
+                                    <div className='flex justify-center'>
+                                        <DropDown onSelect={handleSelect} options={option} />
+                                    </div>
                                 </th>
                                 <th className="p-3 text-center">Status</th>
                             </tr>
@@ -76,7 +132,7 @@ const TabelAbsensi = () => {
                     </div>
                 </div>
                 <div className="flex justify-end  items-center px-8 pt-[11px]">
-                    <ButtonSpan type="submit" fill="bg-green-500">
+                    <ButtonSpan type="submit" fill="bg-green-500" onClick={handleDownload} disabled={isLoading}>
                         PRINT
                     </ButtonSpan>
                 </div>

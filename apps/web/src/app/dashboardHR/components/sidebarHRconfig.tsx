@@ -156,7 +156,7 @@ export const SidebarLinkHR = ({
     label: string;
     href: string;
     icon: IconType;
-    active?: boolean;
+    active: boolean;
     onClick: () => void;
 }) => {
     const { open, animate } = useSidebarHR();
@@ -165,14 +165,16 @@ export const SidebarLinkHR = ({
             return onClick();
         }
     };
+
+    console.log(active, 'ngantuukkkk');
+    
     return (
         <div onClick={handleClick}>
             <Link
                 href={href}
                 className={cn(
-                    `flex items-center justify-start gap-2  group/sidebar text-neutral-800`,
-                    active && 'bg-neutral-500/30 rounded-md',
-                    open ? 'py-1 px-2 text-black' : 'bg-transparent',
+                    `flex items-center justify-start gap-2 px-3 py-1  group/sidebar text-neutral-800`,
+                    active && 'bg-broken-white rounded-lg'
                 )}
             >
                 <Icon size={30} />

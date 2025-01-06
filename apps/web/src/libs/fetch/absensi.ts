@@ -32,3 +32,13 @@ export const clockOutFetch = async () => {
 
   return res;
 };
+
+export const excelFetch = async () => {
+  const res = await axiosInstance.get(
+    '/absensi/export-excel', {
+    responseType: 'blob'
+  }
+  );
+
+  return res;
+};

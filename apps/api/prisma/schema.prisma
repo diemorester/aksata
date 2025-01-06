@@ -38,21 +38,24 @@ enum Roles {
 }
 
 model Absensi {
-  id        String    @id @default(cuid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt()
-  clockIn   DateTime?
-  clockOut  DateTime?
-  location  String?
-  status    Status?
-  date      DateTime  @default(now())
-  user      User      @relation(fields: [userId], references: [id])
-  userId    Int
+  id                 String    @id @default(cuid())
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt()
+  clockIn            DateTime?
+  clockOut           DateTime?
+  duration           String?
+  location           String?
+  status             Status?
+  date               DateTime  @default(now())
+  user               User      @relation(fields: [userId], references: [id])
+  userId             Int
+  keterangan         String?
+  startDatePengajuan DateTime?
+  endDatePengajuan   DateTime?
 }
 
 enum Status {
   Hadir
-  Terlambat
   Sakit
   Cuti
   Izin

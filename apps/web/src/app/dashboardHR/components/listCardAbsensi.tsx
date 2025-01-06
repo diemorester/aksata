@@ -2,7 +2,6 @@
 import CardDataAbsensi from './cardDataAbsensi';
 import { Absensi } from '@/types/absensiTypes';
 import SkeletonAbsensi from './skeletonAbsensi';
-import Image from 'next/image';
 
 interface ListCardAbsensiProps {
     attendance: Absensi[];
@@ -30,7 +29,7 @@ const ListCardAbsensi: React.FC<ListCardAbsensiProps> = ({
 
     return (
         <>
-            {attendance.map((absen) => {
+            {attendance.map((absen, index) => {
                 return (
                     <CardDataAbsensi
                         key={absen.id}
@@ -39,6 +38,8 @@ const ListCardAbsensi: React.FC<ListCardAbsensiProps> = ({
                         clockIn={absen.clockIn}
                         clockOut={absen.clockOut}
                         status={absen.status}
+                        duration={absen.duration}
+                        activeBackground={index % 2 == 1}
                     />
                 );
             })}
