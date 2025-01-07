@@ -82,8 +82,8 @@ const Absensi = () => {
             <p className="text-start">Clock-out Time</p>
           </div>
           <div>
-            <p>{clockIn ? hourFormat(clockIn) : '--/--'}</p>
-            <p>{clockOut ? hourFormat(clockOut) : '--/--'}</p>
+            <p className='font-bold'>{clockIn ? hourFormat(clockIn) : '--/--'}</p>
+            <p className='font-bold'>{clockOut ? hourFormat(clockOut) : '--/--'}</p>
           </div>
         </div>
 

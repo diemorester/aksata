@@ -12,9 +12,10 @@ interface DropDownOptions {
 interface DropDownProps {
     options: DropDownOptions[];
     onSelect: (value: string) => void;
+    pengajuan?: boolean;
 }
 
-const DropDown: React.FC<DropDownProps> = ({ onSelect, options }) => {
+const DropDown: React.FC<DropDownProps> = ({ onSelect, options, pengajuan }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selected, setSelected] = useState<string | null>(options[0].label);
 
@@ -45,9 +46,12 @@ const DropDown: React.FC<DropDownProps> = ({ onSelect, options }) => {
             <button
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex gap-2 items-center"
+                className={clsx(
+                    `flex gap-2 items-center`,
+                    pengajuan && `py-2 px-3 items-center text-off-white w-full border-2 rounded-md justify-between border-off-white`
+                )}
             >
-                Filter: {selected}
+                {pengajuan ? `${selected}` : `Filter: ${selected}`}
                 <FaAngleDown
                     className={clsx(
                         `transition-all duration-600`,
@@ -58,8 +62,9 @@ const DropDown: React.FC<DropDownProps> = ({ onSelect, options }) => {
             {isOpen && (
                 <div
                     className={clsx(
-                        'absolute flex flex-col gap-y-2 py-2 shadow-md bg-slate-100 -left-[13px] z-10 md:w-[168px] cursor-pointer text-start border border-black/20 rounded-md px-3 transform transition-transform origin-top duration-700 ease-in-out',
+                        'absolute flex flex-col gap-y-2 py-2 shadow-md z-10 cursor-pointer text-start border border-black/20 rounded-md px-3 transform transition-transform origin-top duration-700 ease-in-out',
                         isOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0',
+                        pengajuan ? "w-full bg-neutral-800 border-2 border-off-white" : "md:w-[168px] -left-[13px] bg-slate-100"
                     )}
                     style={{transformOrigin: 'top'}}
                 >
@@ -67,7 +72,8 @@ const DropDown: React.FC<DropDownProps> = ({ onSelect, options }) => {
                         <div
                             className={clsx(
                                 'flex items-center font-medium gap-x-2 rounded-md py-1 px-2 justify-between hover:bg-gray-200/50 transition-all duration-200',
-                                selected === value.label && 'bg-broken-white',
+                                selected === value.label && pengajuan ? 'text-off-white bg-off-white/10' : "text-off-white"
+                                
                             )}
                             key={value.value}
                             onClick={() => handleSelect(value.value, value.label)}

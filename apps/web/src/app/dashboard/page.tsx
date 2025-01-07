@@ -1,5 +1,5 @@
 import Absensi from './components/Absensi';
-import Legenda from './components/Legenda';
+import PengajuanKonten from './components/PengajuanKonten';
 
 const Dashboard = () => {
   return (
@@ -10,18 +10,18 @@ const Dashboard = () => {
         </h1>
         <div className="p-3 h-[535px] rounded-lg text-center flex flex-col gap-3">
           <div className="flex gap-3">
-            <div className="bg-neutral-950 w-2/6 h-[248px] place-content-center rounded-lg">
-
-            </div>
             <div className="bg-neutral-950 w-4/6 h-[248px] place-content-center rounded-lg">
 
             </div>
+            <PengajuanKonten />
           </div>
           <div className="flex gap-3">
             <div className="bg-neutral-950 w-4/6 h-[248px] place-content-center rounded-lg">
               <div className='flex justify-between'>
-                <Legenda />
-                <div className='flex items-center text-center justify-center w-full'>kalender</div>
+
+                <div className='flex items-center text-center justify-center w-full'>
+
+                </div>
               </div>
             </div>
             <div className="w-2/6 h-[248px] rounded-lg p-1 bg-neutral-950">
