@@ -8,14 +8,18 @@ const PengajuanKonten = () => {
     const [isOpenModal, setIsOpenModal] = useState(false);
 
     return (
-        <div className="bg-neutral-950 w-2/6 h-[248px] place-content-center rounded-lg">
-            <Kalender onClick={() => setIsOpenModal(true)} />
-            <ButtonSpan
-                type='button'
-                onClick={() => setIsOpenModal(true)}
-            >
-                pengajuan
-            </ButtonSpan>
+        <div>
+            <div className="relative">
+                <Kalender onClick={() => setIsOpenModal(true)} />
+            </div>
+            <div>
+                <ButtonSpan
+                    type='button'
+                    onClick={() => setIsOpenModal(true)}
+                >
+                    pengajuan
+                </ButtonSpan>
+            </div>
             <CutiLemburModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} />
         </div>
     )

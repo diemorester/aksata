@@ -38,20 +38,19 @@ enum Roles {
 }
 
 model Absensi {
-  id                 String    @id @default(cuid())
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt()
-  clockIn            DateTime?
-  clockOut           DateTime?
-  duration           String?
-  location           String?
-  status             Status?
-  date               DateTime  @default(now())
-  user               User      @relation(fields: [userId], references: [id])
-  userId             Int
-  keterangan         String?
-  startDatePengajuan DateTime?
-  endDatePengajuan   DateTime?
+  id         String      @id @default(cuid())
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt()
+  clockIn    DateTime?
+  clockOut   DateTime?
+  duration   String?
+  location   String?
+  status     Status?
+  date       DateTime    @default(now())
+  user       User        @relation(fields: [userId], references: [id])
+  userId     Int
+  keterangan String?
+  Pengajuan  Pengajuan[]
 }
 
 enum Status {
@@ -63,16 +62,25 @@ enum Status {
 }
 
 model Pengajuan {
-  id         String     @id @default(cuid())
-  date       DateTime
-  nominal    Float
-  company    Companies
-  client     String
-  keterangan String     @db.MediumText()
-  tipeLembur OpsiLembur
-  status     Boolean    @default(false)
-  user       User       @relation(fields: [userId], references: [id])
+  id         String          @id @default(cuid())
+  nominal    Float?
+  tipeLembur OpsiLembur?
+  status     StatusPengajuan @default(Waiting)
+  user       User            @relation(fields: [userId], references: [id])
   userId     Int
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+  startDate  DateTime?
+  endDate    DateTime?
+  absensi    Absensi         @relation(fields: [absensiId], references: [id])
+  absensiId  String
+}
+
+enum StatusPengajuan {
+  Approved
+  Waiting
+  Cancelled
+  Declined
 }
 
 enum Companies {

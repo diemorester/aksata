@@ -15,7 +15,7 @@ import { excelFetch } from '@/libs/fetch/absensi';
 const TabelAbsensi = () => {
     const [search, setSearch] = useState('');
     const [filterBy, setFilterBy] = useState('');
-    const [isLoading,setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const [page, setPage] = useState(1);
 
@@ -85,25 +85,28 @@ const TabelAbsensi = () => {
                     </h1>
                 </div>
                 <div className="flex flex-col justify-between rounded-md mx-5 px-3 bg-slate-100 h-full  md:min-h-[550px]">
-                    <table className="mt-2 md:w-full">
+                    <table className="mt-2 md:w-full table-fixed border-collapse">
                         <thead className="pb-5 text-black">
                             <tr className="border-b-[2px] text-start border-black">
-                                <th className="p-3 text-start font-semibold">Nama</th>
-                                <th className="hidden p-3 text-center md:table-cell font-semibold">
-                                    Waktu Check-In
+                                <th className="p-3 text-start font-semibold" style={{ width: "30%" }}>Nama</th>
+                                <th className="hidden p-3 text-center md:table-cell font-semibold" style={{ width: "15%" }}>
+                                    Clock-In
                                 </th>
-                                <th className="hidden p-3 text-center md:table-cell font-semibold">
-                                    Waktu Check-Out
+                                <th className="hidden p-3 text-center md:table-cell font-semibold" style={{ width: "15%" }}>
+                                    Clock-Out
                                 </th>
-                                <th className="hidden p-3 text-center md:table-cell font-semibold">
+                                <th className="hidden p-3 text-center md:table-cell font-semibold" style={{ width: "20%" }}>
                                     Durasi
                                 </th>
-                                <th className="hidden p-3 md:table-cell font-semibold">
-                                    <div className='flex justify-center'>
-                                        <DropDown onSelect={handleSelect} options={option} />
+                                <th className="hidden p-3 md:table-cell font-semibold" style={{ width: "30%" }}>
+                                    <div className="relative">
+                                        {/* Bungkus Dropdown dengan div untuk memberikan ukuran tetap */}
+                                        <div className='md:pl-[56px] md:pr-9'>
+                                            <DropDown onSelect={handleSelect} options={option} pengajuanHR />
+                                        </div>
                                     </div>
                                 </th>
-                                <th className="p-3 text-center">Status</th>
+                                <th className="p-3 text-center" style={{ width: "10%" }}>Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -114,7 +117,7 @@ const TabelAbsensi = () => {
                         </tbody>
                     </table>
                     {data?.attendance.length === 0 && (
-                        <div className='flex w-full h-full place-content-start px-48 items-center'>
+                        <div className='flex w-full h-full place-content-center px-48 items-center'>
                             <Image
                                 width={460}
                                 height={400}

@@ -389,6 +389,13 @@ export const exportExcelService = async () => {
         user: {
           select: {
             name: true
+          },
+        },
+        Pengajuan: {
+          select: {
+            startDate: true,
+            endDate: true,
+            status: true
           }
         }
       },
@@ -401,7 +408,7 @@ export const exportExcelService = async () => {
 
     data.forEach ((item, index, array) => {
       const customRow = sheet.getRow(index + 2);
-      const lastRow = sheet.getRow((array.length - 1) + 2)
+      const lastRow = sheet.getRow((array.length - 1) + 2);         
 
       // nomer
       const cellNumber = customRow.getCell(1);

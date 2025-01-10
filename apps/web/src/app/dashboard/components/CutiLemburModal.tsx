@@ -1,6 +1,4 @@
 'use client'
-
-import Calendar from "@/app/dashboard/components/kalenderPengajuan";
 import ButtonSpan from "@/components/buttons/spanButtons";
 import DropDown from "@/components/dropdowns/dropDown";
 import Modal from "@/components/Modal";
@@ -9,6 +7,7 @@ import { AxiosError } from "axios";
 import React, { useState } from "react";
 import { DateRange } from "react-day-picker";
 import toast from "react-hot-toast";
+import KalenderPengajuan from "./kalenderPengajuan";
 
 interface CutiLemburModalProps {
     isOpen: boolean;
@@ -65,20 +64,21 @@ const CutiLemburModal: React.FC<CutiLemburModalProps> = ({ isOpen, onClose }) =>
         >
             <div className="flex flex-col gap-y-6">
                 <div className="flex flex-col gap-y-1">
-                    <label className="text-neutral-500">Jenis Pengajuan</label>
+                    <label className="text-sm text-neutral-500">Jenis Pengajuan</label>
                     <DropDown
                         onSelect={(e) => setPengajuan(e)}
                         options={options}
                         pengajuan
+                        placeholder="― pilih pengajuan ―"
                     />
                 </div>
                 <div className="flex flex-col gap-y-1">
-                    <label className="text-neutral-500">Pilih Tanggal</label>
-                    <Calendar date={date} setDate={setDate} />
+                    <label className="text-sm text-neutral-500">Tanggal Pengajuan</label>
+                    <KalenderPengajuan date={date} setDate={setDate} />
                 </div>
                 <div className="flex flex-col gap-y-1">
-                    <label className="text-neutral-500">Keterangan</label>
-                    <input onChange={(e) => setKeterangan(e.target.value)} type="text" placeholder="tulis keterangan" className="py-2 px-3 bg-transparent placeholder:text-neutral-500 outline-none focus:border-2 text-off-white w-full border-2 rounded-md border-off-white" />
+                    <label className="text-sm text-neutral-500">Keterangan</label>
+                    <input onChange={(e) => setKeterangan(e.target.value)} type="text" placeholder="― tulis keterangan ―" className="py-[15px] px-5 bg-transparent placeholder:text-sm placeholder:text-neutral-500/65 outline-none focus:border-2 text-off-white w-full border-2 rounded-md border-off-white" />
                 </div>
                 <ButtonSpan
                     aksata
@@ -86,7 +86,7 @@ const CutiLemburModal: React.FC<CutiLemburModalProps> = ({ isOpen, onClose }) =>
                     fill="bg-neutral-300"
                     rounded="lg"
                     fullWidth
-                    classname="mt-2"
+                    classname="mt-5"
                     onClick={handleSubmit}
                     disabled={isLoading}
                 >

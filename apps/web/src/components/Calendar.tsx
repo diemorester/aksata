@@ -1,7 +1,5 @@
 'use client';
-
 import clsx from 'clsx';
-import React from 'react';
 import { DayPicker } from 'react-day-picker';
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
@@ -19,29 +17,35 @@ function Calendar({
       className={clsx('', className)}
       classNames={{
         day: 'py-3 px-4 text-center text-off-white',
-        today: 'text-green-300',
-        selected: clsx(
-          'bg-neutral-600 p-1',
-          numberOfMonths === 12 && 'rounded-full',
-        ),
-        range_middle: 'bg-gray-300/50',
-        range_start: 'rounded-l-full',
-        range_end: 'rounded-r-full',
-        disabled: 'text-rose-400',
+        weekday: 'py-3 px-4',
+        today: 'text-amber-500',
+        // selected: clsx(
+        //   '',
+        //   numberOfMonths === 12 && 'rounded-full',
+        // ),
+        range_middle: 'bg-gray-300/35',
+        range_start: 'rounded-l-full bg-neutral-600',
+        range_end: 'rounded-r-full bg-neutral-600',
+        disabled: 'text-rose-500',
         button_next: clsx('fill-off-white', numberOfMonths === 12 && 'hidden'),
         button_previous: clsx(
           'fill-off-white',
           numberOfMonths === 12 && 'hidden',
         ),
         nav: clsx(
-          'flex space-x-1 items-center justify-between px-5 py-2',
+          'absolute right-6 top-6 items-center flex space-x-2 justify-end z-30',
           numberOfMonths === 12 && 'hidden',
         ),
-        nav_button_next: 'absolute right-1',
-        nav_button_previous: 'absolute left-1',
-        month: 'text-off-white bg-neutral-800 rounded-lg py-2 px-3',
+        month: clsx(
+          'text-off-white bg-neutral-800 rounded-lg px-3 pb-2 pt-16',
+          numberOfMonths === 12 && 'pt-1 pb-2'
+        ),
+        month_caption: clsx(
+          'absolute top-[24px] left-5 text-xl font-semibold text-off-white',
+          numberOfMonths === 12 && 'relative pb-12'
+        ),
         months: clsx('', numberOfMonths === 12 && 'grid grid-cols-3 gap-2'),
-        outside: 'text-off-white/30',
+        outside: 'text-opacity-30',
         ...classNames,
       }}
       disabled={{ dayOfWeek: [0, 6] }}

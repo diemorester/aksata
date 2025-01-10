@@ -1,41 +1,95 @@
 import prisma from "@/prisma";
-import { Absensi } from "@prisma/client";
+import { Absensi, Pengajuan } from "@prisma/client";
 
-export const pengajuanService = async (body: Absensi, userId: number) => {
+export const pengajuanService = async (bodyAbsensi: Absensi, bodyPengajuan: Pengajuan, userId: number) => {
     try {
-        const { status, startDatePengajuan, endDatePengajuan, keterangan } = body
-        if (!status || !startDatePengajuan || !endDatePengajuan || !keterangan) {
-            throw new Error('Pengajuan tidak boleh kosong')
+        const { status, keterangan } = bodyAbsensi
+        const { startDate, endDate } = bodyPengajuan
+        if (!status || !startDate || !endDate || !keterangan) {
+            throw new Error('Keterangan tidak boleh kosong')
         }
-        const startDate = new Date(startDatePengajuan!);
-        const endDate = new Date(endDatePengajuan!)
-        if (endDate < startDate) {
-            throw new Error('End date tidak boleh sebelum start date')
-        }
-        const findPengajuan = await prisma.absensi.findFirst({
+
+        const findApplication = await prisma.pengajuan.findFirst({
             where: {
+                userId,
                 OR: [
                     {
-                        startDatePengajuan: {
-                            lte: startDate
+                        startDate: {
+                            lte: new Date(startDate)
                         },
-                        endDatePengajuan: {
-                            gte: endDate
+                        endDate: {
+                            gte: new Date(endDate)
                         }
                     }
                 ]
             }
         })
-        if (findPengajuan) {
-            throw new Error('anda telah melakukan pengajuan, silakan pilih tanggal lain')
+
+        if (findApplication) {
+            throw new Error('Anda telah melakukan pengajuan, silakan pilih tanggal lain')
         }
-        const pengajuan = await prisma.absensi.create({
+
+        const attendance = await prisma.absensi.create({
             data: {
-                status, startDatePengajuan, endDatePengajuan, userId, keterangan
+                userId,
+                status,
+                keterangan
             }
         })
-        return pengajuan;
+
+        const application = await prisma.pengajuan.create({
+            data: {
+                userId,
+                absensiId: attendance.id,
+                startDate,
+                endDate
+            }
+        })
+        return { attendance, application }
+
     } catch (error) {
         throw error;
     }
-}
+};
+
+export const getPengajuanUserService = async (userId: number) => {
+    try {
+        const pengajuanUser = await prisma.pengajuan.findMany({
+            where: {
+                userId
+            },
+            include: {
+                absensi: {
+                    select: {
+                        status: true,
+                        keterangan: true
+                    }
+                }
+            },
+            orderBy: {
+                createdAt: 'desc'
+            }
+        })
+        return pengajuanUser
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getPengajuanHRService = async () => {
+    try {
+        const pengajuanHR = await prisma.pengajuan.findMany({
+            include: {
+                absensi: {
+                    select: {
+                        status: true,
+                        keterangan: true
+                    }
+                }
+            }
+        })
+        return pengajuanHR
+    } catch (error) {
+        throw error;
+    }
+};

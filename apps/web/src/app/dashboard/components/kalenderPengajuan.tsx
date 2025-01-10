@@ -1,5 +1,4 @@
 'use client';
-
 import { Calendar } from '@/components/Calendar';
 import { pengajuanFormat } from '@/libs/date';
 import { useEffect, useRef, useState } from 'react';
@@ -23,12 +22,13 @@ const KalenderPengajuan: React.FC<KalenderPengajuanProps> = ({
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
         setIsOpen(false);
       }
+      setIsOpen(false)
     };
     if (isOpen) {
       document.addEventListener('click', handleClickOnSide);
     }
     return () => {
-      document.addEventListener('click', handleClickOnSide);
+      document.removeEventListener('click', handleClickOnSide);
     };
   }, [isOpen]);
 
@@ -39,7 +39,7 @@ const KalenderPengajuan: React.FC<KalenderPengajuanProps> = ({
   return (
     <div className="relative" ref={modalRef}>
       <button
-        className="flex py-2 px-3 items-center text-off-white w-full border-2 rounded-md justify-between border-off-white"
+        className="flex py-[13px] px-5 items-center text-off-white w-full border-2 rounded-md justify-between border-off-white"
         type="button"
         onClick={() => setIsOpen(!isOpen)}
       >
@@ -53,7 +53,7 @@ const KalenderPengajuan: React.FC<KalenderPengajuanProps> = ({
             <>{pengajuanFormat(date.from.toISOString())}</>
           )
         ) : (
-          <p>{pengajuanFormat(new Date().toISOString())}</p>
+          <p className='text-sm text-neutral-500/65'>― pilih tanggal ―</p>
         )}
         <LuCalendar size={30} />
       </button>

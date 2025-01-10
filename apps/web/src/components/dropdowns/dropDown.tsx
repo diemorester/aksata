@@ -13,11 +13,13 @@ interface DropDownProps {
     options: DropDownOptions[];
     onSelect: (value: string) => void;
     pengajuan?: boolean;
+    pengajuanHR?: boolean;
+    placeholder?: string;
 }
 
-const DropDown: React.FC<DropDownProps> = ({ onSelect, options, pengajuan }) => {
+const DropDown: React.FC<DropDownProps> = ({ onSelect, options, pengajuan, pengajuanHR, placeholder }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [selected, setSelected] = useState<string | null>(options[0].label);
+    const [selected, setSelected] = useState<string | null>(placeholder || options[0].label);
 
     const modalRef = useRef<HTMLDivElement>(null)
 
@@ -47,15 +49,19 @@ const DropDown: React.FC<DropDownProps> = ({ onSelect, options, pengajuan }) => 
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
                 className={clsx(
-                    `flex gap-2 items-center`,
-                    pengajuan && `py-2 px-3 items-center text-off-white w-full border-2 rounded-md justify-between border-off-white`
+                    `flex gap-2 items-center w-full rounded-md justify-between transition-all`,
+                    selected === placeholder
+                        ? `border-2 py-[15px] px-5 text-neutral-500/65 border-off-white`
+                        : pengajuan
+                        ? `border-2 py-[15px] px-5 text-off-white border-off-white`
+                        : `py-2 px-3 text-black`
                 )}
             >
                 {pengajuan ? `${selected}` : `Filter: ${selected}`}
                 <FaAngleDown
                     className={clsx(
                         `transition-all duration-600`,
-                        isOpen && `rotate-180`,
+                        isOpen && `rotate-180`
                     )}
                 />
             </button>
@@ -70,11 +76,21 @@ const DropDown: React.FC<DropDownProps> = ({ onSelect, options, pengajuan }) => 
                 >
                     {options.map((value) => (
                         <div
-                            className={clsx(
-                                'flex items-center font-medium gap-x-2 rounded-md py-1 px-2 justify-between hover:bg-gray-200/50 transition-all duration-200',
-                                selected === value.label && pengajuan ? 'text-off-white bg-off-white/10' : "text-off-white"
-                                
-                            )}
+                        className={clsx(
+                            'flex items-center font-medium gap-x-2 rounded-md py-1 px-2 justify-between hover:bg-gray-200/50 transition-all duration-200',
+                            selected === value.label
+                                ? pengajuan
+                                    ? 'text-off-white bg-off-white/10'
+                                    : pengajuanHR
+                                    ? 'text-black bg-neutral-700/15'
+                                    : ''
+                                : pengajuan
+                                ? 'text-off-white'
+                                : pengajuanHR
+                                ? 'text-black'
+                                : ''
+                        )}
+                        
                             key={value.value}
                             onClick={() => handleSelect(value.value, value.label)}
                         >

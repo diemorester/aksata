@@ -1,4 +1,6 @@
 import Absensi from './components/Absensi';
+import Approval from './components/Approval';
+import ListApproval from './components/ListApproval';
 import PengajuanKonten from './components/PengajuanKonten';
 
 const Dashboard = () => {
@@ -10,10 +12,14 @@ const Dashboard = () => {
         </h1>
         <div className="p-3 h-[535px] rounded-lg text-center flex flex-col gap-3">
           <div className="flex gap-3">
-            <div className="bg-neutral-950 w-4/6 h-[248px] place-content-center rounded-lg">
-
+            <div className='bg-neutral-950 w-2/6 h-[248px] place-content-center rounded-lg'>
             </div>
-            <PengajuanKonten />
+            <div className="w-4/6 flex gap-x-14 px-6 py-4 bg-neutral-950 h-[248px] rounded-lg">
+              <ListApproval />
+              <div className='flex justify-center place-content-center'>
+                <PengajuanKonten />
+              </div>
+            </div>
           </div>
           <div className="flex gap-3">
             <div className="bg-neutral-950 w-4/6 h-[248px] place-content-center rounded-lg">
