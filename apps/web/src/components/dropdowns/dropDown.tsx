@@ -70,7 +70,7 @@ const DropDown: React.FC<DropDownProps> = ({ onSelect, options, pengajuan, penga
                     className={clsx(
                         'absolute flex flex-col gap-y-2 py-2 shadow-md z-10 cursor-pointer text-start border border-black/20 rounded-md px-3 transform transition-transform origin-top duration-700 ease-in-out',
                         isOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0',
-                        pengajuan ? "w-full bg-neutral-800 border-2 border-off-white" : "md:w-[168px] -left-[13px] bg-slate-100"
+                        pengajuan ? "w-full bg-neutral-800 border-2 border-off-white" : "md:w-[168px] bg-slate-100"
                     )}
                     style={{transformOrigin: 'top'}}
                 >

@@ -5,8 +5,8 @@ export interface PengajuanType {
     status?: string
     createdAt?: string
     updatedAt?: string
-    startDate?: string
-    endDate?: string
+    startDate: string
+    endDate: string
     absensi: {
         status: string
         keterangan: string

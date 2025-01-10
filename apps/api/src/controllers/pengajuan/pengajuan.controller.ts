@@ -18,10 +18,16 @@ export class PengajuanController {
 
     async pengajuanUser(req: Request, res: Response, next: NextFunction) {
         try {
-            const response = await getPengajuanUserService(req.user?.id!)
+            const { page, take, search } = req.query;
+            const { meta, pengajuanUser } = await getPengajuanUserService(req.user?.id!, {
+                page: Number(page as string) || 1,
+                take: Number(take as string) || 10,
+                search: search as string,
+            })
             return res.status(200).send({
                 status: 'ok',
-                response
+                meta,
+                response: pengajuanUser
             })
         } catch (error) {
             next(error);

@@ -1,4 +1,5 @@
 import prisma from "@/prisma";
+import { PengajuanQuery } from "@/types/pengajuan";
 import { Absensi, Pengajuan } from "@prisma/client";
 
 export const pengajuanService = async (bodyAbsensi: Absensi, bodyPengajuan: Pengajuan, userId: number) => {
@@ -52,8 +53,10 @@ export const pengajuanService = async (bodyAbsensi: Absensi, bodyPengajuan: Peng
     }
 };
 
-export const getPengajuanUserService = async (userId: number) => {
+export const getPengajuanUserService = async (userId: number, query: PengajuanQuery) => {
     try {
+        const { page = 1, search, take = 10 } = query;
+        const skip = (page - 1) * take;
         const pengajuanUser = await prisma.pengajuan.findMany({
             where: {
                 userId
@@ -68,9 +71,22 @@ export const getPengajuanUserService = async (userId: number) => {
             },
             orderBy: {
                 createdAt: 'desc'
+            },
+            take,
+            skip,
+        })
+        const total = await prisma.pengajuan.count({
+            where: {
+                userId
             }
         })
-        return pengajuanUser
+        return {
+            meta: {
+                page,
+                total: Math.ceil(total / take),
+                take
+            }, pengajuanUser
+        }
     } catch (error) {
         throw error;
     }

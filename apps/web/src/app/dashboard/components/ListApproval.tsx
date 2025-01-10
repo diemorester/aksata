@@ -2,9 +2,12 @@
 
 import usePengajuanByUser from "@/hooks/usePengajuanByUser"
 import Approval from "./Approval"
+import Link from "next/link";
 
 const ListApproval = () => {
-    const { data } = usePengajuanByUser();
+    const { data } = usePengajuanByUser({
+        take: 4
+    });
 
     return (
         <>
@@ -17,6 +20,14 @@ const ListApproval = () => {
                             <Approval key={item.id} startDate={item.startDate} endDate={item.endDate} status={item.status} absensi={item.absensi} />
                         )
                     })}
+                    {data?.length! > 3 && (
+                        <Link
+                            href="/dashboard/pengajuan/history"
+                            className="text-sm italic"
+                        >
+                            show more
+                        </Link>
+                    )}
                 </div>
             )}
         </>

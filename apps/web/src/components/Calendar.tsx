@@ -16,16 +16,23 @@ function Calendar({
       showOutsideDays={showOutsideDays}
       className={clsx('', className)}
       classNames={{
-        day: 'py-3 px-4 text-center text-off-white',
+        day: 'h-9 w-9 p-0 text-center aria-selected:opacity-100 rounded-lg',
         weekday: 'py-3 px-4',
         today: 'text-amber-500',
-        // selected: clsx(
-        //   '',
-        //   numberOfMonths === 12 && 'rounded-full',
-        // ),
-        range_middle: 'bg-gray-300/35',
-        range_start: 'rounded-l-full bg-neutral-600',
-        range_end: 'rounded-r-full bg-neutral-600',
+        day_selected: clsx(
+          'bg-white',
+          numberOfMonths === 12 && 'rounded-full',
+        ),
+        day_range_middle: "aria:selected:bg-white",
+        day_range_end: "day-range-end",
+        // range_start: 'rounded-l-full bg-neutral-600',
+        // range_end: 'rounded-r-full bg-neutral-600',
+        table: "w-full border-collapse space-y-1",
+        head_row: "flex",
+        head_cell:
+          "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
+        row: "flex w-full mt-2",
+        cell: "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-white [&:has([aria-selected])]:bg-off-white first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
         disabled: 'text-rose-500',
         button_next: clsx('fill-off-white', numberOfMonths === 12 && 'hidden'),
         button_previous: clsx(
@@ -37,8 +44,8 @@ function Calendar({
           numberOfMonths === 12 && 'hidden',
         ),
         month: clsx(
-          'text-off-white bg-neutral-800 rounded-lg px-3 pb-2 pt-16',
-          numberOfMonths === 12 && 'pt-1 pb-2'
+          'text-off-white bg-neutral-900 rounded-lg px-3 pb-2 pt-16',
+          numberOfMonths === 12 && 'pt-1 pb-2 bg-neutral-950'
         ),
         month_caption: clsx(
           'absolute top-[24px] left-5 text-xl font-semibold text-off-white',
