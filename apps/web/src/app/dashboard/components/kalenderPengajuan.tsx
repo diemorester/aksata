@@ -23,25 +23,21 @@ const KalenderPengajuan: React.FC<KalenderPengajuanProps> = ({
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
         setIsOpen(false);
       }
-      setIsOpen(false)
+      setIsOpen(false);
     };
     if (isOpen) {
-      document.addEventListener('click', handleClickOnSide);
+      document.addEventListener('mousedown', handleClickOnSide);
     }
     return () => {
-      document.removeEventListener('click', handleClickOnSide);
+      document.removeEventListener('mousedown', handleClickOnSide);
     };
   }, [isOpen]);
 
-  // const handleSelect = (selected: DateRange | undefined) => {
-  //   setDate(selected);
-  // };
-
   const handleSelect = (selected: DateRange | undefined) => {
     if (selected?.from && !selected.to) {
-      setDate({ from: selected?.from, to: selected?.from })
+      setDate({ from: selected?.from, to: selected?.from });
     } else {
-      setDate(selected)
+      setDate(selected);
     }
   };
 
@@ -52,32 +48,22 @@ const KalenderPengajuan: React.FC<KalenderPengajuanProps> = ({
         type="button"
         onClick={() => setIsOpen(!isOpen)}
       >
-        {/* {date?.from ? (
-          date.to ? (
-            <>
-              {pengajuanFormat(date.from.toISOString())} - {' '}
-              {pengajuanFormat(date.to.toISOString())}
-            </>
-          ) : (
-            <>{pengajuanFormat(date.from.toISOString())}</>
-          )
-        ) : (
-          <p className='text-sm text-neutral-500/65'>― pilih tanggal ―</p>
-        )} */}
         {date?.from ? (
           <>
             {pengajuanFormat(date.from.toISOString())}
-            {date.to && date.from !== date.to && ` - ${pengajuanFormat(date.to.toISOString())}`}
+            {date.to &&
+              date.from !== date.to &&
+              ` - ${pengajuanFormat(date.to.toISOString())}`}
           </>
         ) : (
-          <p className='text-sm text-neutral-500/65'>― pilih tanggal ―</p>
+          <p className="text-sm text-neutral-500/65">― pilih tanggal ―</p>
         )}
         <LuCalendar size={30} />
       </button>
       {isOpen && (
         <div className="absolute rounded-xl z-30">
           <Calendar
-            mode='range'
+            mode="range"
             selected={date}
             onSelect={handleSelect}
             numberOfMonths={1}
