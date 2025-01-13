@@ -36,10 +36,10 @@ const DropDown: React.FC<DropDownProps> = ({ onSelect, options, pengajuan, penga
             }
         }
         if (isOpen) {
-            document.addEventListener(`click`, handleClickModal)
+            document.addEventListener(`mousedown`, handleClickModal)
         }
         return () => {
-            document.addEventListener('click', handleClickModal)
+            document.addEventListener('mousedown', handleClickModal)
         }
     }, [isOpen])
 
