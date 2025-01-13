@@ -6,7 +6,19 @@ export const pengajuanService = async (bodyAbsensi: Absensi, bodyPengajuan: Peng
     try {
         const { status, keterangan } = bodyAbsensi
         const { startDate, endDate } = bodyPengajuan
-        if (!status || !startDate || !endDate || !keterangan) {
+        if (!status) {
+            throw new Error('Status tidak boleh kosong')
+        }
+        
+        if (!startDate) {
+            throw new Error('Tanggal Mulai tidak boleh kosong')
+        }
+
+        if (!endDate) {
+            throw new Error('Tanggal Selesai tidak boleh kosong')
+        }
+
+        if (!keterangan) {
             throw new Error('Keterangan tidak boleh kosong')
         }
 

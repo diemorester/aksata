@@ -16,10 +16,10 @@ const Approval: React.FC<PengajuanType> = ({ startDate, endDate, status, absensi
         } else {
             setIsLineClammed(false)
         }
-    }, [])
+    }, [absensi.keterangan])
 
     return (
-        <div className="flex flex-col min-w-80 h-fit border rounded-md border-gray-500 px-5 py-3">
+        <div className="flex flex-col w-full h-[118px] border rounded-md border-gray-500 hover:border-off-white px-5 py-3">
             <div className="flex justify-between">
                 <p className="text-lg font-bold text-white pb-3">{absensi?.status}</p>
                 <p className={clsx(

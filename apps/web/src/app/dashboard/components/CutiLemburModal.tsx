@@ -45,6 +45,7 @@ const CutiLemburModal: React.FC<CutiLemburModalProps> = ({ isOpen, onClose }) =>
                 keterangan: keterangan
             }
             const res = await pengajuanAbsensiFetch(payload)
+            onClose()
             toast.success(res.data.msg)
         } catch (error) {
             if (error instanceof AxiosError) {
@@ -54,6 +55,8 @@ const CutiLemburModal: React.FC<CutiLemburModalProps> = ({ isOpen, onClose }) =>
             setIsLoading(false)
         }
     };
+    console.log(date);
+    
 
     return (
         <Modal

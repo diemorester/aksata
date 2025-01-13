@@ -8,17 +8,17 @@ const PengajuanKonten = () => {
     const [isOpenModal, setIsOpenModal] = useState(false);
 
     return (
-        <div>
+        <div className="flex flex-col justify-center gap-6 pt-2 w-full h-full">
             <div className="relative">
                 <Kalender onClick={() => setIsOpenModal(true)} />
             </div>
             <div>
-                <ButtonSpan
-                    type='button'
+                <button
                     onClick={() => setIsOpenModal(true)}
+                    className="font-light px-3 py-1 active:scale-95 text-gray-500 hover:text-off-white border rounded-md border-gray-500 hover:border-off-white"
                 >
-                    pengajuan
-                </ButtonSpan>
+                    buat pengajuan
+                </button>
             </div>
             <CutiLemburModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} />
         </div>

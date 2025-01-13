@@ -29,7 +29,7 @@ const ChangeEmailModal: React.FC<ChangeEmailModalProps> = ({ isOpen, setIsChange
         setIsEmailField(false)
         setIsOTPField(false)
         setIsSendEmail(true)
-    }, [isOTPField, isOTPField, isSendEmail, isOpen])
+    }, [setIsChangeEmailModal])
 
     const handleSendOTP = async () => {
         setIsLoading(true);

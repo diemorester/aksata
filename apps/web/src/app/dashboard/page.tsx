@@ -14,9 +14,11 @@ const Dashboard = () => {
           <div className="flex gap-3">
             <div className='bg-neutral-950 w-2/6 h-[248px] place-content-center rounded-lg'>
             </div>
-            <div className="w-4/6 flex gap-x-9 px-6 py-4 bg-neutral-950 h-[248px] rounded-lg">
-              <ListApproval />
-              <div className='flex justify-center place-content-center'>
+            <div className="w-4/6 flex bg-neutral-950 h-[248px] rounded-lg">
+              <div className='flex w-2/3 pl-6 py-4'>
+                <ListApproval />
+              </div>
+              <div className='flex w-1/3 justify-center place-content-center'>
                 <PengajuanKonten />
               </div>
             </div>

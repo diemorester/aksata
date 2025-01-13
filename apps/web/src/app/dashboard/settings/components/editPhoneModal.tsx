@@ -42,7 +42,7 @@ const EditPhoneModal: React.FC<EditModalProps> = ({ isOpen, onClose, isLoading, 
                             {/* {values.phone == phone && (
                                 <div className="mx-4 text-sm text-red-500 font-extralight">phone can not be same</div>
                             )} */}
-                            <p className="text-center text-xs text-neutral-300 font-extralight">phone must be number, can't be same, and can't be empty</p>
+                            <p className="text-center text-xs text-neutral-300 font-extralight">phone must be number, can&apos;t be same, and can&apos;t be empty</p>
                             <div className="flex justify-end gap-6 mt-10">
                                 <ButtonSpan type="button" onClick={onClose} ristoan>
                                     cancel

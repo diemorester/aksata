@@ -1,5 +1,6 @@
 'use client';
-import { Calendar } from '@/components/Calendar';
+import { DummyCalendar } from '@/components/DummyCalendar';
+import { Calendar } from '@/components/ui/calendar';
 import { pengajuanFormat } from '@/libs/date';
 import { useEffect, useRef, useState } from 'react';
 import { DateRange } from 'react-day-picker';
@@ -32,8 +33,16 @@ const KalenderPengajuan: React.FC<KalenderPengajuanProps> = ({
     };
   }, [isOpen]);
 
+  // const handleSelect = (selected: DateRange | undefined) => {
+  //   setDate(selected);
+  // };
+
   const handleSelect = (selected: DateRange | undefined) => {
-    setDate(selected);
+    if (selected?.from && !selected.to) {
+      setDate({ from: selected?.from, to: selected?.from })
+    } else {
+      setDate(selected)
+    }
   };
 
   return (
@@ -43,15 +52,23 @@ const KalenderPengajuan: React.FC<KalenderPengajuanProps> = ({
         type="button"
         onClick={() => setIsOpen(!isOpen)}
       >
-        {date?.from ? (
+        {/* {date?.from ? (
           date.to ? (
             <>
-              {pengajuanFormat(date.from.toISOString())} -{' '}
+              {pengajuanFormat(date.from.toISOString())} - {' '}
               {pengajuanFormat(date.to.toISOString())}
             </>
           ) : (
             <>{pengajuanFormat(date.from.toISOString())}</>
           )
+        ) : (
+          <p className='text-sm text-neutral-500/65'>― pilih tanggal ―</p>
+        )} */}
+        {date?.from ? (
+          <>
+            {pengajuanFormat(date.from.toISOString())}
+            {date.to && date.from !== date.to && ` - ${pengajuanFormat(date.to.toISOString())}`}
+          </>
         ) : (
           <p className='text-sm text-neutral-500/65'>― pilih tanggal ―</p>
         )}
@@ -60,7 +77,7 @@ const KalenderPengajuan: React.FC<KalenderPengajuanProps> = ({
       {isOpen && (
         <div className="absolute rounded-xl z-30">
           <Calendar
-            mode="range"
+            mode='range'
             selected={date}
             onSelect={handleSelect}
             numberOfMonths={1}
