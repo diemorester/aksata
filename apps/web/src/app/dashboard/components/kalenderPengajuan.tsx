@@ -19,17 +19,18 @@ const KalenderPengajuan: React.FC<KalenderPengajuanProps> = ({
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleClickOnSide = (e: MouseEvent) => {
+    const handleClickOutside = (e: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
         setIsOpen(false);
       }
-      setIsOpen(false);
     };
+
     if (isOpen) {
-      document.addEventListener('mousedown', handleClickOnSide);
+      document.addEventListener('mousedown', handleClickOutside);
     }
+
     return () => {
-      document.removeEventListener('mousedown', handleClickOnSide);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isOpen]);
 
