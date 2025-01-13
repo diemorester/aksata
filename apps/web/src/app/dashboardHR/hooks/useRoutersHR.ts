@@ -2,16 +2,25 @@
 import { useAppDispatch } from "@/redux/hooks";
 import { setIsModalOpen } from "@/redux/slices/modalSlice";
 import { usePathname } from "next/navigation";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { BiSolidDashboard } from "react-icons/bi";
 import { IoMdSettings } from "react-icons/io";
 import { VscSignOut } from "react-icons/vsc";
+import { FaCodePullRequest } from "react-icons/fa6";
 
 const useRouterHR = () => {
     const dispatch = useAppDispatch();
     const pathName = usePathname();
-    const handleClick = () => {dispatch(setIsModalOpen(true))};
+    const handleClick = useCallback(() => {
+        dispatch(setIsModalOpen(true))
+    }, [dispatch])
     const router = useMemo(() => [
+        {
+            label: "Requests",
+            href: "/dashboardHR",
+            icon: FaCodePullRequest,
+            active: pathName == "/dashboardHR"
+        },
         {
             label: "Dashboard",
             href: "/dashboardHR",
@@ -30,7 +39,7 @@ const useRouterHR = () => {
             icon: VscSignOut,
             onClick: handleClick
         }
-    ], [pathName])
+    ], [pathName, handleClick])
     return router
 }
 

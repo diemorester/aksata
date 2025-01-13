@@ -2,7 +2,7 @@
 import { useAppDispatch } from "@/redux/hooks"
 import { setIsModalOpen } from "@/redux/slices/modalSlice"
 import { usePathname } from "next/navigation"
-import { useMemo } from "react"
+import { useCallback, useMemo } from "react"
 import { LuUpload } from "react-icons/lu"
 import { RiCalendarCheckLine } from "react-icons/ri";
 import { FaProjectDiagram } from "react-icons/fa";
@@ -13,7 +13,9 @@ import { VscSignOut } from "react-icons/vsc"
 const useRouter = () => {
     const dispatch = useAppDispatch()
     const pathName = usePathname()
-    const handleClick = () => {dispatch(setIsModalOpen(true))}
+    const handleClick = useCallback(() => {
+        dispatch(setIsModalOpen(true))
+    }, [dispatch])
     const router = useMemo(() => [
         {
             label: "Absensi",
@@ -51,7 +53,7 @@ const useRouter = () => {
             icon: VscSignOut,
             onClick: handleClick
         }
-    ], [pathName])
+    ], [pathName, handleClick])
     return router
 }
 

@@ -16,6 +16,7 @@ import path from 'path';
 import { AbsensiRouter } from './routers/absensi/absensi.route';
 import "./jobs/autoAlphaJob";
 import "./jobs/autoClockOutJob";
+import { PengajuanRouter } from './routers/pengajuan/pengajuan.route';
 
 export default class App {
   private app: Express;
@@ -72,6 +73,7 @@ export default class App {
     const userRouter = new UserRouter();
     const decodeRouter = new DecodeRouter();
     const absensiRouter = new AbsensiRouter();
+    const pengajuanRouter = new PengajuanRouter();
 
     this.app.get('/api', (req: Request, res: Response) => {
       res.send(`Hello, Purwadhika Student API!`);
@@ -80,6 +82,7 @@ export default class App {
     this.app.use('/api/user', userRouter.getRouter());
     this.app.use('/api', decodeRouter.getRouter());
     this.app.use('/api/absensi', absensiRouter.getRouter());
+    this.app.use('/api/pengajuan', pengajuanRouter.getRouter());
   }
 
   public start(): void {

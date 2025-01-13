@@ -1,7 +1,13 @@
+import { DummyCalendar } from "@/components/DummyCalendar";
+import { Calendar } from "@/components/ui/calendar";
+
 export default function Pengajuan() {
   return (
-    <div className="min-h-screen place-content-center text-5xl text-neutral-300 text-center">
-        pengajuan
+    <div className="min-h-screen">
+      <Calendar
+        mode="single"
+        numberOfMonths={12}
+      />
     </div>
   )
 }

@@ -70,3 +70,27 @@ export const hourFormat = (date: string) => {
 
   return `${hours}:${minute}`;
 }
+
+export const pengajuanFormat = (date: string) => {
+  const month = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'Mei',
+    'jun',
+    'Jul',
+    'Agu',
+    'Sep',
+    'Okt',
+    'Nov',
+    'Des',
+  ];
+
+  const time = new Date(date);
+  const tanggal = time.getDate()
+  const bulan = time.getMonth();
+  const tahun = time.getFullYear();
+
+  return `${tanggal} ${month[bulan]} ${tahun}`
+}

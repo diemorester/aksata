@@ -17,7 +17,9 @@ interface ButtonSpanProps {
   aksata?: boolean;
   ristoan?: boolean;
   hayan?: boolean;
-  sirius?: boolean
+  sirius?: boolean;
+  fullWidth?: boolean;
+  classname?: string;
 }
 
 const ButtonSpan: React.FC<ButtonSpanProps> = ({
@@ -34,7 +36,9 @@ const ButtonSpan: React.FC<ButtonSpanProps> = ({
   aksata,
   ristoan,
   hayan,
-  sirius
+  sirius,
+  fullWidth,
+  classname
 }) => {
   return (
     <button
@@ -43,20 +47,24 @@ const ButtonSpan: React.FC<ButtonSpanProps> = ({
       onClick={onClick}
       className={clsx(
         `group relative min-h-[35px] transition-transform duration-300 ease-in-out hover:border-none disabled:opacity-55 rounded-${rounded || "3xl"}`,
+        classname,
         children && "",
         !disabled && "active:scale-95",
         // Edit outline
         outline && children && !text1 && !text2 && "px-2 ring-1 ring-green-400",
+
+        fullWidth ? 'w-full' : 'w-fit',
+
         // Edit fill
-        fill == "bg-neutral-300" && children && !outline && !text1 && !text2 && "bg-neutral-300 text-black hover:bg-neutral-100 px-4 py-2 w-fit",
+        fill == "bg-neutral-300" && children && !outline && !text1 && !text2 && "bg-neutral-300 text-black hover:bg-neutral-100 px-4 py-2",
 
-        fill == "bg-red-500" && children && !outline && !text1 && !text2 && "bg-red-500 text-neutral-100 hover:bg-red-400 px-4 py-2 w-fit",
+        fill == "bg-red-500" && children && !outline && !text1 && !text2 && "bg-red-500 text-neutral-100 hover:bg-red-400 px-4 py-2",
 
-        fill == "bg-neutral-700" && children && !outline && !text1 && !text2 && "bg-neutral-700 text-neutral-300 px-4 py-2 text-sm hover:bg-neutral-600 w-fit",
+        fill == "bg-neutral-700" && children && !outline && !text1 && !text2 && "bg-neutral-700 text-neutral-300 px-4 py-2 text-sm hover:bg-neutral-600",
         
-        fill == "bg-black" && children && !outline && !text1 && !text2 && "bg-black text-neutral-300 rounded-lg px-4 py-2 text-sm hover:bg-neutral-700 w-fit",
+        fill == "bg-black" && children && !outline && !text1 && !text2 && "bg-black text-neutral-300 rounded-lg px-4 py-2 text-sm hover:bg-neutral-700",
 
-        fill == "bg-green-500" && children && !outline && !text1 && !text2 && "bg-green-500 text-neutral-100 px-6 py-3 rounded-md hover:bg-green-600 w-fit hover:text-neutral-50",
+        fill == "bg-green-500" && children && !outline && !text1 && !text2 && "bg-green-500 text-neutral-100 px-6 py-3 rounded-md hover:bg-green-600 hover:text-neutral-50",
 
         text1 && text2 && !children && "min-w-[85px] overflow-hidden"
       )}

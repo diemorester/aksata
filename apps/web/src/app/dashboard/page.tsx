@@ -1,5 +1,7 @@
 import Absensi from './components/Absensi';
-import Legenda from './components/Legenda';
+import Approval from './components/Approval';
+import ListApproval from './components/ListApproval';
+import PengajuanKonten from './components/PengajuanKonten';
 
 const Dashboard = () => {
   return (
@@ -10,18 +12,24 @@ const Dashboard = () => {
         </h1>
         <div className="p-3 h-[535px] rounded-lg text-center flex flex-col gap-3">
           <div className="flex gap-3">
-            <div className="bg-neutral-950 w-2/6 h-[248px] place-content-center rounded-lg">
-
+            <div className='bg-neutral-950 w-2/6 h-[248px] place-content-center rounded-lg'>
             </div>
-            <div className="bg-neutral-950 w-4/6 h-[248px] place-content-center rounded-lg">
-
+            <div className="w-4/6 flex bg-neutral-950 h-[248px] rounded-lg">
+              <div className='flex w-2/3 pl-6 py-4'>
+                <ListApproval />
+              </div>
+              <div className='flex w-1/3 justify-center place-content-center'>
+                <PengajuanKonten />
+              </div>
             </div>
           </div>
           <div className="flex gap-3">
             <div className="bg-neutral-950 w-4/6 h-[248px] place-content-center rounded-lg">
               <div className='flex justify-between'>
-                <Legenda />
-                <div className='flex items-center text-center justify-center w-full'>kalender</div>
+
+                <div className='flex items-center text-center justify-center w-full'>
+
+                </div>
               </div>
             </div>
             <div className="w-2/6 h-[248px] rounded-lg p-1 bg-neutral-950">

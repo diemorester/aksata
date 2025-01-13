@@ -96,7 +96,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen w-full relative place-content-center py-8 items-center flex bg-custom-image bg-center bg-cover bg-no-repeat">
+    <div className="min-h-screen w-full relative place-content-center py-8 items-center flex bg-gray-400/25">
       <Formik
         initialValues={
           variantAuth == "Register" ? initialRegisterValues : initialLoginValues
@@ -112,7 +112,7 @@ export default function Home() {
           return (
             <Form>
               <div
-                className={`flex flex-col gap-24 justify-center md:w-[450px] md:h-[480px] ring-white/85 rounded-lg backdrop-blur-md bg-neutral-800/85 ${variantAuth == "Login" ? "py-0" : "gap-9"
+                className={`flex flex-col gap-24 justify-center md:w-[440px] md:h-[470px] ring-white/85 rounded-2xl backdrop-blur-md bg-neutral-950/85 ${variantAuth == "Login" ? "py-0" : "gap-9"
                   }`}
               >
                 <div>
