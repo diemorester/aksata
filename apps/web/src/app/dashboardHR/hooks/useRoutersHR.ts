@@ -6,6 +6,7 @@ import { useCallback, useMemo } from "react";
 import { BiSolidDashboard } from "react-icons/bi";
 import { IoMdSettings } from "react-icons/io";
 import { VscSignOut } from "react-icons/vsc";
+import { TbReportAnalytics } from "react-icons/tb";
 import { FaCodePullRequest } from "react-icons/fa6";
 
 const useRouterHR = () => {
@@ -16,16 +17,16 @@ const useRouterHR = () => {
     }, [dispatch])
     const router = useMemo(() => [
         {
-            label: "Requests",
-            href: "/dashboardHR",
-            icon: FaCodePullRequest,
-            active: pathName == "/dashboardHR"
-        },
-        {
             label: "Dashboard",
             href: "/dashboardHR",
             icon: BiSolidDashboard,
             active: pathName == "/dashboardHR"
+        },
+        {
+            label: "Data Absensi",
+            href: "/dashboardHR/data-absensi",
+            icon: TbReportAnalytics,
+            active: pathName == "/dashboardHR/data-absensi"
         },
         {
             label: "Settings",

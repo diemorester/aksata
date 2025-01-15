@@ -1,4 +1,5 @@
 'use client';
+
 import ButtonSpan from '@/components/buttons/spanButtons';
 import ListCardAbsensi from './listCardAbsensi';
 import Pagination from './pagination';
@@ -6,11 +7,11 @@ import { useState } from 'react';
 import useAbsensi from '@/hooks/useAbsensi';
 import SearchBarInput from './searchBarHR';
 import useDebounce from '@/hooks/useDebounce';
-import Image from 'next/image';
 import DropDown from '@/components/dropdowns/dropDown';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import { excelFetch } from '@/libs/fetch/absensi';
+import { Empty } from 'antd';
 
 const TabelAbsensi = () => {
     const [search, setSearch] = useState('');
@@ -81,7 +82,7 @@ const TabelAbsensi = () => {
                 <div className="flex w-full justify-between items-center px-2 pt-5">
                     <SearchBarInput search={search} onChange={handleSearch} />
                     <h1 className="text-[24px] font-semibold text-end text-black pb-1 px-6">
-                        DASHBOARD
+                        DATA ABSENSI
                     </h1>
                 </div>
                 <div className="flex flex-col justify-between rounded-md mx-5 px-3 bg-slate-100 h-full  md:min-h-[550px]">
@@ -100,7 +101,6 @@ const TabelAbsensi = () => {
                                 </th>
                                 <th className="hidden p-3 md:table-cell font-semibold" style={{ width: "30%" }}>
                                     <div className="relative">
-                                        {/* Bungkus Dropdown dengan div untuk memberikan ukuran tetap */}
                                         <div className='md:pl-[56px] md:pr-9'>
                                             <DropDown onSelect={handleSelect} options={option} pengajuanHR />
                                         </div>
@@ -118,13 +118,7 @@ const TabelAbsensi = () => {
                     </table>
                     {data?.attendance.length === 0 && (
                         <div className='flex w-full h-full place-content-center px-48 items-center'>
-                            <Image
-                                width={460}
-                                height={400}
-                                alt='error dashboard'
-                                src="/dashboardHR-error.svg"
-                                className=''
-                            />
+                            <Empty />
                         </div>
                     )}
                     <div className="mb-3 flex justify-center">

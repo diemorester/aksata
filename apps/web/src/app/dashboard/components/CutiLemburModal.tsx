@@ -8,6 +8,8 @@ import React, { useState } from "react";
 import { DateRange } from "react-day-picker";
 import toast from "react-hot-toast";
 import KalenderPengajuan from "./kalenderPengajuan";
+import usePengajuanByUser from "@/hooks/usePengajuanByUser";
+import usePostPengajuanUser from "@/hooks/usePostPengajuanUser";
 
 interface CutiLemburModalProps {
     isOpen: boolean;
@@ -19,6 +21,7 @@ const CutiLemburModal: React.FC<CutiLemburModalProps> = ({ isOpen, onClose }) =>
     const [isLoading, setIsLoading] = useState(false);
     const [pengajuan, setPengajuan] = useState('');
     const [keterangan, setKeterangan] = useState('');
+    const { mutateAsync } = usePostPengajuanUser()
 
     const options = [
         {
@@ -44,9 +47,9 @@ const CutiLemburModal: React.FC<CutiLemburModalProps> = ({ isOpen, onClose }) =>
                 endDatePengajuan: date?.to?.toISOString(),
                 keterangan: keterangan
             }
-            const res = await pengajuanAbsensiFetch(payload)
+            const res = await mutateAsync(payload)
             onClose()
-            toast.success(res.data.msg)
+            toast.success(res.msg)
         } catch (error) {
             if (error instanceof AxiosError) {
                 toast.error(error.response?.data)
@@ -55,8 +58,6 @@ const CutiLemburModal: React.FC<CutiLemburModalProps> = ({ isOpen, onClose }) =>
             setIsLoading(false)
         }
     };
-    console.log(date);
-    
 
     return (
         <Modal

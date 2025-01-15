@@ -29,6 +29,10 @@ export const dateNow = () => {
 };
 
 export const dayFormat = (date: string) => {
+  if (!date) {
+    return ''
+  }
+
   const day = [
     'Minggu',
     'Senin',

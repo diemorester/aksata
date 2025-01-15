@@ -3,6 +3,7 @@ import {
   clockOutService,
   exportExcelService,
   getAllAttendanceService,
+  pieData,
 } from '@/services/absensi/absensi.service';
 import { NextFunction, Request, Response } from 'express';
 
@@ -36,6 +37,21 @@ export class AbsensiController {
       });
     } catch (error) {
       next(error);
+    }
+  }
+
+  async getUserAttendance(req: Request, res: Response) {
+    try {
+      const userId = req.user?.id!
+      const { hadir, cuti, izin, sakit, alpha, total } = await pieData(userId)
+      res.status(200).send({
+        status: 'ok',
+        hadir, cuti, izin, sakit, alpha, total
+      })
+    } catch (error) {
+      res.status(400).send({
+        status: 'error'
+      })
     }
   }
 

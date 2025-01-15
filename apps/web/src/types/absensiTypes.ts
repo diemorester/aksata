@@ -10,6 +10,7 @@ export interface Absensi {
     clockOut: string,
     location: string,
     date: string,
+    pengajuan: { startDate: string, endDate: string}[],
     duration: string,
     status: 'Hadir' | 'Terlambat' | 'Sakit' | 'Cuti' | 'Izin' | 'Alpha'
 }

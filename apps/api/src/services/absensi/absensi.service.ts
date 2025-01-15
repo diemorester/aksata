@@ -1,10 +1,8 @@
-import { convertDate, hourFormat } from '@/helpers/convertDate';
+import { excelDateFormat, hourFormat } from '@/helpers/convertDate';
 import { durationCounter } from '@/helpers/durationCounter';
 import prisma from '@/prisma';
 import { AbsensiQuery } from '@/types/absensi';
 import * as ExcelJS from 'exceljs';
-import fs from 'fs';
-import path from 'path';
 
 const now = new Date();
 const startDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -99,6 +97,88 @@ export const clockOutService = async (userId: number) => {
   }
 };
 
+export const pieData = async (userId: number) => {
+  try {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth(); // 0 = Januari, 1 = Februari, dst.
+
+    let cutoffStart: Date;
+    let cutoffEnd: Date;
+
+    // Jika hari ini sudah lewat tanggal 21
+    if (today.getDate() >= 21) {
+      cutoffStart = new Date(year, month, 21); // Mulai dari tanggal 21 bulan ini
+      cutoffEnd = new Date(year, month + 1, 20); // Hingga tanggal 20 bulan depan
+    } else {
+      // Jika hari ini sebelum tanggal 21
+      cutoffStart = new Date(year, month - 1, 21); // Mulai dari tanggal 21 bulan lalu
+      cutoffEnd = new Date(year, month, 20); // Hingga tanggal 20 bulan ini
+    }
+
+    const sakit = await prisma.absensi.findMany({
+      where: {
+        userId: userId,
+        status: 'Sakit'
+      }
+    });
+    const izin = await prisma.absensi.findMany({
+      where: {
+        userId,
+        status: 'Izin'
+      }
+    });
+    const cuti = await prisma.absensi.findMany({
+      where: {
+        userId,
+        status: 'Cuti'
+      }
+    });
+    const hadir = await prisma.absensi.findMany({
+      where: {
+        userId,
+        status: 'Hadir'
+      }
+    });
+    const alpha = await prisma.absensi.findMany({
+      where: {
+        userId,
+        status: 'Alpha'
+      }
+    });
+    const total = await prisma.absensi.findMany({
+      where: {
+        userId,
+        // date: {
+        //   gte: cutoffStart,
+        //   lte: cutoffEnd,
+        // },
+        OR: [
+          {
+            date: {
+              gte: cutoffStart,
+              lte: cutoffEnd
+            }
+          },
+          {
+            pengajuan: {
+              every: {
+                startDate: cutoffStart,
+                endDate: cutoffEnd,
+                status: 'Approved'
+              }
+            }
+          }
+        ],
+      },
+    });
+
+    return { hadir: hadir.length, cuti: cuti.length, izin: izin.length, sakit: sakit.length, alpha: alpha.length, total: total.length }
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getAllAttendanceService = async (query: AbsensiQuery) => {
   try {
     const { search, take = 9, page = 1, filterBy } = query;
@@ -151,6 +231,12 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
             name: true,
           },
         },
+        pengajuan: {
+          select: {
+            startDate: true,
+            endDate: true
+          }
+        }
       },
     });
 
@@ -196,7 +282,7 @@ export const autoAlphaAttendance = async () => {
           },
         },
       });
-      
+
       if (!existingAttendace && user.role === 'User') {
         await prisma.absensi.create({
           data: {
@@ -208,8 +294,6 @@ export const autoAlphaAttendance = async () => {
         });
       }
     }
-
-    console.log('Auto set alpha completed');
   } catch (error) {
     throw error;
   }
@@ -253,7 +337,6 @@ export const autoClockOutAttendance = async () => {
         },
       });
     }
-    console.log('Auto Clock-out complete');
   } catch (error) {
     throw error;
   }
@@ -301,7 +384,7 @@ export const exportExcelService = async () => {
       horizontal: 'center',
       vertical: 'middle',
     };
-    sheet.getColumn('C').width = 15
+    sheet.getColumn('C').width = 20
     sheet.getCell('C1').border = {
       top: { style: 'thin' },
       left: { style: 'thin' },
@@ -385,13 +468,20 @@ export const exportExcelService = async () => {
     };
 
     const data = await prisma.absensi.findMany({
+      where: {
+        pengajuan: {
+          every: {
+            status: 'Approved'
+          }
+        }
+      },
       include: {
         user: {
           select: {
             name: true
           },
         },
-        Pengajuan: {
+        pengajuan: {
           select: {
             startDate: true,
             endDate: true,
@@ -406,9 +496,9 @@ export const exportExcelService = async () => {
       }
     })
 
-    data.forEach ((item, index, array) => {
+    data.forEach((item, index, array) => {
       const customRow = sheet.getRow(index + 2);
-      const lastRow = sheet.getRow((array.length - 1) + 2);         
+      const lastRow = sheet.getRow((array.length - 1) + 2);
 
       // nomer
       const cellNumber = customRow.getCell(1);
@@ -443,9 +533,15 @@ export const exportExcelService = async () => {
       }
 
       // tanggal
+      let penampungStart = ""
+      let penampungEnd = ""
+      item.pengajuan.map((item) => {
+        penampungStart += item.startDate
+        penampungEnd += item.endDate
+      })
       const cellDate = customRow.getCell(3);
       const lastDate = lastRow.getCell(3);
-      cellDate.value = item.date
+      cellDate.value = item.status === 'Izin' ? `${penampungStart} - ${penampungEnd}` : item.status === 'Sakit' ? `${penampungStart} - ${penampungEnd}` : item.status === 'Cuti' ? `${excelDateFormat(penampungStart)} - ${excelDateFormat(penampungEnd)}` : item.date
       cellDate.alignment = {
         horizontal: 'center',
         vertical: 'middle'

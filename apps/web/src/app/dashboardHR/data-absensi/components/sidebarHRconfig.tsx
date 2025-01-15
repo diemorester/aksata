@@ -1,5 +1,5 @@
 'use client';
-import { cn } from '../../../libs/utils';
+import { cn } from '../../../../libs/utils';
 import Link from 'next/link';
 import React, { useState, createContext, useContext } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -165,8 +165,6 @@ export const SidebarLinkHR = ({
             return onClick();
         }
     };
-
-    console.log(active, 'ngantuukkkk');
     
     return (
         <div onClick={handleClick}>
