@@ -35,6 +35,7 @@ const ListCardAbsensi: React.FC<ListCardAbsensiProps> = ({
                         key={absen.id}
                         name={absen.user.name}
                         date={absen.date}
+                        pengajuan={absen.pengajuan}
                         clockIn={absen.clockIn}
                         clockOut={absen.clockOut}
                         status={absen.status}

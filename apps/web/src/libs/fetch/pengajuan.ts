@@ -15,4 +15,30 @@ export const pengajuanAbsensiFetch = async (payload: { status: string, startDate
     }
     )
     return res
-}
+};
+
+export const approvePengajuanFetch = async (absensiId: string) => {
+    const token = await getCookie('access_token');
+    const res = await axiosInstance.patch(`/pengajuan/approve-pengajuan/${absensiId}`, {
+
+    }, {
+        headers: {
+            Authorization: `Bearer ${token?.value}`
+        }
+    }
+    )
+    return res
+};
+
+export const declinePengajuanFetch = async (absensiId: string) => {
+    const token = await getCookie('access_token');
+    const res = await axiosInstance.patch(`/pengajuan/decline-pengajuan/${absensiId}`, {
+
+    }, {
+        headers: {
+            Authorization: `Bearer ${token?.value}`
+        }
+    }
+    )
+    return res
+};

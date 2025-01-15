@@ -1,9 +1,9 @@
-import TabelAbsensi from "./components/tabelAbsensi"
+import ContainerHRDashboard from "./components/containerHR"
 
 const DashboardHR = () => {
   return (
     <div>
-        <TabelAbsensi />
+      <ContainerHRDashboard />
     </div>
   )
 }

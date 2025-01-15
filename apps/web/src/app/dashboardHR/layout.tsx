@@ -1,4 +1,4 @@
-import { SidebarHR } from "./components/sidebarHR";
+import { SidebarHR } from "./data-absensi/components/sidebarHR";
 
 export default function RootLayout({
     children,

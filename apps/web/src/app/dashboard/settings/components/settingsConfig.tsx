@@ -24,8 +24,8 @@ export default function SettingsConfig() {
             <div className="flex items-center gap-3 md:gap-5">
               <Image
                 src={avatar || '/profileplaceholder.png'}
-                width={50}
-                height={50}
+                width={668}
+                height={668}
                 alt="settings-avatar"
                 className="rounded-full w-24 h-24 md:w-[120px] md:h-[120px] object-cover border-8 md:border-[13px] border-[#1a1919]"
               />

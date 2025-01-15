@@ -24,8 +24,12 @@ export class AbsensiRouter {
       this.absensiController.clockOut,
     );
     this.router.get('/export-excel', this.absensiController.exportExcel);
+    this.router.get('/attendance',
+      authMiddleware,
+      this.absensiController.getUserAttendance
+    )
     this.router.get(
-      '/getall-attendance',
+      '/attendances',
       // authMiddleware,
       // accessAdminHr,
       this.absensiController.getAllAttendance,

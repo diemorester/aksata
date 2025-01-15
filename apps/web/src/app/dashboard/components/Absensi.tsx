@@ -69,23 +69,24 @@ const Absensi = () => {
   };
 
   return (
-    <div className='flex flex-col justify-between p-3  rounded-lg h-full'>
-      {/* <p className="text-end text-sm">{dateNow()}</p> */}
-      <p className="text-4xl pt-10 font-semibold text-center">
+    <div className='flex flex-col justify-between p-5 rounded-lg h-full'>
+      <p className="text-4xl pt-7 font-semibold text-off-white text-center">
         {timeNow(new Date())}
       </p>
 
-      <div className="flex flex-col gap-y-2 px-3">
-        <div className="flex justify-between items-center text-xs px-1">
+      <div className="flex flex-col gap-y-3 px-3">
+        <div className="flex justify-between items-center px-1">
           <div>
-            <p className="text-start">Clock-in Time</p>
-            <p className="text-start">Clock-out Time</p>
+            <p className="text-xs text-start">Clock-in Time</p>
+            <p className="text-xs text-start">Clock-out Time</p>
           </div>
           <div>
-            <p className='font-bold'>{clockIn ? hourFormat(clockIn) : '--/--'}</p>
-            <p className='font-bold'>{clockOut ? hourFormat(clockOut) : '--/--'}</p>
+            <p className='text-xs font-extrabold text-off-white'>{clockIn ? hourFormat(clockIn) : '--/--'}</p>
+            <p className='text-xs font-extrabold text-off-white'>{clockOut ? hourFormat(clockOut) : '--/--'}</p>
           </div>
         </div>
+
+        <span className='border-t border-neutral-500 w-full'></span>
 
         <div className="flex items-center justify-between gap-5 pb-3">
           <button
@@ -100,7 +101,7 @@ const Absensi = () => {
             type="button"
             onClick={handleClockOut}
             disabled={isLoading || now <= disableHours}
-            className="active:scale-95 text-sm bg-red-400 text-white disabled:cursor-not-allowed disabled:active:scale-100 hover:bg-red-400/60 py-2 px-2 rounded-md w-full"
+            className="active:scale-95 text-sm bg-[#E34234] text-white disabled:cursor-not-allowed disabled:active:scale-100 hover:bg-[#E34234]/75 py-2 px-2 rounded-md w-full"
           >
             Clock Out
           </button>

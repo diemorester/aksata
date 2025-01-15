@@ -42,3 +42,12 @@ export const hourFormat = (date: Date | null) => {
 
   return `${hours}:${minute}`;
 }
+
+export const excelDateFormat = (date: string) => {
+  const time = new Date(date);
+  const tanggal = time.getDate();
+  const bulan = time.getMonth() + 1;
+  const tahun = time.getFullYear();
+
+  return `${tanggal}/${bulan}/${tahun}`
+}
