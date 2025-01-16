@@ -10,12 +10,103 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Sample {
-  id        Int      @id @default(autoincrement())
-  name      String
-  code      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model User {
+  id                    Int                @id @default(autoincrement())
+  name                  String             @unique
+  email                 String             @unique
+  password              String
+  avatar                String?
+  phone                 String?            @unique
+  isVerified            Boolean            @default(false)
+  role                  Roles
+  otp                   String?
+  otpExpired            DateTime?
+  changeEmailExpired    DateTime?
+  changePasswordExpired DateTime?
+  refreshToken          String?            @db.Text
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt()
+  Absensi               Absensi[]
+  Pengajuan             PengajuanAbsensi[]
+  PengajuanLembur       PengajuanLembur[]
+}
 
-  @@map("samples") // if you want to use snake_case format
+enum Roles {
+  User
+  SuperAdmin
+  AdminHR
+  AdminGudang
+}
+
+model Absensi {
+  id         String             @id @default(cuid())
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt()
+  clockIn    DateTime?
+  clockOut   DateTime?
+  duration   String?
+  location   String?
+  status     Status?
+  date       DateTime           @default(now())
+  user       User               @relation(fields: [userId], references: [id])
+  userId     Int
+  keterangan String?
+  pengajuan  PengajuanAbsensi[]
+}
+
+enum Status {
+  Hadir
+  Sakit
+  Cuti
+  Izin
+  Alpha
+}
+
+model PengajuanAbsensi {
+  id        String          @id @default(cuid())
+  status    StatusPengajuan @default(Waiting)
+  user      User            @relation(fields: [userId], references: [id])
+  userId    Int
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  startDate DateTime?
+  endDate   DateTime?
+  absensi   Absensi         @relation(fields: [absensiId], references: [id])
+  absensiId String
+}
+
+enum StatusPengajuan {
+  Approved
+  Waiting
+  Cancelled
+  Declined
+}
+
+model PengajuanLembur {
+  id                    String          @id @default(cuid())
+  user                  User            @relation(fields: [userId], references: [id])
+  userId                Int
+  nominal               Float?
+  tipeLembur            OpsiLembur?
+  date                  DateTime
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
+  statusPengajuanLembur StatusPengajuan
+  keterangan            String
+}
+
+enum Companies {
+  Ristoan
+  Hayan
+  Sirius
+}
+
+enum OpsiLembur {
+  LemburSatu
+  LemburDua
+  LemburTiga
+}
+
+model Gudang {
+  id String @id @default(cuid())
 }
