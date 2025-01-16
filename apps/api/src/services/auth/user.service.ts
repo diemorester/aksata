@@ -60,7 +60,7 @@ export const RegisterUserService = async (body: User) => {
   }
 };
 
-export const verifyUserService = async (id: number) => {
+export const verifyUserService = async (id: string) => {
   try {
     const user = await prisma.user.findUnique({
       where: {
@@ -177,7 +177,7 @@ export const resetPasswordService = async (password: string, email: string) => {
   }
 };
 
-export const editUserService = async (body: User, id: number, file?: string) => {
+export const editUserService = async (body: User, id: string, file?: string) => {
   try {
     const { name, phone } = body;
     const theUser = await prisma.user.findUnique({
@@ -213,7 +213,7 @@ export const editUserService = async (body: User, id: number, file?: string) => 
   }
 };
 
-export const removePhoneService = async (id: number) => {
+export const removePhoneService = async (id: string) => {
   try {
     const theUser = await prisma.user.findUnique({
       where: { id }
@@ -230,7 +230,7 @@ export const removePhoneService = async (id: number) => {
   }
 };
 
-export const removeAvatarService = async (id: number) => {
+export const removeAvatarService = async (id: string) => {
   try {
     const theUser = await prisma.user.findUnique({
       where: { id }
@@ -247,7 +247,7 @@ export const removeAvatarService = async (id: number) => {
   }
 };
 
-export const changePasswordService = async (id: number, oldPass: string, newPass: string) => {
+export const changePasswordService = async (id: string, oldPass: string, newPass: string) => {
   try {
     const now = new Date()
     const theUser = await prisma.user.findUnique({
