@@ -1,3 +1,18 @@
+const month = [
+  'Januari',
+  'Februari',
+  'Maret',
+  'April',
+  'Mei',
+  'Juni',
+  'Juli',
+  'Agustus',
+  'September',
+  'Oktober',
+  'November',
+  'Desember',
+];
+
 export const timeNow = (time: Date) => {
   const hours = time.getHours().toString().padStart(2, '0');
   const minute = time.getMinutes().toString().padStart(2, '0');
@@ -6,21 +21,6 @@ export const timeNow = (time: Date) => {
 };
 
 export const dateNow = () => {
-  const month = [
-    'Januari',
-    'Februari',
-    'Maret',
-    'April',
-    'Mei',
-    'Juni',
-    'Juli',
-    'Agustus',
-    'September',
-    'Oktober',
-    'November',
-    'Desember',
-  ];
-
   const now = new Date();
   const nowMonth = now.getMonth();
   const nowDate = now.getDate();
@@ -37,7 +37,7 @@ export const dayFormat = (date: string) => {
     'Minggu',
     'Senin',
     'Selasa',
-    'Rabu', 
+    'Rabu',
     'Kamis',
     'Jumat',
     'Sabtu'
@@ -57,7 +57,7 @@ export const dayFormat = (date: string) => {
     'Nov',
     'Des',
   ];
-  
+
   const time = new Date(date);
   const tanggal = time.getDate()
   const bulan = time.getMonth();
@@ -97,4 +97,26 @@ export const pengajuanFormat = (date: string) => {
   const tahun = time.getFullYear();
 
   return `${tanggal} ${month[bulan]} ${tahun}`
+}
+
+export const piePeriod = () => {
+  const today = new Date();
+  const pieMonth = today.getMonth();
+  const pieYear = today.getFullYear();
+
+  const cutoffDayStart = 21;
+  const cutoffDayEnd = 20;
+
+  let cutoffStart: Date;
+  let cutoffEnd: Date;
+
+  if (today.getDate() >= cutoffDayStart) {
+    cutoffStart = new Date(pieYear, pieMonth, cutoffDayStart);
+    cutoffEnd = new Date(pieYear, pieMonth + 1, cutoffDayEnd);
+    return `${month[cutoffStart.getMonth()]} ${cutoffStart.getFullYear()} - ${month[cutoffEnd.getMonth()]} ${cutoffEnd.getFullYear()}`
+  } else {
+    cutoffStart = new Date(pieYear, pieMonth - 1, cutoffDayStart);
+    cutoffEnd = new Date(pieYear, pieMonth, cutoffDayEnd);
+    return `${month[cutoffStart.getMonth()]} ${cutoffStart.getFullYear()} - ${month[cutoffEnd.getMonth()]} ${cutoffEnd.getFullYear()}`
+  }
 }

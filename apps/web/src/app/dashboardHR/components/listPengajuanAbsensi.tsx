@@ -2,6 +2,7 @@
 
 import usePengajuanByHR from "@/hooks/usePengajuanByHR"
 import CardPengajuanAbsensi from "./cardPengajuanAbsensi";
+import { Empty } from "antd";
 
 const ListPengajuanAbsensi = () => {
     const { data, revalidate } = usePengajuanByHR({
@@ -16,6 +17,11 @@ const ListPengajuanAbsensi = () => {
                     return <CardPengajuanAbsensi key={item.id} id={item.id} absensi={item.absensi} revalidate={revalidate} user={item.user} startDate={item.startDate} endDate={item.endDate} />
                 })}
             </div>
+            {data?.response.length! < 1 && (
+                <div className="py-32">
+                    <Empty />
+                </div>
+            )}
         </div>
     )
 };

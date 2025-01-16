@@ -101,79 +101,131 @@ export const pieData = async (userId: number) => {
   try {
     const today = new Date();
     const year = today.getFullYear();
-    const month = today.getMonth(); // 0 = Januari, 1 = Februari, dst.
+    const month = today.getMonth();
+
+    const cutoffDayStart = 21;
+    const cutoffDayEnd = 20;
 
     let cutoffStart: Date;
     let cutoffEnd: Date;
 
-    // Jika hari ini sudah lewat tanggal 21
-    if (today.getDate() >= 21) {
-      cutoffStart = new Date(year, month, 21); // Mulai dari tanggal 21 bulan ini
-      cutoffEnd = new Date(year, month + 1, 20); // Hingga tanggal 20 bulan depan
+    if (today.getDate() >= cutoffDayStart) {
+      cutoffStart = new Date(year, month, cutoffDayStart);
+      cutoffEnd = new Date(year, month + 1, cutoffDayEnd);
     } else {
-      // Jika hari ini sebelum tanggal 21
-      cutoffStart = new Date(year, month - 1, 21); // Mulai dari tanggal 21 bulan lalu
-      cutoffEnd = new Date(year, month, 20); // Hingga tanggal 20 bulan ini
+      cutoffStart = new Date(year, month - 1, cutoffDayStart);
+      cutoffEnd = new Date(year, month, cutoffDayEnd);
     }
 
     const sakit = await prisma.absensi.findMany({
       where: {
-        userId: userId,
-        status: 'Sakit'
-      }
+        userId,
+        status: 'Sakit',
+        pengajuan: {
+          every: {
+            status: 'Approved',
+            startDate: {
+              gte: cutoffStart
+            },
+            endDate: {
+              lte: cutoffEnd
+            }
+          },
+        },
+      },
     });
     const izin = await prisma.absensi.findMany({
       where: {
         userId,
-        status: 'Izin'
-      }
+        status: 'Izin',
+        pengajuan: {
+          every: {
+            status: 'Approved',
+            startDate: {
+              gte: cutoffStart
+            },
+            endDate: {
+              lte: cutoffEnd
+            }
+          },
+        },
+      },
     });
     const cuti = await prisma.absensi.findMany({
       where: {
         userId,
-        status: 'Cuti'
-      }
+        status: 'Cuti',
+        pengajuan: {
+          every: {
+            status: 'Approved',
+            startDate: {
+              gte: cutoffStart,
+            },
+            endDate: {
+              lte: cutoffEnd,
+            }
+          },
+        },
+      },
     });
     const hadir = await prisma.absensi.findMany({
       where: {
         userId,
-        status: 'Hadir'
-      }
+        status: 'Hadir',
+        date: {
+          gte: cutoffStart,
+          lte: cutoffEnd,
+        },
+      },
     });
     const alpha = await prisma.absensi.findMany({
       where: {
         userId,
-        status: 'Alpha'
-      }
-    });
-    const total = await prisma.absensi.findMany({
-      where: {
-        userId,
-        // date: {
-        //   gte: cutoffStart,
-        //   lte: cutoffEnd,
-        // },
-        OR: [
-          {
-            date: {
-              gte: cutoffStart,
-              lte: cutoffEnd
-            }
-          },
-          {
-            pengajuan: {
-              every: {
-                startDate: cutoffStart,
-                endDate: cutoffEnd,
-                status: 'Approved'
-              }
-            }
-          }
-        ],
+        status: 'Alpha',
+        date: {
+          gte: cutoffStart,
+          lte: cutoffEnd,
+        },
       },
     });
 
-    return { hadir: hadir.length, cuti: cuti.length, izin: izin.length, sakit: sakit.length, alpha: alpha.length, total: total.length }
+    const total = await prisma.absensi.findMany({
+      where: {
+        userId,
+        date: {
+          gte: cutoffStart,
+          lte: cutoffEnd,
+        },
+        pengajuan: {
+          every: {
+            status: 'Approved',
+            OR: [
+              {
+                startDate: {
+                  gte: cutoffStart,
+                  lte: cutoffEnd
+                },
+              },
+              {
+                endDate: {
+                  gte: cutoffStart,
+                  lte: cutoffEnd
+                },
+              },
+            ]
+          }
+        }
+      },
+    });
+
+    return {
+      hadir: hadir.length,
+      cuti: cuti.length,
+      izin: izin.length,
+      sakit: sakit.length,
+      alpha: alpha.length,
+      total: total.length,
+    };
   } catch (error) {
     throw error;
   }
@@ -184,6 +236,18 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
     const { search, take = 9, page = 1, filterBy } = query;
     const now = new Date();
     const skip = (page - 1) * take;
+
+    let cutoffStart: Date | undefined;
+    let cutoffEnd: Date | undefined;
+
+    // Menentukan rentang cutoff
+    if (now.getDate() >= 21) {
+      cutoffStart = new Date(now.getFullYear(), now.getMonth(), 21); // Mulai dari tanggal 21 bulan ini
+      cutoffEnd = new Date(now.getFullYear(), now.getMonth() + 1, 20); // Hingga tanggal 20 bulan depan
+    } else {
+      cutoffStart = new Date(now.getFullYear(), now.getMonth() - 1, 21); // Mulai dari tanggal 21 bulan lalu
+      cutoffEnd = new Date(now.getFullYear(), now.getMonth(), 20); // Hingga tanggal 20 bulan ini
+    }
 
     let startDate: Date | undefined;
     let endDate: Date | undefined;
@@ -203,9 +267,12 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
       startDate = new Date(now.getFullYear(), now.getMonth(), 1);
       endDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
     } else if (filterBy === 'yearly') {
-      startDate = new Date(now.getFullYear(), 0, 1);
-      endDate = new Date(now.getFullYear() + 1, 0, 1);
-    }
+      startDate = new Date(now.getFullYear(), 0, 0);
+      endDate = new Date(now.getFullYear() + 1, 0, 20);
+    };
+
+    startDate = startDate && startDate < cutoffStart ? cutoffStart : startDate;
+    endDate = endDate && endDate > cutoffEnd ? cutoffEnd : endDate;
 
     const attendance = await prisma.absensi.findMany({
       where: {
@@ -218,6 +285,25 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
           lte: endDate,
           gte: startDate,
         },
+        pengajuan: {
+          every: {
+            status: 'Approved',
+            OR: [
+              {
+                startDate: {
+                  gte: cutoffStart,
+                  lte: cutoffEnd
+                },
+              },
+              {
+                endDate: {
+                  gte: cutoffStart,
+                  lte: cutoffEnd
+                },
+              },
+            ]
+          },
+        }
       },
       orderBy: {
         date: 'desc',
@@ -248,9 +334,28 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
           },
         },
         date: {
-          gte: startDate,
-          lte: endDate,
+          gte: cutoffStart,
+          lte: cutoffEnd,
         },
+        pengajuan: {
+          every: {
+            status: 'Approved',
+            OR: [
+              {
+                startDate: {
+                  gte: cutoffStart,
+                  lte: cutoffEnd
+                },
+              },
+              {
+                endDate: {
+                  gte: cutoffStart,
+                  lte: cutoffEnd
+                },
+              },
+            ]
+          },
+        }
       },
     });
 

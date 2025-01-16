@@ -1,4 +1,5 @@
 'use client';
+import usePostClockIn from '@/hooks/useClockIn';
 import { hourFormat, timeNow } from '@/libs/date';
 import { clockInFetch, clockOutFetch } from '@/libs/fetch/absensi';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
@@ -11,6 +12,7 @@ const Absensi = () => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
   const { clockIn, clockOut } = useAppSelector((state) => state.absen);
+  const { mutateAsync } = usePostClockIn();
 
   const now = new Date()
   const disableHours = new Date()
@@ -37,7 +39,7 @@ const Absensi = () => {
   const handleClockIn = async () => {
     setIsLoading(true);
     try {
-      const res = await clockInFetch();
+      const res = await mutateAsync();
       toast.success(res.data.msg);
       dispatch(addAbsenSlice(res.data.response));
     } catch (error) {
