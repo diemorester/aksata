@@ -17,6 +17,7 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart"
 import usePieUser from "@/hooks/usePieUser"
+import { piePeriod } from "@/libs/date"
 
 export function PieChartComponent() {
     // const totalVisitors = React.useMemo(() => {
@@ -63,7 +64,7 @@ export function PieChartComponent() {
         <Card className="flex flex-col w-full h-full bg-neutral-950 border-none text-off-white">
             <CardHeader className="items-center pb-0">
                 <CardTitle className="text-sm">Absensi</CardTitle>
-                <CardDescription className="text-xs text-neutral-300">Januari 2025</CardDescription>
+                <CardDescription className="text-xs text-neutral-300">{piePeriod()}</CardDescription>
             </CardHeader>
             <CardContent className="w-full h-full flex items-center justify-center">
                 <ChartContainer
