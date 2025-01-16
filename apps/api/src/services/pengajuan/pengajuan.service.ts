@@ -2,7 +2,7 @@ import prisma from "@/prisma";
 import { PengajuanQuery } from "@/types/pengajuan";
 import { Absensi, PengajuanAbsensi } from "@prisma/client";
 
-export const pengajuanService = async (bodyAbsensi: Absensi, bodyPengajuan: PengajuanAbsensi, userId: number) => {
+export const pengajuanService = async (bodyAbsensi: Absensi, bodyPengajuan: PengajuanAbsensi, userId: string) => {
     try {
         const { status, keterangan } = bodyAbsensi
         const { startDate, endDate } = bodyPengajuan
@@ -65,7 +65,7 @@ export const pengajuanService = async (bodyAbsensi: Absensi, bodyPengajuan: Peng
     }
 };
 
-export const getPengajuanUserService = async (userId: number, query: PengajuanQuery) => {
+export const getPengajuanUserService = async (userId: string, query: PengajuanQuery) => {
     try {
         const { page = 1, search, take = 10 } = query;
         const skip = (page - 1) * take;
@@ -104,7 +104,7 @@ export const getPengajuanUserService = async (userId: number, query: PengajuanQu
     }
 };
 
-export const getPengajuanHRService = async (userId: number, query: PengajuanQuery) => {
+export const getPengajuanHRService = async (userId: string, query: PengajuanQuery) => {
     try {
         const { page = 1, search, take = 10 } = query;
         const skip = ( page - 1 ) * take;

@@ -9,7 +9,7 @@ const startDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 const endDay = new Date(startDay);
 endDay.setDate(startDay.getDate() + 1);
 
-export const clockInService = async (userId: number) => {
+export const clockInService = async (userId: string) => {
   try {
     const user = await prisma.user.findFirst({
       where: { id: userId },
@@ -44,7 +44,7 @@ export const clockInService = async (userId: number) => {
   }
 };
 
-export const clockOutService = async (userId: number) => {
+export const clockOutService = async (userId: string) => {
   try {
     const user = await prisma.user.findFirst({
       where: { id: userId },
@@ -97,7 +97,7 @@ export const clockOutService = async (userId: number) => {
   }
 };
 
-export const pieData = async (userId: number) => {
+export const pieData = async (userId: string) => {
   try {
     const today = new Date();
     const year = today.getFullYear();
