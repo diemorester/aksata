@@ -16,7 +16,7 @@ model User {
   email                 String             @unique
   password              String
   avatar                String?
-  phone                 String?            @unique
+  phone                 String?            
   isVerified            Boolean            @default(false)
   role                  Roles
   otp                   String?
