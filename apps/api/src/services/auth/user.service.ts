@@ -40,7 +40,8 @@ export const RegisterUserService = async (body: User) => {
       role: newUser.role,
     };
 
-    const templatePath = path.join(__dirname, '../../templates', 'verify.hbs');
+    // const templatePath = path.join(__dirname, '../../templates', 'verify.hbs');
+    const templatePath = path.join(__dirname, '../../../src/templates', 'verify.hbs');
 
     const token = createToken(payload, '5m');
     const link = process.env.BASE_URL_WEB + `/verify/${token}`;
