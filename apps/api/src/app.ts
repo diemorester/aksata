@@ -29,8 +29,10 @@ export default class App {
   }
 
   private configure(): void {
+    const origin = process.env.BASE_URL_WEB || "http://103.146.62.122";
     const corsOptions = {
-      origin: process.env.BASE_URL_WEB,
+      origin,
+      method: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
       credentials: true,
     };
 
