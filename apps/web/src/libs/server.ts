@@ -9,7 +9,7 @@ export const createCookie = (key: string, value: string) => {
     expires: Date.now() + oneDay,
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict'
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
   });
 };
 
