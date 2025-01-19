@@ -7,13 +7,13 @@ const nextConfig = {
             { protocol: "http", hostname: "localhost" }
         ]
     },
-    webpack: (config) => {
-        config.resolve.fallback = {
-            ...config.resolve.fallback,
-            crypto: false, // Ensure no polyfill for 'crypto'
-        };
-        return config;
-    },
+    // webpack: (config) => {
+    //     config.resolve.fallback = {
+    //         ...config.resolve.fallback,
+    //         crypto: false, // Ensure no polyfill for 'crypto'
+    //     };
+    //     return config;
+    // },
     output: 'standalone'
 }
 
