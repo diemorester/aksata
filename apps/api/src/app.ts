@@ -76,7 +76,7 @@ export default class App {
     const pengajuanRouter = new PengajuanRouter();
 
     this.app.get('/api', (req: Request, res: Response) => {
-      res.send(`Hello, Purwadhika Student API!`);
+      res.send(`welcome to ERP Aksata API`);
     });
 
     this.app.use('/api/user', userRouter.getRouter());
