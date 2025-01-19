@@ -67,7 +67,7 @@ export const pengajuanService = async (bodyAbsensi: Absensi, bodyPengajuan: Peng
 
 export const getPengajuanUserService = async (userId: string, query: PengajuanQuery) => {
     try {
-        const { page = 1, search, take = 10 } = query;
+        const { page = 1, take = 10 } = query;
         const skip = (page - 1) * take;
         const pengajuanUser = await prisma.pengajuanAbsensi.findMany({
             where: {
