@@ -111,12 +111,16 @@ export const pieData = async (userId: string) => {
 
     if (today.getDate() >= cutoffDayStart) {
       cutoffStart = new Date(year, month, cutoffDayStart);
+      cutoffStart.setHours(0, 0, 0, 0); // Set waktu menjadi pukul 00:00:00
       cutoffEnd = new Date(year, month + 1, cutoffDayEnd);
+      cutoffEnd.setHours(23, 59, 59, 999); // Set waktu menjadi pukul 23:59:59
     } else {
       cutoffStart = new Date(year, month - 1, cutoffDayStart);
+      cutoffStart.setHours(0, 0, 0, 0); // Set waktu menjadi pukul 00:00:00
       cutoffEnd = new Date(year, month, cutoffDayEnd);
+      cutoffEnd.setHours(23, 59, 59, 999); // Set waktu menjadi pukul 23:59:59
     }
-
+    
     const sakit = await prisma.absensi.findMany({
       where: {
         userId,
@@ -242,11 +246,13 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
 
     // Menentukan rentang cutoff
     if (now.getDate() >= 21) {
-      cutoffStart = new Date(now.getFullYear(), now.getMonth(), 21); // Mulai dari tanggal 21 bulan ini
-      cutoffEnd = new Date(now.getFullYear(), now.getMonth() + 1, 20); // Hingga tanggal 20 bulan depan
+      // Kalau tanggal sekarang >= 21, periode mulai 21 bulan ini sampai 20 bulan depan
+      cutoffStart = new Date(now.getFullYear(), now.getMonth(), 21, 0, 0, 0, 0); // 21 bulan ini
+      cutoffEnd = new Date(now.getFullYear(), now.getMonth() + 1, 20, 23, 59, 59, 999); // Sampai 20 bulan depan, jam 23:59:59.999
     } else {
-      cutoffStart = new Date(now.getFullYear(), now.getMonth() - 1, 21); // Mulai dari tanggal 21 bulan lalu
-      cutoffEnd = new Date(now.getFullYear(), now.getMonth(), 20); // Hingga tanggal 20 bulan ini
+      // Kalau tanggal sekarang < 21, periode mulai 21 bulan lalu sampai 20 bulan ini
+      cutoffStart = new Date(now.getFullYear(), now.getMonth() - 1, 21, 0, 0, 0, 0); // 21 bulan lalu
+      cutoffEnd = new Date(now.getFullYear(), now.getMonth(), 20, 23, 59, 59, 999); // Sampai 20 bulan ini, jam 23:59:59.999
     }
 
     let startDate: Date | undefined;
