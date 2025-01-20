@@ -40,8 +40,8 @@ const Absensi = () => {
     setIsLoading(true);
     try {
       const res = await mutateAsync();
-      toast.success(res.data.msg);
-      dispatch(addAbsenSlice(res.data.response));
+      toast.success(res.msg);
+      dispatch(addAbsenSlice(res.response));
     } catch (error) {
       if (error instanceof AxiosError) {
         toast.error(error.response?.data);
