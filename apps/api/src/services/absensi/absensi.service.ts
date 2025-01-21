@@ -706,7 +706,7 @@ export const exportExcelService = async () => {
       // durasi
       const cellDuration = customRow.getCell(6);
       const lastDuration = lastRow.getCell(6);
-      cellDuration.value = item.duration ? `${item.duration?.split(':')[0]} jam ${item.duration?.split(':')[1]} menit` : '-';
+      cellDuration.value = item.duration ? `${item.duration?.split(':')[0]?.padStart(2, '0')}:${item.duration?.split(':')[1]?.padStart(2, '0')}` : '-';
       cellDuration.alignment = {
         horizontal: 'center',
         vertical: 'middle'
