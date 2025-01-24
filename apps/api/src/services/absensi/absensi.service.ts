@@ -5,9 +5,13 @@ import { AbsensiQuery } from '@/types/absensi';
 import * as ExcelJS from 'exceljs';
 
 const now = new Date();
-const startDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+// const startDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+// const endDay = new Date(startDay);
+// endDay.setDate(startDay.getDate() + 1);
+
+const startDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
 const endDay = new Date(startDay);
-endDay.setDate(startDay.getDate() + 1);
+endDay.setUTCDate(startDay.getUTCDate() + 1);
 
 export const clockInService = async (userId: string) => {
   try {
