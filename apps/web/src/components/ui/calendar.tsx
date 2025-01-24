@@ -5,32 +5,49 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 import { DayPicker } from "react-day-picker"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
+import clsx from "clsx"
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
 
 function Calendar({
   className,
   classNames,
+  numberOfMonths = 1,
   showOutsideDays = true,
   ...props
 }: CalendarProps) {
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={cn("p-3", className)}
+      className={cn("px-8", className)}
       classNames={{
-        month: "space-y-4 bg-neutral-900 px-2 py-3 rounded-lg text-off-white text-center",
-        months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
+        month: clsx(
+          'space-y-4 bg-neutral-900 px-2 py-3 rounded-lg text-off-white text-center',
+          numberOfMonths === 12 && ''
+        ),
+        months: clsx(
+          '',
+          numberOfMonths === 12 && 'grid grid-cols-3 gap-3 w-fit'
+        ),
         caption: "flex justify-center relative items-center",
         caption_label: "text-xl font-semibold",
-        nav: "space-x-1 flex items-center",
+        nav: clsx('space-x-1 flex items-center',
+          numberOfMonths === 12 && 'hidden'
+        ),
         nav_button: cn(
           buttonVariants({ variant: "outline" }),
-          "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100"
+          "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100",
+          numberOfMonths === 12 && 'hidden'
         ),
-        nav_button_previous: "absolute left-1",
-        nav_button_next: "absolute right-1",
-        table: "w-full border-collapse space-y-1",
+        nav_button_previous: clsx(
+          'absolute left-1',
+          numberOfMonths === 12 && 'hidden'
+        ),
+        nav_button_next: clsx(
+          'absolute right-1',
+          numberOfMonths === 12 && 'hidden'
+        ),
+        table: "w-fit border-collapse space-y-1",
         head_row: "flex",
         head_cell:
           "text-off-white w-full font-medium text-center",
@@ -67,6 +84,7 @@ function Calendar({
         ),
       }}
       disabled={{ dayOfWeek: [0, 6]}}
+      numberOfMonths={numberOfMonths}
       {...props}
     />
   )
