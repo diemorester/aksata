@@ -434,9 +434,6 @@ export const autoClockOutAttendance = async () => {
         user: {
           role: 'User',
         },
-        clockIn: {
-          not: null,
-        },
       },
     });
 
