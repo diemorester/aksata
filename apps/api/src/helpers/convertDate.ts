@@ -1,3 +1,14 @@
+import { format, toZonedTime } from "date-fns-tz";
+
+const now = new Date(); // Waktu UTC dari server
+const timeZone = "Asia/Jakarta"; // Sesuaikan dengan zona waktu kamu
+
+const localTime = toZonedTime(now, timeZone);
+const startDay = format(localTime, "yyyy-MM-dd HH:mm:ssXXX", { timeZone })
+
+console.log(startDay);
+
+
 // Kamis, 12 November 2024
 export const convertDate = (date: Date | null) => {
   if (date == null) {
