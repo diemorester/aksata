@@ -1,6 +1,6 @@
 import { excelDateFormat, hourFormat } from '@/helpers/convertDate';
 import { durationCounter } from '@/helpers/durationCounter';
-import { getCurrentWIBTime, getDayRange } from '@/helpers/timezoneConverter';
+import { getDayRange } from '@/helpers/timezoneConverter';
 import prisma from '@/prisma';
 import { AbsensiQuery } from '@/types/absensi';
 import * as ExcelJS from 'exceljs';
@@ -72,7 +72,7 @@ export const clockOutService = async (userId: string) => {
       },
       data: {
         userId,
-        clockOut: getCurrentWIBTime(),
+        clockOut: new Date(),
       },
     });
 
