@@ -10,7 +10,7 @@ import * as ExcelJS from 'exceljs';
 // endDay.setUTCDate(startDay.getUTCDate() + 1);
 
 const now = new Date();
-  
+
 const wibOffset = 7 * 60 * 60 * 1000;
 
 const startDay = new Date(
@@ -137,7 +137,7 @@ export const pieData = async (userId: string) => {
       cutoffEnd = new Date(year, month, cutoffDayEnd);
       cutoffEnd.setHours(23, 59, 59, 999); // Set waktu menjadi pukul 23:59:59
     }
-    
+
     const sakit = await prisma.absensi.findMany({
       where: {
         userId,
@@ -287,26 +287,41 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
       endDate = new Date(startDate);
       endDate.setDate(startDate.getDate() + 7);
     } else if (filterBy === 'monthly') {
-      startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-      endDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+      startDate = new Date(cutoffStart);
+      endDate = new Date(cutoffEnd);
     } else if (filterBy === 'yearly') {
-      startDate = new Date(now.getFullYear(), 0, 0);
-      endDate = new Date(now.getFullYear() + 1, 0, 20);
+      // startDate = new Date(now.getFullYear(), 0, 0);
+      // endDate = new Date(now.getFullYear() + 1, 0, 20);
+      const fiscalYearStart = (startDay.getMonth() > 0 || (startDay.getMonth() === 0 && startDay.getDate() >= 21))
+        ? new Date(startDay.getFullYear(), 0, 21, 0, 0, 0, 0) // 21 Januari tahun ini (WIB)
+        : new Date(startDay.getFullYear() - 1, 0, 21, 0, 0, 0, 0); // 21 Januari tahun lalu (WIB)
+
+      const fiscalYearEnd = new Date(fiscalYearStart.getFullYear() + 1, 0, 20, 23, 59, 59, 999); // 20 Januari tahun berikutnya (WIB)
+
+      startDate = fiscalYearStart;
+      endDate = fiscalYearEnd;
     };
 
-    startDate = startDate && startDate < cutoffStart ? cutoffStart : startDate;
-    endDate = endDate && endDate > cutoffEnd ? cutoffEnd : endDate;
+    // startDate = startDate && startDate < cutoffStart ? cutoffStart : startDate;
+    // endDate = endDate && endDate > cutoffEnd ? cutoffEnd : endDate;
+    if (startDate && startDate < cutoffStart!) {
+      startDate = cutoffStart
+    };
+    if (endDate && endDate > cutoffEnd!) {
+      endDate = cutoffEnd
+    };
 
     const attendance = await prisma.absensi.findMany({
       where: {
         user: {
           name: {
             contains: search,
+            mode: 'insensitive',
           },
         },
         date: {
-          lte: endDate,
           gte: startDate,
+          lte: endDate,
         },
         pengajuan: {
           every: {
@@ -354,11 +369,12 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
         user: {
           name: {
             contains: search,
+            mode: 'insensitive',
           },
         },
         date: {
-          gte: cutoffStart,
-          lte: cutoffEnd,
+          gte: startDate,
+          lte: endDate,
         },
         pengajuan: {
           every: {
@@ -366,14 +382,14 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
             OR: [
               {
                 startDate: {
-                  gte: cutoffStart,
-                  lte: cutoffEnd
+                  gte: startDate,
+                  lte: endDate
                 },
               },
               {
                 endDate: {
-                  gte: cutoffStart,
-                  lte: cutoffEnd
+                  gte: startDate,
+                  lte: endDate
                 },
               },
             ]

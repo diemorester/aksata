@@ -1,13 +1,11 @@
-import { DummyCalendar } from "@/components/DummyCalendar";
-import { Calendar } from "@/components/ui/calendar";
+import ContainerPengajuan from "./components/ContainerPengajuan";
 
 export default function Pengajuan() {
   return (
-    <div className="min-h-screen">
-      <Calendar
-        mode="single"
-        numberOfMonths={12}
-      />
+    <div className="">
+      <div className="md:py-[70px]">
+        <ContainerPengajuan />
+      </div>
     </div>
   )
 }
