@@ -1,13 +1,13 @@
 // Konversi waktu lokal WIB ke UTC
 const getWIBToUTC = (date: Date): Date => {
   // Dapatkan offset WIB dalam menit (WIB = UTC+7)
-  const offset = 7 * 60 * 1000; // 7 jam dalam milidetik
+  const offset = 7 * 60 * 60 * 1000; // 7 jam dalam milidetik
   return new Date(date.getTime() + offset);
 };
 
 // Konversi UTC ke waktu lokal WIB
 const getUTCToWIB = (date: Date): Date => {
-  const offset = 7 * 60 * 1000;
+  const offset = 7 * 60 * 60 * 1000;
   return new Date(date.getTime() + offset);
 };
 
