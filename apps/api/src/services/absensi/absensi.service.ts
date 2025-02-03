@@ -1,38 +1,12 @@
 import { excelDateFormat, hourFormat } from '@/helpers/convertDate';
 import { durationCounter } from '@/helpers/durationCounter';
+import { getCurrentWIBTime, getDayRange } from '@/helpers/timezoneConverter';
 import prisma from '@/prisma';
 import { AbsensiQuery } from '@/types/absensi';
-import { fromZonedTime } from 'date-fns-tz';
 import * as ExcelJS from 'exceljs';
 
-// const now = new Date();
-// const startDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
-// const endDay = new Date(startDay);
-// endDay.setUTCDate(startDay.getUTCDate() + 1);
-
-const now = new Date();
-
-const wibOffset = 7 * 60 * 60 * 1000;
-
-const startDay = new Date(
-  Date.UTC(
-    now.getUTCFullYear(),
-    now.getUTCMonth(),
-    now.getUTCDate()
-  )
-);
-startDay.setTime(startDay.getTime() + wibOffset);
-
-const endDay = new Date(startDay);
-endDay.setUTCDate(startDay.getUTCDate() + 1);
-endDay.setTime(endDay.getTime() - 1);
-
 export const clockInService = async (userId: string) => {
-  const jakartaDate = new Date(); // Ambil waktu server
-  const timeZone = 'Asia/Jakarta';
-
-  const utcDate = fromZonedTime(jakartaDate, timeZone);
-  
+  const { startDayUTC, endDayUTC } = getDayRange();
   try {
     const user = await prisma.user.findFirst({
       where: { id: userId },
@@ -44,8 +18,8 @@ export const clockInService = async (userId: string) => {
       where: {
         userId,
         clockIn: {
-          gte: startDay,
-          lte: endDay,
+          gte: startDayUTC,
+          lte: endDayUTC,
         },
       },
     });
@@ -56,7 +30,7 @@ export const clockInService = async (userId: string) => {
     const clockIn = await prisma.absensi.create({
       data: {
         userId,
-        clockIn: utcDate,
+        clockIn: getCurrentWIBTime(),
         status: 'Hadir',
       },
     });
@@ -68,6 +42,7 @@ export const clockInService = async (userId: string) => {
 };
 
 export const clockOutService = async (userId: string) => {
+  const { startDayUTC, endDayUTC } = getDayRange();
   try {
     const user = await prisma.user.findFirst({
       where: { id: userId },
@@ -79,8 +54,8 @@ export const clockOutService = async (userId: string) => {
       where: {
         userId,
         clockIn: {
-          gte: startDay,
-          lte: endDay,
+          gte: startDayUTC,
+          lte: endDayUTC,
         },
       },
     });
@@ -97,7 +72,7 @@ export const clockOutService = async (userId: string) => {
       },
       data: {
         userId,
-        clockOut: startDay,
+        clockOut: getCurrentWIBTime(),
       },
     });
 
@@ -259,6 +234,7 @@ export const pieData = async (userId: string) => {
 };
 
 export const getAllAttendanceService = async (query: AbsensiQuery) => {
+  const { startDayUTC, endDayUTC } = getDayRange();
   try {
     const { search, take = 9, page = 1, filterBy } = query;
     const now = new Date();
@@ -298,9 +274,9 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
     } else if (filterBy === 'yearly') {
       // startDate = new Date(now.getFullYear(), 0, 0);
       // endDate = new Date(now.getFullYear() + 1, 0, 20);
-      const fiscalYearStart = (startDay.getMonth() > 0 || (startDay.getMonth() === 0 && startDay.getDate() >= 21))
-        ? new Date(startDay.getFullYear(), 0, 21, 0, 0, 0, 0) // 21 Januari tahun ini (WIB)
-        : new Date(startDay.getFullYear() - 1, 0, 21, 0, 0, 0, 0); // 21 Januari tahun lalu (WIB)
+      const fiscalYearStart = (startDayUTC.getMonth() > 0 || (startDayUTC.getMonth() === 0 && startDayUTC.getDate() >= 21))
+        ? new Date(startDayUTC.getFullYear(), 0, 21, 0, 0, 0, 0) // 21 Januari tahun ini (WIB)
+        : new Date(startDayUTC.getFullYear() - 1, 0, 21, 0, 0, 0, 0); // 21 Januari tahun lalu (WIB)
 
       const fiscalYearEnd = new Date(fiscalYearStart.getFullYear() + 1, 0, 20, 23, 59, 59, 999); // 20 Januari tahun berikutnya (WIB)
 
@@ -419,6 +395,7 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
 };
 
 export const autoAlphaAttendance = async () => {
+  const { startDayUTC, endDayUTC } = getDayRange();
   try {
     const users = await prisma.user.findMany();
 
@@ -427,8 +404,8 @@ export const autoAlphaAttendance = async () => {
         where: {
           userId: user.id,
           date: {
-            gte: startDay,
-            lte: endDay,
+            gte: startDayUTC,
+            lte: endDayUTC,
           },
         },
       });
