@@ -2,6 +2,7 @@ import { excelDateFormat, hourFormat } from '@/helpers/convertDate';
 import { durationCounter } from '@/helpers/durationCounter';
 import prisma from '@/prisma';
 import { AbsensiQuery } from '@/types/absensi';
+import { fromZonedTime } from 'date-fns-tz';
 import * as ExcelJS from 'exceljs';
 
 // const now = new Date();
@@ -27,6 +28,11 @@ endDay.setUTCDate(startDay.getUTCDate() + 1);
 endDay.setTime(endDay.getTime() - 1);
 
 export const clockInService = async (userId: string) => {
+  const jakartaDate = new Date(); // Ambil waktu server
+  const timeZone = 'Asia/Jakarta';
+
+  const utcDate = fromZonedTime(jakartaDate, timeZone);
+  
   try {
     const user = await prisma.user.findFirst({
       where: { id: userId },
@@ -50,7 +56,7 @@ export const clockInService = async (userId: string) => {
     const clockIn = await prisma.absensi.create({
       data: {
         userId,
-        clockIn: startDay,
+        clockIn: utcDate,
         status: 'Hadir',
       },
     });
