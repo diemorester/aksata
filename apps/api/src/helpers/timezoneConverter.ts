@@ -25,7 +25,7 @@ export const getDayRange = () => {
 
     // Akhir hari di WIB (23:59:59 WIB)
     const endOfDayWIB = new Date(startOfDayWIB);
-    endOfDayWIB.setHours(-1); // Set waktu ke akhir hari
+    endOfDayWIB.setHours(23, 59, 59, 999); // Set waktu ke akhir hari
     const endDayUTC = getWIBToUTC(endOfDayWIB); // Konversi ke UTC
 
     return { startDayUTC, endDayUTC };
