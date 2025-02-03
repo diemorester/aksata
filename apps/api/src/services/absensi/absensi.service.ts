@@ -30,7 +30,7 @@ export const clockInService = async (userId: string) => {
     const clockIn = await prisma.absensi.create({
       data: {
         userId,
-        clockIn: getCurrentWIBTime(),
+        clockIn: new Date(),
         status: 'Hadir',
       },
     });
