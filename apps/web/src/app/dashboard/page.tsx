@@ -1,11 +1,1 @@
-import ContainerAbsensi from './components/ContainerAbsensi'
-
-const Dashboard = () => {
-  return (
-    <div>
-        <ContainerAbsensi />
-    </div>
-  )
-}
-
-export default Dashboard
+export { default } from '@/app/dashboard/components/ContainerAbsensi';
