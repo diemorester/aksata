@@ -1,7 +1,7 @@
 'use client';
 import usePostClockIn from '@/hooks/useClockIn';
 import { hourFormat, timeNow } from '@/libs/date';
-import { clockInFetch, clockOutFetch } from '@/libs/fetch/absensi';
+import { clockOutFetch } from '@/libs/fetch/absensi';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { addAbsenSlice, removeAbsenSlice } from '@/redux/slices/absenSlice';
 import { AxiosError } from 'axios';
