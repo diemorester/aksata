@@ -14,9 +14,9 @@ import { UserRouter } from './routers/auth/user.router';
 import { DecodeRouter } from './routers/decode.router';
 import path from 'path';
 import { AbsensiRouter } from './routers/absensi/absensi.route';
+import { PengajuanRouter } from './routers/pengajuan/pengajuan.route';
 import "./jobs/autoAlphaJob";
 import "./jobs/autoClockOutJob";
-import { PengajuanRouter } from './routers/pengajuan/pengajuan.route';
 
 export default class App {
   private app: Express;

@@ -23,13 +23,13 @@ function Calendar({
       classNames={{
         month: clsx(
           'space-y-4 bg-neutral-900 px-2 py-3 rounded-lg text-off-white text-center',
-          numberOfMonths === 12 && ''
+          numberOfMonths === 12 && 'px-3'
         ),
         months: clsx(
           '',
           numberOfMonths === 12 && 'grid grid-cols-3 gap-3 w-fit'
         ),
-        caption: "flex justify-center relative items-center",
+        caption: "flex justify-center relative items-center py-3",
         caption_label: "text-xl font-semibold",
         nav: clsx('space-x-1 flex items-center',
           numberOfMonths === 12 && 'hidden'
