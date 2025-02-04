@@ -11,7 +11,6 @@ const Absensi = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { mutateAsync } = usePostClockIn();
   const { data, revalidate } = useGetAbsensiByUserId();
-  console.log(data, 'lapar');
 
   const handleClockIn = async () => {
     setIsLoading(true);
