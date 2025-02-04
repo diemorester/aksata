@@ -17,6 +17,7 @@ import { AbsensiRouter } from './routers/absensi/absensi.route';
 import { PengajuanRouter } from './routers/pengajuan/pengajuan.route';
 import "./jobs/autoAlphaJob";
 import "./jobs/autoClockOutJob";
+import { AdminHRRouter } from './routers/adminHR/adminHR.route';
 
 export default class App {
   private app: Express;
@@ -74,6 +75,7 @@ export default class App {
     const decodeRouter = new DecodeRouter();
     const absensiRouter = new AbsensiRouter();
     const pengajuanRouter = new PengajuanRouter();
+    const adminHRRouter = new AdminHRRouter()
 
     this.app.get('/api', (req: Request, res: Response) => {
       res.send(`welcome to ERP Aksata API`);
@@ -83,6 +85,7 @@ export default class App {
     this.app.use('/api', decodeRouter.getRouter());
     this.app.use('/api/absensi', absensiRouter.getRouter());
     this.app.use('/api/pengajuan', pengajuanRouter.getRouter());
+    this.app.use('/api/admin-hr', adminHRRouter.getRouter());
   }
 
   public start(): void {

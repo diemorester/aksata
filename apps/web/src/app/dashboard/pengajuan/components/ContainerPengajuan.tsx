@@ -3,6 +3,9 @@
 import { Calendar } from '@/components/ui/calendar';
 import { useState } from 'react';
 import ModalPengajuan from './ModalPengajuan';
+import { AxiosError } from 'axios';
+import toast from 'react-hot-toast';
+import useLemburPerdin from '@/hooks/useLemburPerdin';
 
 // Dua jenis pengajuan
 // 1. Pengajuan lembur
@@ -19,12 +22,12 @@ export default function ContainerPengajuan() {
     useState<VariantPengajuan>('LEMBUR');
 
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+  const { mutateAsync, isPending } = useLemburPerdin();
 
   // Kirim ke BE
   const [date, setDate] = useState<Date | undefined>();
   const [selectLembur, setSelectLembur] = useState<string>('');
-  const [selectPerdin, setSelectPerdin] = useState<string>('');
-  const [keterangan, setKeterangan] = useState<string>('');
+  const [keterangan, setKeterangan] = useState('');
 
   const handleChangeVariantPengajuan = () => {
     if (variantPengajuan === 'LEMBUR') {
@@ -49,33 +52,44 @@ export default function ContainerPengajuan() {
     },
   ];
 
-  const optionsPerdin = [
-    {
-      value: 'PILIH ACUUU',
-      label: '',
-    },
-  ];
-
-  const handleSubmitPengajuan = () => {
+  const handleSubmitPengajuan = async () => {
     if (variantPengajuan === 'LEMBUR') {
-      // Axios lembur
-      alert('LEMBUR BANGGG!!!');
+      const payload = {
+        date: date?.toISOString(),
+        keterangan: keterangan,
+        tipePengajuan: selectLembur
+      }
+      try {
+        const res = await mutateAsync(payload) 
+        toast.success('Pengajuan telah disubmit');
+        setIsOpenModal(false);
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          toast.error(error.response?.data)
+        }
+      }
     }
 
     if (variantPengajuan === 'PERDIN') {
-      // Axios perdin
-      alert('PERDIN BANGGGG!!!');
+      const payload = {
+        date: date?.toISOString(),
+        keterangan: keterangan,
+        tipePengajuan: 'PerjalananDinas'
+      }
+      try {
+        await mutateAsync(payload);
+        toast.success('Pengajuan telah disubmit');
+        setIsOpenModal(false);
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          toast.error(error.response?.data)
+        }
+      }
     }
   };
 
   const handleSelectOptionLembur = (value: string) => {
-    // Code
     setSelectLembur(value);
-  };
-
-  const handleSelectOptionPerdin = (value: string) => {
-    // Code
-    setSelectPerdin(value);
   };
 
   return (
@@ -92,8 +106,10 @@ export default function ContainerPengajuan() {
       <ModalPengajuan
         date={date}
         isOpen={isOpenModal}
+        isLoading={isPending}
         optionLembur={optionLembur}
         variantPengajuan={variantPengajuan}
+        setKeterangan={setKeterangan}
         onClose={() => setIsOpenModal(false)}
         handleSubmitPengajuan={handleSubmitPengajuan}
         handleChangeVariantPengajuan={handleChangeVariantPengajuan}

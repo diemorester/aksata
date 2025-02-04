@@ -14,3 +14,15 @@ export interface PengajuanType {
         avatar: string | null
     }
 }
+
+export interface PengajuanLemburPerdinType {
+    id: string;
+    userId: string;
+    nominal: number | null;
+    tipePengajuan: 'LemburSatu' | 'LemburDua' | 'LemburTiga' | 'PerjalananDinas';
+    date: string;
+    createdAt: string;
+    updatedAt: string;
+    statusPengajuan: 'Waiting' | 'Approved' | 'Rejected';
+    keterangan: string;
+  };
