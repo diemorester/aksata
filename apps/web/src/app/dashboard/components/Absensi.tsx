@@ -55,8 +55,16 @@ const Absensi = () => {
             <p className="text-xs text-start">Clock-out Time</p>
           </div>
           <div>
-            <p className='text-xs font-extrabold text-off-white'>{data?.absensi.isActive && data.absensi.clockIn ? hourFormat(data?.absensi.clockIn) : '--/--'}</p>
-            <p className='text-xs font-extrabold text-off-white'>{data?.absensi.isActive && data.absensi.clockOut ? hourFormat(data?.absensi.clockOut) : '--/--'}</p>
+            <p className="text-xs font-extrabold text-off-white">
+              {data?.absensi?.isActive && data?.absensi?.clockIn
+                ? hourFormat(data.absensi.clockIn)
+                : "--/--"}
+            </p>
+            <p className="text-xs font-extrabold text-off-white">
+              {data?.absensi?.isActive && data?.absensi?.clockOut
+                ? hourFormat(data.absensi.clockOut)
+                : "--/--"}
+            </p>
           </div>
         </div>
 
