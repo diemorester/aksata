@@ -17,7 +17,6 @@ const VerifiedPage = ({ params }: { params: { token: string } }) => {
       toast.success(res.data.msg)
       setIsNowVerified(true)
     } catch (error: any) {
-      console.log(error);
       if (error.response.data.status == "ERROR MIDDLEWARE") {
         toast.error('token expired')
       } else if (error instanceof AxiosError) {
