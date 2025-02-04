@@ -102,7 +102,7 @@ export const Logo = () => {
             <motion.span
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="font-bold text-off-white md:text-[26px] px-1 whitespace-pre"
+                className="font-bold text-off-white md:text-xl px-1 whitespace-pre"
             >
                 Ristoan Tri Laras
             </motion.span>

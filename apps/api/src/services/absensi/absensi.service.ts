@@ -72,6 +72,7 @@ export const clockOutService = async (userId: string) => {
       },
       data: {
         userId,
+        isActive: false,
         clockOut: new Date(),
       },
     });
@@ -228,6 +229,22 @@ export const pieData = async (userId: string) => {
       alpha: alpha.length,
       total: total.length,
     };
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAttendanceByUserIdService = async (userId: string) => {
+  try {
+    const latestData = await prisma.absensi.findFirst({
+      where: {
+        userId
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
+    return latestData;
   } catch (error) {
     throw error;
   }
@@ -427,29 +444,39 @@ export const autoAlphaAttendance = async () => {
 };
 
 export const autoClockOutAttendance = async () => {
+  const { startDayUTC, endDayUTC } = getDayRange();
+
   try {
     const attendance = await prisma.absensi.findMany({
       where: {
-        clockOut: null,
         user: {
-          role: 'User',
+          role: 'User'
         },
-      },
+        status: 'Hadir',
+        clockIn: {
+          not: null
+        },
+        date: {
+          gte: startDayUTC,
+          lte: endDayUTC
+        }
+      }
     });
 
     for (const attend of attendance) {
-      const durationTime = await prisma.absensi.update({
+      await prisma.absensi.update({
         where: {
           id: attend.id,
         },
         data: {
           clockOut: new Date(),
+          isActive: false
         },
-      });
+      });     
 
       const duration = durationCounter(
-        durationTime.clockIn,
-        durationTime.clockOut,
+        attend.clockIn,
+        attend.clockOut,
       );
 
       await prisma.absensi.update({
@@ -459,7 +486,7 @@ export const autoClockOutAttendance = async () => {
         data: {
           duration,
         },
-      });
+      });     
     }
   } catch (error) {
     throw error;

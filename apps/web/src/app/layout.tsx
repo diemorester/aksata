@@ -1,13 +1,10 @@
-"use client"
-
-// import { Inter } from 'next/font/google';
+import { Inter } from 'next/font/google';
+import ClientQueryProvider from '@/components/ClientQueryProvider';
 import './globals.css';
 import ToastComp from '@/components/toasts';
 import StoreProvider from '@/providers/storeProvider';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-// const inter = Inter({ subsets: ['latin'] });
-const queryClient = new QueryClient();
+const inter = Inter({ subsets: ['latin'] });
 
 export default function RootLayout({
   children,
@@ -16,12 +13,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className={`${inter.className}`}>
         <ToastComp />
         <StoreProvider>
-          <QueryClientProvider client={queryClient}>
-            {children}
-          </QueryClientProvider>
+          <ClientQueryProvider>{children}</ClientQueryProvider>
         </StoreProvider>
       </body>
     </html>

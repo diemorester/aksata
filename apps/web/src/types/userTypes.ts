@@ -27,3 +27,8 @@ export interface EditModalProps {
     onClose: () => void,
     handleUpdate: (data: EditUserSlice) => void
 }
+
+export interface AllUserType {
+    id: string;
+    name: string;
+}
