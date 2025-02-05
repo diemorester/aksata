@@ -1,11 +1,1 @@
-import TabelAbsensi from "./components/tabelAbsensi"
-
-const Attendance = () => {
-  return (
-    <div>
-      <TabelAbsensi />
-    </div>
-  )
-}
-
-export default Attendance
+export { default } from '@/app/dashboardHR/data-absensi/components/tabelAbsensi';

@@ -1,12 +1,1 @@
-import React from 'react'
-import SettingsHRconfig from './components/settingsHRconfig'
-
-const SettingsHR = () => {
-  return (
-    <div>
-        <SettingsHRconfig />
-    </div>
-  )
-}
-
-export default SettingsHR
+export { default } from '@/app/dashboardHR/settings/components/settingsHRconfig';

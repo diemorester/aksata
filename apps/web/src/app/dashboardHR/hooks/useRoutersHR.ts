@@ -1,46 +1,55 @@
-'use client'
-import { useAppDispatch } from "@/redux/hooks";
-import { setIsModalOpen } from "@/redux/slices/modalSlice";
-import { usePathname } from "next/navigation";
-import { useCallback, useMemo } from "react";
-import { BiSolidDashboard } from "react-icons/bi";
-import { IoMdSettings } from "react-icons/io";
-import { TbReportAnalytics } from "react-icons/tb";
-import { VscSignOut } from "react-icons/vsc";
+'use client';
+import { usePathname } from 'next/navigation';
+import { useCallback, useMemo, useState } from 'react';
+import { GoGitPullRequest, GoGitPullRequestDraft } from 'react-icons/go';
+import { IoMdSettings } from 'react-icons/io';
+import { TbReportAnalytics } from 'react-icons/tb';
+import { VscSignOut } from 'react-icons/vsc';
 
 const useRouterHR = () => {
-    const dispatch = useAppDispatch();
-    const pathName = usePathname();
-    const handleClick = useCallback(() => {
-        dispatch(setIsModalOpen(true))
-    }, [dispatch])
-    const router = useMemo(() => [
-        {
-            label: "Dashboard",
-            href: "/dashboardHR",
-            icon: BiSolidDashboard,
-            active: pathName == "/dashboardHR"
-        },
-        {
-            label: "Data Absensi",
-            href: "/dashboardHR/data-absensi",
-            icon: TbReportAnalytics,
-            active: pathName == "/dashboardHR/data-absensi"
-        },
-        {
-            label: "Settings",
-            href: "/dashboardHR/settings",
-            icon: IoMdSettings,
-            active: pathName == "/dashboardHR/settings"
-        },
-        {
-            label: "Logout",
-            href: "#",
-            icon: VscSignOut,
-            onClick: handleClick
-        }
-    ], [pathName, handleClick])
-    return router
-}
+  const pathName = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
 
-export default useRouterHR
+  const handleToggleModal = useCallback(() => {
+    setIsOpen(!isOpen);
+  }, [isOpen]);
+
+  const router = useMemo(
+    () => [
+      {
+        label: 'Absensi',
+        href: '/dashboardHR',
+        icon: GoGitPullRequestDraft,
+        active: pathName == '/dashboardHR',
+      },
+      {
+        label: 'Lembur Perdin',
+        href: '/dashboardHR/lembur-perdin',
+        icon: GoGitPullRequest,
+        active: pathName.startsWith('/dashboardHR/lembur-perdin'),
+      },
+      {
+        label: 'Data Absensi',
+        href: '/dashboardHR/data-absensi',
+        icon: TbReportAnalytics,
+        active: pathName == '/dashboardHR/data-absensi',
+      },
+      {
+        label: 'Settings',
+        href: '/dashboardHR/settings',
+        icon: IoMdSettings,
+        active: pathName == '/dashboardHR/settings',
+      },
+      {
+        label: 'Logout',
+        href: '#',
+        icon: VscSignOut,
+        onClick: handleToggleModal,
+      },
+    ],
+    [pathName, handleToggleModal],
+  );
+  return { router, isOpen, handleToggleModal };
+};
+
+export default useRouterHR;

@@ -111,7 +111,7 @@ export function AppSidebar() {
           </SidebarMenu>
         </SidebarGroupContent>
       </SidebarContent>
-      <SidebarFooter username={name}>
+      <SidebarFooter className="text-white" username={name}>
         <Avatar image={avatar} />
       </SidebarFooter>
       <ModalLogout isOpen={isOpen} onClose={handleToggleModal} />

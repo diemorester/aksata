@@ -18,7 +18,7 @@ export default function SettingsConfig() {
   return (
     <div className="flex flex-col w-full">
       <div className="lg:w-full relative h-36 bg-[linear-gradient(to_bottom,_#0a0a0a_50%,_#1a1919_50%)] rounded-t-3xl">
-        <div className="">
+        <div>
           <div className="flex items-center gap-3 md:gap-5 p-5 pt-12">
             <Image
               src={avatar || '/profileplaceholder.png'}
