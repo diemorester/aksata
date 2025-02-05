@@ -26,7 +26,7 @@ export default function StoreProvider({
               autoPlay
               muted
               loop
-              className="w-[450px] h-[450px]"
+              className="md:w-[450px] md:h-[450px]"
             />
           </div>}
       >
