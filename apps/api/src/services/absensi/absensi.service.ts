@@ -464,7 +464,7 @@ export const autoClockOutAttendance = async () => {
     });
 
     for (const attend of attendance) {
-      await prisma.absensi.update({
+      const updateClockOut = await prisma.absensi.update({
         where: {
           id: attend.id,
         },
@@ -475,8 +475,8 @@ export const autoClockOutAttendance = async () => {
       });     
 
       const duration = durationCounter(
-        attend.clockIn,
-        attend.clockOut,
+        updateClockOut.clockIn,
+        updateClockOut.clockOut,
       );
 
       await prisma.absensi.update({
