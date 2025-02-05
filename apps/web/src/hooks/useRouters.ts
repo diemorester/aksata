@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname } from "next/navigation"
-import { useMemo, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { FaProjectDiagram } from "react-icons/fa"
 import { IoMdSettings } from "react-icons/io"
 import { LuUpload } from "react-icons/lu"
@@ -13,9 +13,9 @@ const useRouter = () => {
     const pathName = usePathname();
     const [isOpen, setIsOpen] = useState(false);
 
-    const handleToggleModal = () => {
+    const handleToggleModal = useCallback(() => {
         setIsOpen(!isOpen)
-    }
+    }, [isOpen])
     
     const router = useMemo(() => [
         {
