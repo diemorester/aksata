@@ -14,8 +14,11 @@ export class PengajuanRouter {
 
     private initializeRoutes(): void {
         this.router.post('/', authMiddleware, this.pengajuanController.pengajuan);
+        this.router.post('/lembur', authMiddleware, this.pengajuanController.pengajuanLemburPerdin);
         this.router.get('/get-pengajuan-by-user-id', authMiddleware, this.pengajuanController.pengajuanUser);
-        this.router.get('/get-pengajuan-HR', authMiddleware, this.pengajuanController.pengajuanHR);
+        this.router.get('/get-pengajuan-by-HR', authMiddleware, this.pengajuanController.pengajuanHR);
+        this.router.patch('/approve-pengajuan/:absensiId', authMiddleware, this.pengajuanController.approvePengajuan);
+        this.router.patch('/decline-pengajuan/:absensiId', authMiddleware, this.pengajuanController.declinePengajuan);
     }
 
     getRouter(): Router {

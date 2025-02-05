@@ -1,15 +1,16 @@
 'use client';
+
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { cn } from '../../../libs/utils';
+import { cn } from '../../../../libs/utils';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { setIsModalOpen } from '@/redux/slices/modalSlice';
 import { deleteCookie, navigate } from '@/libs/server';
 import { logoutAction } from '@/redux/slices/userslice';
-import img1 from '../../../../public/aksata-logo.png'
-import useRouterHR from '../hooks/useRoutersHR';
+import img1 from '../../../../../public/aksata-logo.png'
+import useRouterHR from '../../hooks/useRoutersHR';
 import { SidebarBodyHR, SidebarConfigHR, SidebarLinkHR } from './sidebarHRconfig';
 import Modal from '@/components/Modal';
 import ButtonSpan from '@/components/buttons/spanButtons';

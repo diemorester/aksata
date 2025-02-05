@@ -1,5 +1,4 @@
 'use client';
-import { DummyCalendar } from '@/components/DummyCalendar';
 import { Calendar } from '@/components/ui/calendar';
 import { pengajuanFormat } from '@/libs/date';
 import { useEffect, useRef, useState } from 'react';
@@ -43,7 +42,7 @@ const KalenderPengajuan: React.FC<KalenderPengajuanProps> = ({
   };
 
   return (
-    <div className="relative" ref={modalRef}>
+    <div className="relative " ref={modalRef}>
       <button
         className="flex py-[13px] px-5 items-center text-off-white w-full border-2 rounded-md justify-between border-off-white"
         type="button"
@@ -62,7 +61,7 @@ const KalenderPengajuan: React.FC<KalenderPengajuanProps> = ({
         <LuCalendar size={30} />
       </button>
       {isOpen && (
-        <div className="absolute rounded-xl z-30">
+        <div className="absolute rounded-lg z-30">
           <Calendar
             mode="range"
             selected={date}

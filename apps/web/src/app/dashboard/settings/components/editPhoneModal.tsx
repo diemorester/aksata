@@ -4,14 +4,13 @@ import PhoneInputEdit from "@/components/input/phoneInput"
 import Modal from "@/components/Modal"
 import { useAppSelector } from "@/redux/hooks"
 import { EditModalProps } from "@/types/userTypes"
-import clsx from "clsx"
 import { Form, Formik } from "formik"
 import * as yup from 'yup'
 
 const EditPhoneModal: React.FC<EditModalProps> = ({ isOpen, onClose, isLoading, handleUpdate }) => {
     const { phone } = useAppSelector(user => user.user);
     const validation = yup.object().shape({
-        phone: yup.string().required("phone number can't be empty").min(10, 'phone numbers must be at least 10').max(13, "phone number can't be more than 13")
+        phone: yup.string().required("phone number can't be empty").min(10, 'phone numbers must be at least 10').max(17, "phone number can't be more than 13")
     })
 
     return (

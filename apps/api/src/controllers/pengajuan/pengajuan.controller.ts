@@ -1,4 +1,5 @@
-import { getPengajuanHRService, getPengajuanUserService, pengajuanService } from "@/services/pengajuan/pengajuan.service";
+import { approvePengajuanRequestService, declinePengajuanRequestService, getPengajuanHRService, getPengajuanUserService, pengajuanService } from "@/services/pengajuan/pengajuan.service";
+import { pengajuanLemburPerdinService } from "@/services/pengajuan/pengajuanLemburPerdin.service";
 import { NextFunction, Request, Response } from "express";
 
 export class PengajuanController {
@@ -36,10 +37,54 @@ export class PengajuanController {
 
     async pengajuanHR(req: Request, res: Response, next: NextFunction) {
         try {
-            const response = await getPengajuanHRService()
+            const { page, take, search } = req.query;
+            const { meta, pengajuanHR } = await getPengajuanHRService(req.user?.id!, {
+                page: Number(page as string) || 1,
+                take: Number(take as string) || 10,
+                search: search as string,
+            })
             return res.status(200).send({
                 status: 'ok',
-                response
+                meta,
+                response: pengajuanHR
+            })
+        } catch (error) {
+            next(error);
+        };
+    };
+
+    async approvePengajuan(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { absensiId } = req.params
+            const updatePengajuan = await approvePengajuanRequestService(absensiId)
+            return res.status(200).send({
+                status: 'ok',
+                updatePengajuan
+            })
+        } catch (error) {
+            next(error);
+        };
+    };
+
+    async declinePengajuan(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { absensiId } = req.params
+            const updatePengajuan = await declinePengajuanRequestService(absensiId)
+            return res.status(200).send({
+                status: 'ok',
+                updatePengajuan
+            })
+        } catch (error) {
+            next(error);
+        };
+    };
+
+    async pengajuanLemburPerdin(req: Request, res: Response, next: NextFunction) {
+        try {
+            await pengajuanLemburPerdinService(req.body, req.user?.id!)
+            return res.status(200).send({
+                status: 'ok',
+                msg: 'Pengajuan Berhasil'
             })
         } catch (error) {
             next(error);

@@ -6,10 +6,7 @@ import { redirect } from "next/navigation";
 export const createCookie = (key: string, value: string) => {
   const oneDay = 24 * 60 * 60 * 1000;
   cookies().set(key, value, {
-    expires: Date.now() + oneDay,
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict'
+    expires: Date.now() + oneDay
   });
 };
 

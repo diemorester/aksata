@@ -16,16 +16,16 @@ export default function SettingsConfig() {
   const [cropImage, setCropImage] = useState<string | null>(null);
 
   return (
-    <div className="flex flex-col relative">
-      <div className="lg:w-[950px] mx-auto min-h-screen min-[1225px]:fixed min-[1225px]:right-[17%]">
+    <div className="flex flex-col pl-48">
+      <div className="min-h-screen md:w-[950px]">
         <h1 className="text-end text-2xl lg:text-[27px] font-semibold text-neutral-100 px-3 lg:py-6 py-3">Settings</h1>
         <div className="lg:w-full relative h-36 bg-[linear-gradient(to_bottom,_#0a0a0a_50%,_#1a1919_50%)] rounded-t-3xl">
           <div className="lg:w-full items-center absolute -bottom-6 left-8">
             <div className="flex items-center gap-3 md:gap-5">
               <Image
                 src={avatar || '/profileplaceholder.png'}
-                width={50}
-                height={50}
+                width={668}
+                height={668}
                 alt="settings-avatar"
                 className="rounded-full w-24 h-24 md:w-[120px] md:h-[120px] object-cover border-8 md:border-[13px] border-[#1a1919]"
               />

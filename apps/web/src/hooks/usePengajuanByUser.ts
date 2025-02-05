@@ -3,7 +3,7 @@
 import axiosInstance from "@/libs/axios"
 import { getCookie } from "@/libs/server"
 import { PengajuanType } from "@/types/pengajuanTypes"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 
 interface PengajuanQuery {
     take?: number
@@ -18,7 +18,9 @@ interface PengajuanUserType {
 }
 
 const usePengajuanByUser = (params: PengajuanQuery) => {
-    return useQuery({
+    const queryClient = useQueryClient();
+
+    const query = useQuery({
         queryKey: ['pengajuan-user', params.page, params.search, params.take],
         queryFn: async () => {
             const token = await getCookie('access_token');
@@ -32,6 +34,13 @@ const usePengajuanByUser = (params: PengajuanQuery) => {
             return data.response
         }
     })
+    const revalidate = () => {
+        queryClient.invalidateQueries({
+            queryKey: ['pengajuan-user', params.page, params.search, params.take],
+        })
+    };
+
+    return { ...query, revalidate }
 }
 
 export default usePengajuanByUser
