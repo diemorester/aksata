@@ -79,11 +79,8 @@ const TabelAbsensi = () => {
     return (
         <div className="flex flex-col">
             <div className="w-full min-h-screen mx-auto">
-                <div className="flex w-full justify-between items-center px-2 pt-5">
+                <div className="flex w-full justify-between items-center px-2">
                     <SearchBarInput search={search} onChange={handleSearch} />
-                    <h1 className="text-[24px] font-semibold text-end text-black pb-1 px-6">
-                        DATA ABSENSI
-                    </h1>
                 </div>
                 <div className="flex flex-col justify-between rounded-md mx-5 px-3 bg-slate-100 h-full  md:min-h-[550px]">
                     <table className="mt-2 md:w-full table-fixed border-collapse">

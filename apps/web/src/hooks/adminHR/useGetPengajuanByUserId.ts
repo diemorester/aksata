@@ -9,7 +9,7 @@ interface ResponseGetUserById {
     response: PengajuanLemburPerdinType[]
 }
 
-const useGetUserByID = (userId: string) => {
+const useGetPengajuanByUserId = (userId: string) => {
   return useQuery({
     queryKey: ['get-user', userId],
     queryFn: async () => {
@@ -19,4 +19,4 @@ const useGetUserByID = (userId: string) => {
   })
 }
 
-export default useGetUserByID
+export default useGetPengajuanByUserId

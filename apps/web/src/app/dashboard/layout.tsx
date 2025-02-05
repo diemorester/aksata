@@ -1,18 +1,9 @@
-import { AppSidebar } from "@/components/ui/appSidebar";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import ConfigLayoutUser from './settings/components/ConfigLayoutUser';
 
 export default function RootLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-    return (
-        <>
-            <AppSidebar />
-            <div className="w-full h-full bg-neutral-800 text-neutral-300">
-                <SidebarTrigger />
-                {children}
-            </div>
-        </>
-    );
+  return <ConfigLayoutUser>{children}</ConfigLayoutUser>;
 }
