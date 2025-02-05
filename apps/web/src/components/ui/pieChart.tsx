@@ -20,10 +20,6 @@ import usePieUser from "@/hooks/usePieUser"
 import { piePeriod } from "@/libs/date"
 
 export function PieChartComponent() {
-    // const totalVisitors = React.useMemo(() => {
-    //     return chartData.reduce((acc, curr) => acc + curr.visitors, 0)
-    // }, [])
-
     const { data } = usePieUser();
 
     const chartData = [
@@ -61,7 +57,7 @@ export function PieChartComponent() {
     } satisfies ChartConfig
 
     return (
-        <Card className="flex flex-col w-full h-full bg-neutral-950 border-none text-off-white">
+        <Card className="flex flex-col w-full h-full bg-black border-none text-off-white">
             <CardHeader className="items-center pb-0">
                 <CardTitle className="text-sm">Absensi</CardTitle>
                 <CardDescription className="text-xs text-neutral-300">{piePeriod()}</CardDescription>

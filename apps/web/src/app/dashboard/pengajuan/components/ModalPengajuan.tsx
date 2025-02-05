@@ -95,7 +95,7 @@ const ModalPengajuan: React.FC<ModalPengajuanProps> = ({
           </div>
           <div className='flex justify-between text-off-white'>
             <div className='px-2 pt-4 w-1/3'>
-              {variantPengajuan === 'LEMBUR' ? 'Tipe Lembur' : 'Tipe Perdin'}
+              Keterangan
             </div>
             <div className='w-2/3'>
               <textarea

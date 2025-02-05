@@ -5,9 +5,8 @@ import { usePathname } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import { BiSolidDashboard } from "react-icons/bi";
 import { IoMdSettings } from "react-icons/io";
-import { VscSignOut } from "react-icons/vsc";
 import { TbReportAnalytics } from "react-icons/tb";
-import { FaCodePullRequest } from "react-icons/fa6";
+import { VscSignOut } from "react-icons/vsc";
 
 const useRouterHR = () => {
     const dispatch = useAppDispatch();
