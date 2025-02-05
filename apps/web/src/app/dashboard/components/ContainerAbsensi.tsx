@@ -5,8 +5,8 @@ import PengajuanKonten from './PengajuanKonten';
 
 const ContainerAbsensi = () => {
   return (
-    <div className="flex pl-48 w-screen">
-      <div className="min-h-screen md:w-[950px]">
+    <div className="flex">
+      <div className="min-h-screen">
         <h1 className="text-end text-2xl lg:text-[27px] font-semibold text-neutral-100 px-3 lg:py-6 py-3">
           Absensi
         </h1>

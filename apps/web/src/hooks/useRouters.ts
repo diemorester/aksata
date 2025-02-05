@@ -1,21 +1,22 @@
 'use client'
-import { useAppDispatch } from "@/redux/hooks"
-import { setIsModalOpen } from "@/redux/slices/modalSlice"
+
 import { usePathname } from "next/navigation"
-import { useCallback, useMemo } from "react"
+import { useMemo, useState } from "react"
+import { FaProjectDiagram } from "react-icons/fa"
+import { IoMdSettings } from "react-icons/io"
 import { LuUpload } from "react-icons/lu"
-import { RiCalendarCheckLine } from "react-icons/ri";
-import { FaProjectDiagram } from "react-icons/fa";
-import { MdWarehouse } from "react-icons/md";
-import { IoMdSettings } from "react-icons/io";
+import { MdWarehouse } from "react-icons/md"
+import { RiCalendarCheckLine } from "react-icons/ri"
 import { VscSignOut } from "react-icons/vsc"
 
 const useRouter = () => {
-    const dispatch = useAppDispatch()
-    const pathName = usePathname()
-    const handleClick = useCallback(() => {
-        dispatch(setIsModalOpen(true))
-    }, [dispatch])
+    const pathName = usePathname();
+    const [isOpen, setIsOpen] = useState(false);
+
+    const handleToggleModal = () => {
+        setIsOpen(!isOpen)
+    }
+    
     const router = useMemo(() => [
         {
             label: "Absensi",
@@ -51,10 +52,10 @@ const useRouter = () => {
             label: "Logout",
             href: "#",
             icon: VscSignOut,
-            onClick: handleClick
+            onClick: handleToggleModal
         }
-    ], [pathName, handleClick])
-    return router
+    ], [pathName, handleToggleModal])
+    return { router, isOpen, handleToggleModal }
 }
 
 export default useRouter

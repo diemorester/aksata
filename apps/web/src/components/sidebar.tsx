@@ -46,7 +46,7 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
                     <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
                         {open ? <Logo /> : <LogoIcon />}
                         <div className="mt-10 flex flex-col gap-5">
-                            {router.map((link, idx) => (
+                            {/* {router.map((link, idx) => (
                                 <SidebarLink
                                     key={idx}
                                     href={link.href}
@@ -55,7 +55,7 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
                                     active={link.active}
                                     onClick={link.onClick!}
                                 />
-                            ))}
+                            ))} */}
                         </div>
                     </div>
                     <div className="mb-11 px-1 flex gap-3 justify-start items-center text-ellipsis">

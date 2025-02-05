@@ -1,4 +1,5 @@
-import { Sidebar } from "@/components/sidebar";
+import { AppSidebar } from "@/components/ui/appSidebar";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export default function RootLayout({
     children,
@@ -6,12 +7,12 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <div>
-            <Sidebar>
-                <div className="w-full h-full text-neutral-300">
-                    {children}
-                </div>
-            </Sidebar>
-        </div>
+        <>
+            <AppSidebar />
+            <div className="w-full h-full bg-neutral-800 text-neutral-300">
+                <SidebarTrigger />
+                {children}
+            </div>
+        </>
     );
 }
