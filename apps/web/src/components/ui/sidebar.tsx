@@ -170,6 +170,7 @@ const Sidebar = React.forwardRef<
     side?: 'left' | 'right';
     variant?: 'sidebar' | 'floating' | 'inset';
     collapsible?: 'offcanvas' | 'icon' | 'none';
+    color?: 'black' | 'white';
   }
 >(
   (
@@ -177,6 +178,7 @@ const Sidebar = React.forwardRef<
       side = 'left',
       variant = 'sidebar',
       collapsible = 'offcanvas',
+      color = 'black',
       className,
       children,
       ...props
@@ -256,7 +258,10 @@ const Sidebar = React.forwardRef<
         >
           <div
             data-sidebar="sidebar"
-            className="flex h-full w-full flex-col bg-black group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow"
+            className={cn(
+              'flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow',
+              color === 'black' ? 'bg-black' : 'bg-off-white',
+            )}
           >
             {children}
           </div>
@@ -360,39 +365,58 @@ SidebarInput.displayName = 'SidebarInput';
 
 const SidebarHeader = React.forwardRef<
   HTMLDivElement,
-  React.ComponentProps<'div'> & { textWhenOpen?: string }
->(({ className, textWhenOpen, children, ...props }, ref) => {
-  const { open } = useSidebar();
-  const [showText, setShowText] = React.useState(open);
+  React.ComponentProps<'div'> & {
+    textWhenOpen?: string;
+    colorTextWhenOpen?: 'black' | 'white';
+  }
+>(
+  (
+    {
+      className,
+      textWhenOpen,
+      children,
+      colorTextWhenOpen = 'white',
+      ...props
+    },
+    ref,
+  ) => {
+    const { open } = useSidebar();
+    const [showText, setShowText] = React.useState(open);
 
-  React.useEffect(() => {
-    if (open) {
-      const timeOut = setTimeout(() => setShowText(true), 300);
-      return () => clearTimeout(timeOut);
-    } else {
-      setShowText(false);
-    }
-  }, [open]);
+    React.useEffect(() => {
+      if (open) {
+        const timeOut = setTimeout(() => setShowText(true), 300);
+        return () => clearTimeout(timeOut);
+      } else {
+        setShowText(false);
+      }
+    }, [open]);
 
-  return (
-    <div
-      ref={ref}
-      data-sidebar="header"
-      className={cn(
-        'flex flex-col items-center gap-2 py-3 px-2 transition-all duration-200',
-        className,
-      )}
-      {...props}
-    >
-      {children}
-      {showText && textWhenOpen && (
-        <span className="text-xl font-semibold text-off-white">
-          {textWhenOpen}
-        </span>
-      )}
-    </div>
-  );
-});
+    return (
+      <div
+        ref={ref}
+        data-sidebar="header"
+        className={cn(
+          'flex flex-col items-center gap-2 py-3 px-2 transition-all duration-200',
+          className,
+        )}
+        {...props}
+      >
+        {children}
+        {showText && textWhenOpen && (
+          <span
+            className={cn(
+              'text-xl font-semibold',
+              colorTextWhenOpen === 'white' ? 'text-off-white' : 'text-black',
+            )}
+          >
+            {textWhenOpen}
+          </span>
+        )}
+      </div>
+    );
+  },
+);
 SidebarHeader.displayName = 'SidebarHeader';
 
 const SidebarFooter = React.forwardRef<
@@ -420,7 +444,7 @@ const SidebarFooter = React.forwardRef<
     >
       {children}
       {showName && username && (
-        <p className="text-white text-xl font-medium">{username}</p>
+        <p className="text-xl font-medium">{username}</p>
       )}
     </div>
   );
@@ -563,12 +587,13 @@ const SidebarMenuItem = React.forwardRef<
 SidebarMenuItem.displayName = 'SidebarMenuItem';
 
 const sidebarMenuButtonVariants = cva(
-  'peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-none ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-off-white active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-off-white/95 data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0',
+  'peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-none ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-off-white active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50  data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0',
   {
     variants: {
       variant: {
+        aksata: 'data-[active=true]:bg-broken-white/95',
         default:
-          'hover:bg-sidebar-accent/55 hover:text-sidebar-accent-foreground',
+          'hover:bg-sidebar-accent/55 hover:text-sidebar-accent-foreground data-[active=true]:bg-off-white/95',
         outline:
           'bg-background shadow-[0_0_0_1px_hsl(var(--sidebar-border))] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_hsl(var(--sidebar-accent))]',
       },
