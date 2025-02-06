@@ -17,6 +17,7 @@ import { AbsensiRouter } from './routers/absensi/absensi.route';
 import { PengajuanRouter } from './routers/pengajuan/pengajuan.route';
 import "./jobs/autoAlphaJob";
 import "./jobs/autoClockOutJob";
+import "./jobs/autoPostPengajuanJob";
 import { AdminHRRouter } from './routers/adminHR/adminHR.route';
 
 export default class App {

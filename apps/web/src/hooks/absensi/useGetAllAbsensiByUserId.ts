@@ -1,36 +1,44 @@
-"use client"
+'use client'
 
 import axiosInstance from "@/libs/axios";
 import { getCookie } from "@/libs/server";
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 
+enum Status {
+    Hadir = 'Hadir',
+    Sakit = 'Sakit',
+    Cuti = 'Cuti',
+    Izin = 'Izin',
+    Alpha = 'Alpha'
+  }
+
 type Absensi = {
     id: string;
     createdAt: string;
     updatedAt: string;
-    clockIn: string;  
-    clockOut: string; 
+    clockIn: string;
+    clockOut: string;
     isActive: boolean;
     duration: string;
     location: string | null;
-    status: 'Hadir' | 'Alpha' | 'Izin' | 'Sakit' | 'Cuti'; 
-    date: string;     
+    status: Status;
+    date: string;
     keterangan: string | null;
     userId: string;
 };
 
-interface ResponseAbsensiByUserIdType {
+interface ResponseAllAbsensiByUserIdType {
     status: string,
-    absensi: Absensi
+    allAbsensi: Absensi[]
 }
 
-const useGetAbsensiByUserId = () => {
+const useGetAllAbsensiByUserId = () => {
     const queryClient = useQueryClient();
     const query = useQuery({
-        queryKey: ['absensi'],
+        queryKey: ['all-absensi'],
         queryFn: async () => {
             const token = await getCookie('access_token');
-            const { data } = await axiosInstance.get<ResponseAbsensiByUserIdType>('/absensi/attendance-by-id', {
+            const { data } = await axiosInstance.get<ResponseAllAbsensiByUserIdType>('/absensi/all-attendance-by-id', {
                 headers: {
                     Authorization: `Bearer ${token?.value}`
                 }
@@ -40,11 +48,11 @@ const useGetAbsensiByUserId = () => {
     });
     const revalidate = () => {
         queryClient.invalidateQueries({
-            queryKey: ['absensi']
+            queryKey: ['all-absensi']
         })
     };
 
-    return { ...query, revalidate }
+    return {...query, revalidate}
 }
 
-export default useGetAbsensiByUserId
+export default useGetAllAbsensiByUserId

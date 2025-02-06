@@ -27,7 +27,7 @@ const ConfigLayoutHr: React.FC<ConfigLayoutHrProps> = ({ children }) => {
           <SidebarTrigger variant="default" className='text-black'/>
           <h1 className="text-2xl font-semibold text-black">{handleChangeHeaderPage()}</h1>
         </div>
-        <div className="p-3 px-4 flex items-center w-full justify-center h-full lg:min-h-[630px] 3xl">
+        <div className="p-3 px-4 flex w-full h-full lg:min-h-[630px] 3xl">
           {children}
         </div>
       </div>

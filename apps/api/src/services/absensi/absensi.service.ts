@@ -250,6 +250,28 @@ export const getAttendanceByUserIdService = async (userId: string) => {
   }
 };
 
+export const getAllAttendanceByUserIdService = async (userId: string) => {
+  try {
+    const allAttendance = await prisma.absensi.findMany({
+      where: {
+        userId,
+        pengajuan: {
+          none: {
+            status: { in: ['Approved', 'Cancelled', 'Declined', 'Waiting'] }
+          }
+        }
+      },
+      select: {
+        date: true,
+        status: true
+      }
+    })
+    return allAttendance
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getAllAttendanceService = async (query: AbsensiQuery) => {
   const { startDayUTC, endDayUTC } = getDayRange();
   try {
