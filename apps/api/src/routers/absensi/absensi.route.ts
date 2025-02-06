@@ -37,9 +37,14 @@ export class AbsensiRouter {
       authMiddleware,
       this.absensiController.getAttendanceById
     );
-  }
+    this.router.get(
+      '/all-attendance-by-id',
+      authMiddleware,
+      this.absensiController.getAllAttendanceById
+    );
+  };
 
   getRouter(): Router {
     return this.router;
-  }
-}
+  };
+};

@@ -2,6 +2,7 @@ import {
   clockInService,
   clockOutService,
   exportExcelService,
+  getAllAttendanceByUserIdService,
   getAllAttendanceService,
   getAttendanceByUserIdService,
   pieData,
@@ -68,6 +69,18 @@ export class AbsensiController {
       return res.status(200).send({
         status: 'ok',
         absensi
+      })
+    } catch (error) {
+      next(error)
+    };
+  };
+
+  async getAllAttendanceById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const allAbsensi = await getAllAttendanceByUserIdService(req.user?.id!)
+      return res.status(200).send({
+        status: 'ok baaang',
+        allAbsensi
       })
     } catch (error) {
       next(error)
