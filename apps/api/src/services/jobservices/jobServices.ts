@@ -1,7 +1,6 @@
 import { durationCounter } from "@/helpers/durationCounter";
 import { getDayRange } from "@/helpers/timezoneConverter";
 import prisma from "@/prisma";
-import { Request, Response } from "express";
 
 export const autoAlphaAttendance = async () => {
     const { startDayUTC, endDayUTC } = getDayRange();
