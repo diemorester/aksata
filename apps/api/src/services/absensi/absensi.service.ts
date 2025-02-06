@@ -323,23 +323,9 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
           lte: endDate,
         },
         pengajuan: {
-          every: {
-            status: 'Approved',
-            OR: [
-              {
-                startDate: {
-                  gte: cutoffStart,
-                  lte: cutoffEnd
-                },
-              },
-              {
-                endDate: {
-                  gte: cutoffStart,
-                  lte: cutoffEnd
-                },
-              },
-            ]
-          },
+          none: {
+            status: { in: ['Approved', 'Cancelled', 'Declined', 'Waiting'] }
+          }
         }
       },
       orderBy: {
@@ -354,12 +340,6 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
             name: true,
           },
         },
-        pengajuan: {
-          select: {
-            startDate: true,
-            endDate: true
-          }
-        }
       },
     });
 
@@ -376,23 +356,9 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
           lte: endDate,
         },
         pengajuan: {
-          every: {
-            status: 'Approved',
-            OR: [
-              {
-                startDate: {
-                  gte: startDate,
-                  lte: endDate
-                },
-              },
-              {
-                endDate: {
-                  gte: startDate,
-                  lte: endDate
-                },
-              },
-            ]
-          },
+          none: {
+            status: { in: ['Approved', 'Cancelled', 'Declined', 'Waiting'] }
+          }
         }
       },
     });
@@ -406,88 +372,6 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
       },
       attendance,
     };
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const autoAlphaAttendance = async () => {
-  const { startDayUTC, endDayUTC } = getDayRange();
-  try {
-    const users = await prisma.user.findMany();
-
-    for (const user of users) {
-      const existingAttendace = await prisma.absensi.findFirst({
-        where: {
-          userId: user.id,
-          date: {
-            gte: startDayUTC,
-            lte: endDayUTC,
-          },
-        },
-      });
-
-      if (!existingAttendace && user.role === 'User') {
-        await prisma.absensi.create({
-          data: {
-            userId: user.id,
-            clockIn: null,
-            clockOut: null,
-            status: 'Alpha',
-          },
-        });
-      }
-    }
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const autoClockOutAttendance = async () => {
-  const { startDayUTC, endDayUTC } = getDayRange();
-
-  try {
-    const attendance = await prisma.absensi.findMany({
-      where: {
-        user: {
-          role: 'User'
-        },
-        status: 'Hadir',
-        clockIn: {
-          not: null
-        },
-        date: {
-          gte: startDayUTC,
-          lte: endDayUTC
-        }
-      }
-    });
-
-    for (const attend of attendance) {
-      const updateClockOut = await prisma.absensi.update({
-        where: {
-          id: attend.id,
-        },
-        data: {
-          clockOut: new Date(),
-          isActive: false
-        },
-      });     
-
-      const duration = durationCounter(
-        updateClockOut.clockIn,
-        updateClockOut.clockOut,
-      );
-
-      await prisma.absensi.update({
-        where: {
-          id: attend.id,
-        },
-        data: {
-          duration,
-        },
-      });     
-    }
   } catch (error) {
     throw error;
   }
@@ -621,8 +505,8 @@ export const exportExcelService = async () => {
     const data = await prisma.absensi.findMany({
       where: {
         pengajuan: {
-          every: {
-            status: 'Approved'
+          none: {
+            status: { in: ['Approved', 'Cancelled', 'Declined', 'Waiting'] }
           }
         }
       },
@@ -632,13 +516,6 @@ export const exportExcelService = async () => {
             name: true
           },
         },
-        pengajuan: {
-          select: {
-            startDate: true,
-            endDate: true,
-            status: true
-          }
-        }
       },
       orderBy: {
         user: {
@@ -684,15 +561,9 @@ export const exportExcelService = async () => {
       }
 
       // tanggal
-      let penampungStart = ""
-      let penampungEnd = ""
-      item.pengajuan.map((item) => {
-        penampungStart += item.startDate
-        penampungEnd += item.endDate
-      })
       const cellDate = customRow.getCell(3);
       const lastDate = lastRow.getCell(3);
-      cellDate.value = item.status === 'Izin' ? `${penampungStart} - ${penampungEnd}` : item.status === 'Sakit' ? `${penampungStart} - ${penampungEnd}` : item.status === 'Cuti' ? `${excelDateFormat(penampungStart)} - ${excelDateFormat(penampungEnd)}` : item.date
+      cellDate.value = item.date
       cellDate.alignment = {
         horizontal: 'center',
         vertical: 'middle'
