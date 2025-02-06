@@ -1,4 +1,4 @@
-import { autoClockOutAttendance } from '@/services/absensi/absensi.service';
+import { autoClockOutAttendance } from '@/services/jobservices/jobServices';
 import cron from 'node-cron';
 
 cron.schedule('0 12 * * *', async () => {
