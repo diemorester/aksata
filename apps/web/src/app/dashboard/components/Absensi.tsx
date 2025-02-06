@@ -1,5 +1,6 @@
 'use client';
 import useGetAbsensiByUserId from '@/hooks/absensi/useGetAbsensiByUserId';
+import useGetAllAbsensiByUserId from '@/hooks/absensi/useGetAllAbsensiByUserId';
 import usePostClockIn from '@/hooks/useClockIn';
 import { hourFormat, timeNow } from '@/libs/date';
 import { clockOutFetch } from '@/libs/fetch/absensi';
@@ -11,6 +12,7 @@ const Absensi = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { mutateAsync } = usePostClockIn();
   const { data, revalidate } = useGetAbsensiByUserId();
+  const { revalidate: revalidateCalendar } = useGetAllAbsensiByUserId();
 
   const handleClockIn = async () => {
     setIsLoading(true);
@@ -18,6 +20,7 @@ const Absensi = () => {
       const res = await mutateAsync();
       toast.success(res.msg);
       revalidate();
+      revalidateCalendar();
     } catch (error) {
       if (error instanceof AxiosError) {
         toast.error(error.response?.data);

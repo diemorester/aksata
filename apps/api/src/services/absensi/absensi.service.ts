@@ -3,6 +3,7 @@ import { durationCounter } from '@/helpers/durationCounter';
 import { getDayRange } from '@/helpers/timezoneConverter';
 import prisma from '@/prisma';
 import { AbsensiQuery } from '@/types/absensi';
+import { Status } from '@prisma/client';
 import * as ExcelJS from 'exceljs';
 
 export const clockInService = async (userId: string) => {
@@ -120,115 +121,52 @@ export const pieData = async (userId: string) => {
       cutoffEnd.setHours(23, 59, 59, 999); // Set waktu menjadi pukul 23:59:59
     }
 
-    const sakit = await prisma.absensi.findMany({
+    const dataPie = await prisma.absensi.count({
       where: {
         userId,
-        status: 'Sakit',
         pengajuan: {
-          every: {
-            status: 'Approved',
-            startDate: {
-              gte: cutoffStart
-            },
-            endDate: {
-              lte: cutoffEnd
-            }
-          },
-        },
-      },
-    });
-    const izin = await prisma.absensi.findMany({
-      where: {
-        userId,
-        status: 'Izin',
-        pengajuan: {
-          every: {
-            status: 'Approved',
-            startDate: {
-              gte: cutoffStart
-            },
-            endDate: {
-              lte: cutoffEnd
-            }
-          },
-        },
-      },
-    });
-    const cuti = await prisma.absensi.findMany({
-      where: {
-        userId,
-        status: 'Cuti',
-        pengajuan: {
-          every: {
-            status: 'Approved',
-            startDate: {
-              gte: cutoffStart,
-            },
-            endDate: {
-              lte: cutoffEnd,
-            }
-          },
-        },
-      },
-    });
-    const hadir = await prisma.absensi.findMany({
-      where: {
-        userId,
-        status: 'Hadir',
-        date: {
-          gte: cutoffStart,
-          lte: cutoffEnd,
-        },
-      },
-    });
-    const alpha = await prisma.absensi.findMany({
-      where: {
-        userId,
-        status: 'Alpha',
-        date: {
-          gte: cutoffStart,
-          lte: cutoffEnd,
-        },
-      },
-    });
-
-    const total = await prisma.absensi.findMany({
-      where: {
-        userId,
-        date: {
-          gte: cutoffStart,
-          lte: cutoffEnd,
-        },
-        pengajuan: {
-          every: {
-            status: 'Approved',
-            OR: [
-              {
-                startDate: {
-                  gte: cutoffStart,
-                  lte: cutoffEnd
-                },
-              },
-              {
-                endDate: {
-                  gte: cutoffStart,
-                  lte: cutoffEnd
-                },
-              },
-            ]
+          none: {
+            status: { in: ['Approved', 'Cancelled', 'Declined', 'Waiting'] }
           }
+        },
+        date: {
+          gte: cutoffStart,
+          lte: cutoffEnd
         }
       },
-    });
+    })
+
+    const statusAbsensi: Status[] = ["Hadir", "Alpha", "Cuti", "Izin", "Sakit"]
+
+    const totalData = await Promise.all(
+      statusAbsensi.map((status) =>
+      prisma.absensi.count({
+        where: {
+          userId,
+          status,
+          pengajuan: {
+            none: {
+              status: { in: ['Approved', 'Cancelled', 'Declined', 'Waiting'] }
+            }
+          },
+          date: {
+            gte: cutoffStart,
+            lte: cutoffEnd
+          }
+        }
+      })
+      )
+    )
 
     return {
-      hadir: hadir.length,
-      cuti: cuti.length,
-      izin: izin.length,
-      sakit: sakit.length,
-      alpha: alpha.length,
-      total: total.length,
-    };
+      hadir: totalData[0],
+      alpha: totalData[1],
+      cuti: totalData[2],
+      izin: totalData[3],
+      sakit: totalData[4],
+      total: dataPie
+    }
+
   } catch (error) {
     throw error;
   }
