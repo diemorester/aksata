@@ -73,7 +73,6 @@ export const clockOutService = async (userId: string) => {
       },
       data: {
         userId,
-        isActive: false,
         clockOut: new Date(),
       },
     });
