@@ -84,6 +84,41 @@ export const autoClockOutAttendance = async () => {
     }
 };
 
+export const autoIsActiveRemoval = async () => {
+    const { startDayUTC, endDayUTC } = getDayRange();
+    try {
+        const attendance = await prisma.absensi.findMany({
+            where: {
+                user: {
+                    role: 'User'
+                },
+                status: 'Hadir',
+                clockIn: {
+                    not: null
+                },
+                date: {
+                    gte: startDayUTC,
+                    lte: endDayUTC
+                }
+            }
+        });
+
+        for (const attend of attendance) {
+
+            await prisma.absensi.update({
+                where: {
+                    id: attend.id,
+                },
+                data: {
+                    isActive: false
+                },
+            });
+        }
+    } catch (error) {
+        throw error;
+    }
+};
+
 export const autoPostPengajuanService = async () => {
     const { startDayUTC, endDayUTC } = getDayRange();
     try {

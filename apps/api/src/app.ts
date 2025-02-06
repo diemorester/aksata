@@ -18,6 +18,7 @@ import { PengajuanRouter } from './routers/pengajuan/pengajuan.route';
 import "./jobs/autoAlphaJob";
 import "./jobs/autoClockOutJob";
 import "./jobs/autoPostPengajuanJob";
+import "./jobs/autoIsActiveRemoval"
 import { AdminHRRouter } from './routers/adminHR/adminHR.route';
 
 export default class App {
