@@ -28,7 +28,7 @@ const ContainerAbsensi = () => {
         <AbsensiHistory />
       </div>
       <div className="md:col-span-4 md:row-span-3 md:col-start-3 md:row-start-1 bg-black rounded-xl p-3">
-        <div className="w-full h-full gap-y-2 justify-center gap-x-5 flex flex-col-reverse md:flex-row">
+        <div className="w-full h-full gap-y-2 justify-center gap-x-3 flex flex-col-reverse md:flex-row">
           <div className="md:w-2/3 max-h-[240px] overflow-y-auto scrollbar-none">
             <ListApproval />
           </div>
