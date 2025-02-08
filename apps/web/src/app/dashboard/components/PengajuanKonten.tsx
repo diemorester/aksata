@@ -1,5 +1,4 @@
 "use client"
-import ButtonSpan from "@/components/buttons/spanButtons"
 import Kalender from "./Kalender"
 import { useState } from "react"
 import CutiLemburModal from "./CutiLemburModal"
@@ -8,7 +7,7 @@ const PengajuanKonten = () => {
     const [isOpenModal, setIsOpenModal] = useState(false);
 
     return (
-        <div className="flex flex-col justify-center gap-6 pt-2 w-full h-full">
+        <div className="flex flex-row md:flex-col justify-center items-center gap-6 pt-2 w-full h-full">
             <div className="relative">
                 <Kalender onClick={() => setIsOpenModal(true)} />
             </div>

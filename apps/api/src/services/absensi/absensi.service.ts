@@ -1,15 +1,13 @@
 import { excelDateFormat, hourFormat } from '@/helpers/convertDate';
 import { durationCounter } from '@/helpers/durationCounter';
+import { getDayRange } from '@/helpers/timezoneConverter';
 import prisma from '@/prisma';
 import { AbsensiQuery } from '@/types/absensi';
+import { Status } from '@prisma/client';
 import * as ExcelJS from 'exceljs';
 
-const now = new Date();
-const startDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-const endDay = new Date(startDay);
-endDay.setDate(startDay.getDate() + 1);
-
 export const clockInService = async (userId: string) => {
+  const { startDayUTC, endDayUTC } = getDayRange();
   try {
     const user = await prisma.user.findFirst({
       where: { id: userId },
@@ -21,8 +19,8 @@ export const clockInService = async (userId: string) => {
       where: {
         userId,
         clockIn: {
-          gte: startDay,
-          lte: endDay,
+          gte: startDayUTC,
+          lte: endDayUTC,
         },
       },
     });
@@ -45,6 +43,7 @@ export const clockInService = async (userId: string) => {
 };
 
 export const clockOutService = async (userId: string) => {
+  const { startDayUTC, endDayUTC } = getDayRange();
   try {
     const user = await prisma.user.findFirst({
       where: { id: userId },
@@ -56,8 +55,8 @@ export const clockOutService = async (userId: string) => {
       where: {
         userId,
         clockIn: {
-          gte: startDay,
-          lte: endDay,
+          gte: startDayUTC,
+          lte: endDayUTC,
         },
       },
     });
@@ -111,127 +110,107 @@ export const pieData = async (userId: string) => {
 
     if (today.getDate() >= cutoffDayStart) {
       cutoffStart = new Date(year, month, cutoffDayStart);
+      cutoffStart.setHours(0, 0, 0, 0); // Set waktu menjadi pukul 00:00:00
       cutoffEnd = new Date(year, month + 1, cutoffDayEnd);
+      cutoffEnd.setHours(23, 59, 59, 999); // Set waktu menjadi pukul 23:59:59
     } else {
       cutoffStart = new Date(year, month - 1, cutoffDayStart);
+      cutoffStart.setHours(0, 0, 0, 0); // Set waktu menjadi pukul 00:00:00
       cutoffEnd = new Date(year, month, cutoffDayEnd);
+      cutoffEnd.setHours(23, 59, 59, 999); // Set waktu menjadi pukul 23:59:59
     }
 
-    const sakit = await prisma.absensi.findMany({
+    const dataPie = await prisma.absensi.count({
       where: {
         userId,
-        status: 'Sakit',
         pengajuan: {
-          every: {
-            status: 'Approved',
-            startDate: {
-              gte: cutoffStart
-            },
-            endDate: {
-              lte: cutoffEnd
-            }
-          },
+          none: {
+            status: { in: ['Approved', 'Cancelled', 'Declined', 'Waiting'] }
+          }
         },
-      },
-    });
-    const izin = await prisma.absensi.findMany({
-      where: {
-        userId,
-        status: 'Izin',
-        pengajuan: {
-          every: {
-            status: 'Approved',
-            startDate: {
-              gte: cutoffStart
-            },
-            endDate: {
-              lte: cutoffEnd
-            }
-          },
-        },
-      },
-    });
-    const cuti = await prisma.absensi.findMany({
-      where: {
-        userId,
-        status: 'Cuti',
-        pengajuan: {
-          every: {
-            status: 'Approved',
-            startDate: {
-              gte: cutoffStart,
-            },
-            endDate: {
-              lte: cutoffEnd,
-            }
-          },
-        },
-      },
-    });
-    const hadir = await prisma.absensi.findMany({
-      where: {
-        userId,
-        status: 'Hadir',
         date: {
           gte: cutoffStart,
-          lte: cutoffEnd,
-        },
+          lte: cutoffEnd
+        }
       },
-    });
-    const alpha = await prisma.absensi.findMany({
-      where: {
-        userId,
-        status: 'Alpha',
-        date: {
-          gte: cutoffStart,
-          lte: cutoffEnd,
-        },
-      },
-    });
+    })
 
-    const total = await prisma.absensi.findMany({
+    const statusAbsensi: Status[] = ["Hadir", "Alpha", "Cuti", "Izin", "Sakit"]
+
+    const totalData = await Promise.all(
+      statusAbsensi.map((status) =>
+      prisma.absensi.count({
+        where: {
+          userId,
+          status,
+          pengajuan: {
+            none: {
+              status: { in: ['Approved', 'Cancelled', 'Declined', 'Waiting'] }
+            }
+          },
+          date: {
+            gte: cutoffStart,
+            lte: cutoffEnd
+          }
+        }
+      })
+      )
+    )
+
+    return {
+      hadir: totalData[0],
+      alpha: totalData[1],
+      cuti: totalData[2],
+      izin: totalData[3],
+      sakit: totalData[4],
+      total: dataPie
+    }
+
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAttendanceByUserIdService = async (userId: string) => {
+  try {
+    const latestData = await prisma.absensi.findFirst({
+      where: {
+        userId
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
+    return latestData;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAllAttendanceByUserIdService = async (userId: string) => {
+  try {
+    const allAttendance = await prisma.absensi.findMany({
       where: {
         userId,
-        date: {
-          gte: cutoffStart,
-          lte: cutoffEnd,
-        },
         pengajuan: {
-          every: {
-            status: 'Approved',
-            OR: [
-              {
-                startDate: {
-                  gte: cutoffStart,
-                  lte: cutoffEnd
-                },
-              },
-              {
-                endDate: {
-                  gte: cutoffStart,
-                  lte: cutoffEnd
-                },
-              },
-            ]
+          none: {
+            status: { in: ['Approved', 'Cancelled', 'Declined', 'Waiting'] }
           }
         }
       },
-    });
-
-    return {
-      hadir: hadir.length,
-      cuti: cuti.length,
-      izin: izin.length,
-      sakit: sakit.length,
-      alpha: alpha.length,
-      total: total.length,
-    };
+      select: {
+        date: true,
+        status: true
+      }
+    })
+    return allAttendance
   } catch (error) {
     throw error;
   }
 };
 
 export const getAllAttendanceService = async (query: AbsensiQuery) => {
+  const { startDayUTC, endDayUTC } = getDayRange();
   try {
     const { search, take = 9, page = 1, filterBy } = query;
     const now = new Date();
@@ -242,11 +221,13 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
 
     // Menentukan rentang cutoff
     if (now.getDate() >= 21) {
-      cutoffStart = new Date(now.getFullYear(), now.getMonth(), 21); // Mulai dari tanggal 21 bulan ini
-      cutoffEnd = new Date(now.getFullYear(), now.getMonth() + 1, 20); // Hingga tanggal 20 bulan depan
+      // Kalau tanggal sekarang >= 21, periode mulai 21 bulan ini sampai 20 bulan depan
+      cutoffStart = new Date(now.getFullYear(), now.getMonth(), 21, 0, 0, 0, 0); // 21 bulan ini
+      cutoffEnd = new Date(now.getFullYear(), now.getMonth() + 1, 20, 23, 59, 59, 999); // Sampai 20 bulan depan, jam 23:59:59.999
     } else {
-      cutoffStart = new Date(now.getFullYear(), now.getMonth() - 1, 21); // Mulai dari tanggal 21 bulan lalu
-      cutoffEnd = new Date(now.getFullYear(), now.getMonth(), 20); // Hingga tanggal 20 bulan ini
+      // Kalau tanggal sekarang < 21, periode mulai 21 bulan lalu sampai 20 bulan ini
+      cutoffStart = new Date(now.getFullYear(), now.getMonth() - 1, 21, 0, 0, 0, 0); // 21 bulan lalu
+      cutoffEnd = new Date(now.getFullYear(), now.getMonth(), 20, 23, 59, 59, 999); // Sampai 20 bulan ini, jam 23:59:59.999
     }
 
     let startDate: Date | undefined;
@@ -264,45 +245,46 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
       endDate = new Date(startDate);
       endDate.setDate(startDate.getDate() + 7);
     } else if (filterBy === 'monthly') {
-      startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-      endDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+      startDate = new Date(cutoffStart);
+      endDate = new Date(cutoffEnd);
     } else if (filterBy === 'yearly') {
-      startDate = new Date(now.getFullYear(), 0, 0);
-      endDate = new Date(now.getFullYear() + 1, 0, 20);
+      // startDate = new Date(now.getFullYear(), 0, 0);
+      // endDate = new Date(now.getFullYear() + 1, 0, 20);
+      const fiscalYearStart = (startDayUTC.getMonth() > 0 || (startDayUTC.getMonth() === 0 && startDayUTC.getDate() >= 21))
+        ? new Date(startDayUTC.getFullYear(), 0, 21, 0, 0, 0, 0) // 21 Januari tahun ini (WIB)
+        : new Date(startDayUTC.getFullYear() - 1, 0, 21, 0, 0, 0, 0); // 21 Januari tahun lalu (WIB)
+
+      const fiscalYearEnd = new Date(fiscalYearStart.getFullYear() + 1, 0, 20, 23, 59, 59, 999); // 20 Januari tahun berikutnya (WIB)
+
+      startDate = fiscalYearStart;
+      endDate = fiscalYearEnd;
     };
 
-    startDate = startDate && startDate < cutoffStart ? cutoffStart : startDate;
-    endDate = endDate && endDate > cutoffEnd ? cutoffEnd : endDate;
+    // startDate = startDate && startDate < cutoffStart ? cutoffStart : startDate;
+    // endDate = endDate && endDate > cutoffEnd ? cutoffEnd : endDate;
+    if (startDate && startDate < cutoffStart!) {
+      startDate = cutoffStart
+    };
+    if (endDate && endDate > cutoffEnd!) {
+      endDate = cutoffEnd
+    };
 
     const attendance = await prisma.absensi.findMany({
       where: {
         user: {
           name: {
             contains: search,
+            mode: 'insensitive',
           },
         },
         date: {
-          lte: endDate,
           gte: startDate,
+          lte: endDate,
         },
         pengajuan: {
-          every: {
-            status: 'Approved',
-            OR: [
-              {
-                startDate: {
-                  gte: cutoffStart,
-                  lte: cutoffEnd
-                },
-              },
-              {
-                endDate: {
-                  gte: cutoffStart,
-                  lte: cutoffEnd
-                },
-              },
-            ]
-          },
+          none: {
+            status: { in: ['Approved', 'Cancelled', 'Declined', 'Waiting'] }
+          }
         }
       },
       orderBy: {
@@ -317,12 +299,6 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
             name: true,
           },
         },
-        pengajuan: {
-          select: {
-            startDate: true,
-            endDate: true
-          }
-        }
       },
     });
 
@@ -331,30 +307,17 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
         user: {
           name: {
             contains: search,
+            mode: 'insensitive',
           },
         },
         date: {
-          gte: cutoffStart,
-          lte: cutoffEnd,
+          gte: startDate,
+          lte: endDate,
         },
         pengajuan: {
-          every: {
-            status: 'Approved',
-            OR: [
-              {
-                startDate: {
-                  gte: cutoffStart,
-                  lte: cutoffEnd
-                },
-              },
-              {
-                endDate: {
-                  gte: cutoffStart,
-                  lte: cutoffEnd
-                },
-              },
-            ]
-          },
+          none: {
+            status: { in: ['Approved', 'Cancelled', 'Declined', 'Waiting'] }
+          }
         }
       },
     });
@@ -368,80 +331,6 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
       },
       attendance,
     };
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const autoAlphaAttendance = async () => {
-  try {
-    const users = await prisma.user.findMany();
-
-    for (const user of users) {
-      const existingAttendace = await prisma.absensi.findFirst({
-        where: {
-          userId: user.id,
-          date: {
-            gte: startDay,
-            lte: endDay,
-          },
-        },
-      });
-
-      if (!existingAttendace && user.role === 'User') {
-        await prisma.absensi.create({
-          data: {
-            userId: user.id,
-            clockIn: null,
-            clockOut: null,
-            status: 'Alpha',
-          },
-        });
-      }
-    }
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const autoClockOutAttendance = async () => {
-  try {
-    const attendance = await prisma.absensi.findMany({
-      where: {
-        clockOut: null,
-        user: {
-          role: 'User',
-        },
-        clockIn: {
-          not: null,
-        },
-      },
-    });
-
-    for (const attend of attendance) {
-      const durationTime = await prisma.absensi.update({
-        where: {
-          id: attend.id,
-        },
-        data: {
-          clockOut: new Date(),
-        },
-      });
-
-      const duration = durationCounter(
-        durationTime.clockIn,
-        durationTime.clockOut,
-      );
-
-      await prisma.absensi.update({
-        where: {
-          id: attend.id,
-        },
-        data: {
-          duration,
-        },
-      });
-    }
   } catch (error) {
     throw error;
   }
@@ -575,8 +464,8 @@ export const exportExcelService = async () => {
     const data = await prisma.absensi.findMany({
       where: {
         pengajuan: {
-          every: {
-            status: 'Approved'
+          none: {
+            status: { in: ['Approved', 'Cancelled', 'Declined', 'Waiting'] }
           }
         }
       },
@@ -586,13 +475,6 @@ export const exportExcelService = async () => {
             name: true
           },
         },
-        pengajuan: {
-          select: {
-            startDate: true,
-            endDate: true,
-            status: true
-          }
-        }
       },
       orderBy: {
         user: {
@@ -638,15 +520,9 @@ export const exportExcelService = async () => {
       }
 
       // tanggal
-      let penampungStart = ""
-      let penampungEnd = ""
-      item.pengajuan.map((item) => {
-        penampungStart += item.startDate
-        penampungEnd += item.endDate
-      })
       const cellDate = customRow.getCell(3);
       const lastDate = lastRow.getCell(3);
-      cellDate.value = item.status === 'Izin' ? `${penampungStart} - ${penampungEnd}` : item.status === 'Sakit' ? `${penampungStart} - ${penampungEnd}` : item.status === 'Cuti' ? `${excelDateFormat(penampungStart)} - ${excelDateFormat(penampungEnd)}` : item.date
+      cellDate.value = item.date
       cellDate.alignment = {
         horizontal: 'center',
         vertical: 'middle'
@@ -700,7 +576,7 @@ export const exportExcelService = async () => {
       // durasi
       const cellDuration = customRow.getCell(6);
       const lastDuration = lastRow.getCell(6);
-      cellDuration.value = item.duration ? `${item.duration?.split(':')[0]} jam ${item.duration?.split(':')[1]} menit` : '-';
+      cellDuration.value = item.duration ? `${item.duration?.split(':')[0]?.padStart(2, '0')}:${item.duration?.split(':')[1]?.padStart(2, '0')}` : '-';
       cellDuration.alignment = {
         horizontal: 'center',
         vertical: 'middle'

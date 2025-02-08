@@ -17,9 +17,9 @@ export const pengajuanAbsensiFetch = async (payload: { status: string, startDate
     return res
 };
 
-export const approvePengajuanFetch = async (absensiId: string) => {
+export const approvePengajuanAbsensiFetch = async (absensiId: string) => {
     const token = await getCookie('access_token');
-    const res = await axiosInstance.patch(`/pengajuan/approve-pengajuan/${absensiId}`, {
+    const res = await axiosInstance.patch(`/pengajuan-absensi/approve-pengajuan/${absensiId}`, {
 
     }, {
         headers: {
@@ -30,9 +30,35 @@ export const approvePengajuanFetch = async (absensiId: string) => {
     return res
 };
 
-export const declinePengajuanFetch = async (absensiId: string) => {
+export const declinePengajuanAbsensiFetch = async (absensiId: string) => {
     const token = await getCookie('access_token');
-    const res = await axiosInstance.patch(`/pengajuan/decline-pengajuan/${absensiId}`, {
+    const res = await axiosInstance.patch(`/pengajuan-absensi/decline-pengajuan/${absensiId}`, {
+
+    }, {
+        headers: {
+            Authorization: `Bearer ${token?.value}`
+        }
+    }
+    )
+    return res
+};
+
+export const approvePengajuanLemburPerdinFetch = async (pengajuanId: string) => {
+    const token = await getCookie('access_token');
+    const res = await axiosInstance.patch(`/pengajuan-lembur-perdin/approve-pengajuan/${pengajuanId}`, {
+
+    }, {
+        headers: {
+            Authorization: `Bearer ${token?.value}`
+        }
+    }
+    )
+    return res
+};
+
+export const declinePengajuanLemburPerdinFetch = async (id: string) => {
+    const token = await getCookie('access_token');
+    const res = await axiosInstance.patch(`/pengajuan-lembur-perdin/decline-pengajuan/${id}`, {
 
     }, {
         headers: {

@@ -1,4 +1,5 @@
-import { approvePengajuanRequestService, declinePengajuanRequestService, getPengajuanHRService, getPengajuanUserService, pengajuanService } from "@/services/pengajuan/pengajuan.service";
+import { approvePengajuanAbsensiRequestService, declinePengajuanAbsensiRequestService, getPengajuanHRService, getPengajuanUserService, pengajuanService } from "@/services/pengajuan/pengajuanAbsensi.service";
+import { pengajuanLemburPerdinService } from "@/services/pengajuan/pengajuanLemburPerdin.service";
 import { NextFunction, Request, Response } from "express";
 
 export class PengajuanController {
@@ -52,10 +53,10 @@ export class PengajuanController {
         };
     };
 
-    async approvePengajuan(req: Request, res: Response, next: NextFunction) {
+    async approvePengajuanAbsensi(req: Request, res: Response, next: NextFunction) {
         try {
             const { absensiId } = req.params
-            const updatePengajuan = await approvePengajuanRequestService(absensiId)
+            const updatePengajuan = await approvePengajuanAbsensiRequestService(absensiId)
             return res.status(200).send({
                 status: 'ok',
                 updatePengajuan
@@ -68,10 +69,22 @@ export class PengajuanController {
     async declinePengajuan(req: Request, res: Response, next: NextFunction) {
         try {
             const { absensiId } = req.params
-            const updatePengajuan = await declinePengajuanRequestService(absensiId)
+            const updatePengajuan = await declinePengajuanAbsensiRequestService(absensiId)
             return res.status(200).send({
                 status: 'ok',
                 updatePengajuan
+            })
+        } catch (error) {
+            next(error);
+        };
+    };
+
+    async pengajuanLemburPerdin(req: Request, res: Response, next: NextFunction) {
+        try {
+            await pengajuanLemburPerdinService(req.body, req.user?.id!)
+            return res.status(200).send({
+                status: 'ok',
+                msg: 'Pengajuan Berhasil'
             })
         } catch (error) {
             next(error);

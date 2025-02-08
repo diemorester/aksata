@@ -1,5 +1,4 @@
 'use client';
-import { DummyCalendar } from '@/components/DummyCalendar';
 import { Calendar } from '@/components/ui/calendar';
 import { pengajuanFormat } from '@/libs/date';
 import { useEffect, useRef, useState } from 'react';
@@ -68,6 +67,7 @@ const KalenderPengajuan: React.FC<KalenderPengajuanProps> = ({
             selected={date}
             onSelect={handleSelect}
             numberOfMonths={1}
+            disabled={{ dayOfWeek: [0, 6]}}
           />
         </div>
       )}

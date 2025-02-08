@@ -1,14 +1,14 @@
 "use client"
 
 import ButtonSpan from "@/components/buttons/spanButtons"
-import { approvePengajuanFetch, declinePengajuanFetch } from "@/libs/fetch/pengajuan";
+import { approvePengajuanAbsensiFetch, declinePengajuanAbsensiFetch, } from "@/libs/fetch/pengajuan";
 import { PengajuanType } from "@/types/pengajuanTypes";
 import { AxiosError } from "axios";
 import { useState } from "react"
 import toast from "react-hot-toast";
 import { FaRegCalendar } from "react-icons/fa6";
-import ModalApproval from "./modalApproval";
-import ModalRefusal from "./modalRefusal";
+import ModalApproval from "../../../components/modalApproval";
+import ModalRefusal from "../../../components/modalRefusal";
 import { pengajuanFormat } from "@/libs/date";
 import clsx from "clsx";
 import Image from "next/image";
@@ -25,9 +25,9 @@ const CardPengajuanAbsensi: React.FC<RevalidateType> = ({ user, absensi, startDa
     const handleApprove = async () => {
         setIsLoading(true);
         try {
-            await approvePengajuanFetch(id!);
+            await approvePengajuanAbsensiFetch(id!);
             toast.success('Pengajuan telah diterima');
-            revalidate()
+            revalidate();
             setIsOpenApproval(false);
         } catch (error) {
             if (error instanceof AxiosError) {
@@ -41,7 +41,7 @@ const CardPengajuanAbsensi: React.FC<RevalidateType> = ({ user, absensi, startDa
     const handleDecline = async () => {
         setIsLoading(true);
         try {
-            await declinePengajuanFetch(id!);
+            await declinePengajuanAbsensiFetch(id!);
             toast.success('Pengajuan telah ditolak');
             revalidate();
             setIsOpenRefusal(false);
@@ -55,7 +55,7 @@ const CardPengajuanAbsensi: React.FC<RevalidateType> = ({ user, absensi, startDa
     }
 
     return (
-        <div className="flex flex-col border gap-8 px-3 pt-2 pb-3 bg-off-white rounded-lg">
+        <div className="flex flex-col border gap-8 px-3 pt-2 pb-3 bg-off-white rounded-lg shadow-sm shadow-black/35">
             <div className="flex items-center justify-between">
                 <div className="flex pt-4 px-2 space-x-2">
                     <Image

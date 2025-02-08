@@ -12,11 +12,13 @@ import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import { excelFetch } from '@/libs/fetch/absensi';
 import { Empty } from 'antd';
+import { IoSearch } from "react-icons/io5";
 
 const TabelAbsensi = () => {
     const [search, setSearch] = useState('');
     const [filterBy, setFilterBy] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [isOpenSearch, setIsOpenSearch] = useState(false);
 
     const [page, setPage] = useState(1);
 
@@ -41,20 +43,24 @@ const TabelAbsensi = () => {
             label: 'Tahunan',
             value: 'yearly'
         }
-    ]
+    ];
 
     const handleSelect = (value: string) => {
         setFilterBy(value)
 
-    }
+    };
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearch(e.target.value)
-    }
+    };
 
     const handleChange = ({ selected }: { selected: number }) => {
         setPage(selected + 1);
     };
+
+    const handleToggle = () => {
+        setIsOpenSearch(!isOpenSearch)
+    }
 
     const handleDownload = async () => {
         setIsLoading(true);
@@ -78,18 +84,21 @@ const TabelAbsensi = () => {
 
     return (
         <div className="flex flex-col">
-            <div className="w-full min-h-screen mx-auto">
-                <div className="flex w-full justify-between items-center px-2 pt-5">
-                    <SearchBarInput search={search} onChange={handleSearch} />
-                    <h1 className="text-[24px] font-semibold text-end text-black pb-1 px-6">
-                        DATA ABSENSI
-                    </h1>
-                </div>
-                <div className="flex flex-col justify-between rounded-md mx-5 px-3 bg-slate-100 h-full  md:min-h-[550px]">
+            <div className="w-full mx-auto">
+                <div className="flex flex-col justify-between rounded-md mx-5 px-3 bg-slate-100">
                     <table className="mt-2 md:w-full table-fixed border-collapse">
                         <thead className="pb-5 text-black">
                             <tr className="border-b-[2px] text-start border-black">
-                                <th className="p-3 text-start font-semibold" style={{ width: "30%" }}>Nama</th>
+                                <th className="p-3 text-start font-semibold" style={{ width: "30%" }}>
+                                    <div className='flex items-center justify-between'>
+                                        {isOpenSearch ? (
+                                            <SearchBarInput search={search} onChange={handleSearch} />
+                                        ) : (
+                                            <button className='w-full text-start' onClick={() => setIsOpenSearch(true)}>Nama</button>
+                                        )}
+                                        <IoSearch onClick={handleToggle} />
+                                    </div>
+                                </th>
                                 <th className="hidden p-3 text-center md:table-cell font-semibold" style={{ width: "15%" }}>
                                     Clock-In
                                 </th>
@@ -121,7 +130,7 @@ const TabelAbsensi = () => {
                             <Empty />
                         </div>
                     )}
-                    <div className="mb-3 flex justify-center">
+                    <div className="my-3 flex justify-center">
                         <Pagination
                             total={data?.meta.totalPages!}
                             onPageChange={handleChange}

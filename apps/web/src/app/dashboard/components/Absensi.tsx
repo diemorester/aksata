@@ -1,47 +1,26 @@
 'use client';
+import useGetAbsensiByUserId from '@/hooks/absensi/useGetAbsensiByUserId';
+import useGetAllAbsensiByUserId from '@/hooks/absensi/useGetAllAbsensiByUserId';
 import usePostClockIn from '@/hooks/useClockIn';
 import { hourFormat, timeNow } from '@/libs/date';
-import { clockInFetch, clockOutFetch } from '@/libs/fetch/absensi';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { addAbsenSlice, removeAbsenSlice } from '@/redux/slices/absenSlice';
+import { clockOutFetch } from '@/libs/fetch/absensi';
 import { AxiosError } from 'axios';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 const Absensi = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useAppDispatch();
-  const { clockIn, clockOut } = useAppSelector((state) => state.absen);
   const { mutateAsync } = usePostClockIn();
-
-  const now = new Date()
-  const disableHours = new Date()
-  disableHours.setHours(13, 0, 0, 0)
-
-  useEffect(() => {
-    const now = new Date();
-    const resetTime = new Date();
-    resetTime.setHours(4, 0, 0, 0);
-
-    const lastResetDate = localStorage.getItem('lastResetDate');
-    const today = now.toISOString().split('T')[0];
-    
-    if (now >= resetTime && lastResetDate !== today) {
-      const timeout = setTimeout(() => {
-        dispatch(removeAbsenSlice());
-        localStorage.setItem('lastResetDate', today);
-      }, 1000);
-
-      return () => clearTimeout(timeout);
-    }
-  }, [dispatch]);
+  const { data, revalidate } = useGetAbsensiByUserId();
+  const { revalidate: revalidateCalendar } = useGetAllAbsensiByUserId();
 
   const handleClockIn = async () => {
     setIsLoading(true);
     try {
       const res = await mutateAsync();
-      toast.success(res.data.msg);
-      dispatch(addAbsenSlice(res.data.response));
+      toast.success(res.msg);
+      revalidate();
+      revalidateCalendar();
     } catch (error) {
       if (error instanceof AxiosError) {
         toast.error(error.response?.data);
@@ -56,11 +35,7 @@ const Absensi = () => {
     try {
       const res = await clockOutFetch();
       toast.success(res.data.msg);
-      dispatch(addAbsenSlice(res.data.response));
-
-      setTimeout(() => {
-        dispatch(removeAbsenSlice());
-      }, 60000);
+      revalidate();
     } catch (error) {
       if (error instanceof AxiosError) {
         toast.error(error.response?.data);
@@ -71,8 +46,8 @@ const Absensi = () => {
   };
 
   return (
-    <div className='flex flex-col justify-between p-5 rounded-lg h-full'>
-      <p className="text-4xl pt-7 font-semibold text-off-white text-center">
+    <div className='flex flex-col justify-between h-full'>
+      <p className="text-4xl pt-10 font-semibold text-off-white text-center">
         {timeNow(new Date())}
       </p>
 
@@ -83,8 +58,16 @@ const Absensi = () => {
             <p className="text-xs text-start">Clock-out Time</p>
           </div>
           <div>
-            <p className='text-xs font-extrabold text-off-white'>{clockIn ? hourFormat(clockIn) : '--/--'}</p>
-            <p className='text-xs font-extrabold text-off-white'>{clockOut ? hourFormat(clockOut) : '--/--'}</p>
+            <p className="text-xs font-extrabold text-off-white">
+              {data?.absensi?.isActive && data?.absensi?.clockIn
+                ? hourFormat(data.absensi.clockIn)
+                : "--/--"}
+            </p>
+            <p className="text-xs font-extrabold text-off-white">
+              {data?.absensi?.isActive && data?.absensi?.clockOut
+                ? hourFormat(data.absensi.clockOut)
+                : "--/--"}
+            </p>
           </div>
         </div>
 
@@ -102,7 +85,7 @@ const Absensi = () => {
           <button
             type="button"
             onClick={handleClockOut}
-            disabled={isLoading || now <= disableHours}
+            disabled={isLoading}
             className="active:scale-95 text-sm bg-[#E34234] text-white disabled:cursor-not-allowed disabled:active:scale-100 hover:bg-[#E34234]/75 py-2 px-2 rounded-md w-full"
           >
             Clock Out

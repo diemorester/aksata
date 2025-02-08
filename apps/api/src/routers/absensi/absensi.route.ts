@@ -27,16 +27,24 @@ export class AbsensiRouter {
     this.router.get('/attendance',
       authMiddleware,
       this.absensiController.getUserAttendance
-    )
+    );
     this.router.get(
       '/attendances',
-      // authMiddleware,
-      // accessAdminHr,
-      this.absensiController.getAllAttendance,
+      this.absensiController.getAllAttendance
     );
-  }
+    this.router.get(
+      '/attendance-by-id',
+      authMiddleware,
+      this.absensiController.getAttendanceById
+    );
+    this.router.get(
+      '/all-attendance-by-id',
+      authMiddleware,
+      this.absensiController.getAllAttendanceById
+    );
+  };
 
   getRouter(): Router {
     return this.router;
-  }
-}
+  };
+};

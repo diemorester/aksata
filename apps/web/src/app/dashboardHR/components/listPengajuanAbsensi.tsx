@@ -10,8 +10,7 @@ const ListPengajuanAbsensi = () => {
     });
 
     return (
-        <div className="flex flex-col">
-            <h2 className="text-lg font-medium p-3">Pengajuan Absensi</h2>
+        <div className="w-full">
             <div className="grid grid-cols-3 gap-5">
                 {data?.response.map((item) => {
                     return <CardPengajuanAbsensi key={item.id} id={item.id} absensi={item.absensi} revalidate={revalidate} user={item.user} startDate={item.startDate} endDate={item.endDate} />

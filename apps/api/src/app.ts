@@ -16,7 +16,10 @@ import path from 'path';
 import { AbsensiRouter } from './routers/absensi/absensi.route';
 import "./jobs/autoAlphaJob";
 import "./jobs/autoClockOutJob";
-import { PengajuanRouter } from './routers/pengajuan/pengajuan.route';
+import "./jobs/autoPostPengajuanJob";
+import "./jobs/autoIsActiveRemoval"
+import { PengajuanAbsensiRouter } from './routers/pengajuan/pengajuanAbsensi.route';
+import { PengajuanLemburPerdinRouter } from './routers/pengajuan/pengajuanLembur.route';
 
 export default class App {
   private app: Express;
@@ -73,16 +76,20 @@ export default class App {
     const userRouter = new UserRouter();
     const decodeRouter = new DecodeRouter();
     const absensiRouter = new AbsensiRouter();
-    const pengajuanRouter = new PengajuanRouter();
+    const pengajuanAbsensiRouter = new PengajuanAbsensiRouter();
+    const pengajuanLemburPerdinRouter = new PengajuanLemburPerdinRouter()
+    
+    
 
     this.app.get('/api', (req: Request, res: Response) => {
-      res.send(`Hello, Purwadhika Student API!`);
+      res.send(`welcome to ERP Aksata API`);
     });
 
     this.app.use('/api/user', userRouter.getRouter());
     this.app.use('/api', decodeRouter.getRouter());
     this.app.use('/api/absensi', absensiRouter.getRouter());
-    this.app.use('/api/pengajuan', pengajuanRouter.getRouter());
+    this.app.use('/api/pengajuan-absensi', pengajuanAbsensiRouter.getRouter());
+    this.app.use('/api/pengajuan-lembur-perdin', pengajuanLemburPerdinRouter.getRouter());
   }
 
   public start(): void {

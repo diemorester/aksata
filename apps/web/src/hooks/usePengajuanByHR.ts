@@ -24,16 +24,15 @@ const usePengajuanByHR = (params: PengajuanHRQuery) => {
         queryKey: ['pengajuan-HR', params.page, params.search, params.take],
         queryFn: async () => {
             const token = await getCookie('access_token');
-            const { data } = await axiosInstance.get<PengajuanHRType>('/pengajuan/get-pengajuan-by-HR', {
+            const { data } = await axiosInstance.get<PengajuanHRType>('/pengajuan-absensi/get-pengajuan-by-HR', {
                 params,
                 headers: {
                     Authorization: `Bearer ${token?.value}`
                 }
-            }
-            )
+            })
             return data
         }
-    })
+    });
 
     const revalidate = () => {
         queryClient.invalidateQueries({
