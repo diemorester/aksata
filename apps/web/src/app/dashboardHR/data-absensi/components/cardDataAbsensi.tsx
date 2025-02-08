@@ -2,7 +2,6 @@
 
 import { dayFormat, hourFormat } from "@/libs/date"
 import clsx from "clsx"
-import { useEffect, useState } from "react"
 
 interface CardAbsensiProps {
     name: string,
@@ -15,7 +14,7 @@ interface CardAbsensiProps {
     status: 'Hadir' | 'Terlambat' | 'Sakit' | 'Cuti' | 'Izin' | 'Alpha'
 }
 
-const CardDataAbsensi: React.FC<CardAbsensiProps> = ({ name, clockIn, clockOut, status, date, pengajuan, duration, activeBackground }) => {
+const CardDataAbsensi: React.FC<CardAbsensiProps> = ({ name, clockIn, clockOut, status, date, duration, activeBackground }) => {
     const hours = duration?.split(':')[0];
     const minutes = duration?.split(':')[1];
 

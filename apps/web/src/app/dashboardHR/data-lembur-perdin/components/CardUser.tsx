@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 const CardUser: React.FC<AllUserType> = ({ id, name }) => {
   return (
-    <Link href={`/dashboardHR/lembur-perdin/${id}`}>
+    <Link href={`/dashboardHR/data-lembur-perdin/${id}`}>
       <p>nama: {name}</p>
     </Link>
   );

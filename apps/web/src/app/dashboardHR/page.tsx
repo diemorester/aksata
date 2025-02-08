@@ -1,1 +1,1 @@
-export { default } from '@/app/dashboardHR/components/containerHR';
+export { default } from '@/app/dashboardHR/components/containerPengajuanAbsensi';

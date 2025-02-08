@@ -60,7 +60,7 @@ export default function ContainerPengajuan() {
         tipePengajuan: selectLembur
       }
       try {
-        const res = await mutateAsync(payload) 
+        const res = await mutateAsync(payload)
         toast.success('Pengajuan telah disubmit');
         setIsOpenModal(false);
       } catch (error) {
@@ -92,6 +92,9 @@ export default function ContainerPengajuan() {
     setSelectLembur(value);
   };
 
+  const thisYear = new Date().getFullYear();
+  const january = new Date(thisYear, 0, 1);
+
   return (
     <div className="min-h-screen relative">
       <div className="flex justify-center">
@@ -100,6 +103,13 @@ export default function ContainerPengajuan() {
           selected={date}
           onSelect={setDate}
           numberOfMonths={12}
+          defaultMonth={january}
+          modifiers={{
+            weekEnd: (day) => day.getDay() == 0 || day.getDay() == 6
+          }}
+          modifiersClassNames={{
+            weekEnd: 'text-red-500'
+          }}
           onDayClick={() => setIsOpenModal(true)}
         />
       </div>

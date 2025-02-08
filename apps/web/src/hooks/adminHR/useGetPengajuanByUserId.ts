@@ -13,7 +13,7 @@ const useGetPengajuanByUserId = (userId: string) => {
   return useQuery({
     queryKey: ['get-user', userId],
     queryFn: async () => {
-        const { data } = await axiosInstance.get<ResponseGetUserById>(`/admin-hr/${userId}`)
+        const { data } = await axiosInstance.get<ResponseGetUserById>(`/pengajuan-lembur-perdin/${userId}`)
         return data
     }
   })

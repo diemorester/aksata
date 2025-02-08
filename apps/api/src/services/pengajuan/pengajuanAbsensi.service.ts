@@ -149,7 +149,7 @@ export const getPengajuanHRService = async (userId: string, query: PengajuanQuer
     }
 };
 
-export const approvePengajuanRequestService = async (absensiId: string) => {
+export const approvePengajuanAbsensiRequestService = async (absensiId: string) => {
     try {
         const pengajuan = await prisma.pengajuanAbsensi.findUnique({
             where: { id: absensiId },
@@ -179,7 +179,7 @@ export const approvePengajuanRequestService = async (absensiId: string) => {
     }
 };
 
-export const declinePengajuanRequestService = async (absensiId: string) => {
+export const declinePengajuanAbsensiRequestService = async (absensiId: string) => {
     try {
         const pengajuan = await prisma.pengajuanAbsensi.findUnique({
             where: { id: absensiId },

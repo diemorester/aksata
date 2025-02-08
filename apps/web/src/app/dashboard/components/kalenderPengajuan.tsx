@@ -67,6 +67,7 @@ const KalenderPengajuan: React.FC<KalenderPengajuanProps> = ({
             selected={date}
             onSelect={handleSelect}
             numberOfMonths={1}
+            disabled={{ dayOfWeek: [0, 6]}}
           />
         </div>
       )}
