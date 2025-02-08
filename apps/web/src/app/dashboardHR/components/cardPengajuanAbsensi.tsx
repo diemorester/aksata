@@ -65,7 +65,7 @@ const CardPengajuanAbsensi: React.FC<RevalidateType> = ({ user, absensi, startDa
                         src={user?.avatar || '/profileplaceholder.png'}
                         className="rounded-full object-cover w-8 h-8"
                     />
-                    <h1 className="text-md pt-1 font-bold">{user?.name}</h1>
+                    <h1 className="text-md p-1 font-bold">{user?.name}</h1>
                 </div>
                 <div className="pt-1 pb-5">
                     <h2 className={clsx(`px-3 py-1 cursor-pointer text-sm rounded-lg`,

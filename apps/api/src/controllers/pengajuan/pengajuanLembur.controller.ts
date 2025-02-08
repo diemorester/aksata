@@ -1,4 +1,4 @@
-import { approvePengajuanLemburPerdinService, getAllPengajuanLemburService, getAllUserService, getPengajuanByUserIdService } from "@/services/pengajuan/pengajuanLemburPerdin.service";
+import { approvePengajuanLemburPerdinService, getAllPengajuanLemburService, getAllUserService, getPengajuanLemburPerdinByUserIdService, } from "@/services/pengajuan/pengajuanLemburPerdin.service";
 import { NextFunction, Request, Response } from "express";
 
 export class PengajuanLemburPerdinController {
@@ -16,23 +16,24 @@ export class PengajuanLemburPerdinController {
 
     async getAllUser(req: Request, res: Response, next: NextFunction) {
         try {
-          const response = await getAllUserService();
-          return res.status(200).send({
-            status: 'ok',
-            response
-          })  
+            const response = await getAllUserService();
+            return res.status(200).send({
+                status: 'ok',
+                response
+            })
         } catch (error) {
             next(error)
         };
     };
 
-    async getPengajuanByUserId(req: Request, res: Response, next: NextFunction) {
+    async getPengajuanLemburPerdinByUserId(req: Request, res: Response, next: NextFunction) {
         try {
-            const response = await getPengajuanByUserIdService(req.params.userId);
+            const { user, pengajuanUser: response } = await getPengajuanLemburPerdinByUserIdService(req.params.userId);
             return res.status(200).send({
                 status: 'ok',
+                user,
                 response
-            })      
+            })
         } catch (error) {
             next(error)
         };
