@@ -13,8 +13,9 @@ const ConfigLayoutHr: React.FC<ConfigLayoutHrProps> = ({ children }) => {
 
   const handleChangeHeaderPage = () => {
     if (pathname === '/dashboardHR') return 'Pengajuan Absensi';
-    if (pathname === '/dashboardHR/lembur-perdin') return 'Pengajuan Lembur - Perdin';
+    if (pathname === '/dashboardHR/lembur-perdin') return 'Pengajuan Lembur & Perdin';
     if (pathname === '/dashboardHR/data-absensi') return 'Data Absensi';
+    if (pathname === '/dashboardHR/data-lembur-perdin') return 'Data Lembur & Perdin';
     if (pathname === '/dashboardHR/settings') return 'Settings';
   };
 

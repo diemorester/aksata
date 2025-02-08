@@ -14,7 +14,7 @@ const ListApproval = () => {
         <>
             {data?.length == 0 ? (
                 <div className="flex flex-col gap-3 overflow-auto scrollbar-none w-full h-full">
-                    <div className="border rounded-md w-full h-fit border-gray-500 hover:border-off-white px-5 py-3">
+                    <div className="border rounded-md w-full h-fit bg-black border-gray-500 hover:border-off-white px-5 py-3">
                         <div className="flex justify-between">
                             <p className="text-lg font-bold text-white pb-3">Data Kosong</p>
                             <p className="text-sm font-light">Data Kosong</p>

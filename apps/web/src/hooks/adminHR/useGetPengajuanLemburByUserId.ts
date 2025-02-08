@@ -7,16 +7,20 @@ import { useQuery } from "@tanstack/react-query"
 interface ResponseGetUserById {
     status: string;
     response: PengajuanLemburPerdinType[]
+    user: {
+      name: string;
+      avatar: string;
+    };
 }
 
-const useGetPengajuanByUserId = (userId: string) => {
+const useGetPengajuanLemburPerdinByUserId = (userId: string) => {
   return useQuery({
     queryKey: ['get-user', userId],
     queryFn: async () => {
-        const { data } = await axiosInstance.get<ResponseGetUserById>(`/admin-hr/${userId}`)
+        const { data } = await axiosInstance.get<ResponseGetUserById>(`/pengajuan-lembur-perdin/${userId}`)
         return data
     }
   })
 }
 
-export default useGetPengajuanByUserId
+export default useGetPengajuanLemburPerdinByUserId

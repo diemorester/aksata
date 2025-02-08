@@ -1,25 +1,24 @@
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import express, {
-  json,
-  urlencoded,
   Express,
+  json,
+  NextFunction,
   Request,
   Response,
-  NextFunction,
-  Router,
+  urlencoded
 } from 'express';
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
-import { PORT } from './config';
-import { UserRouter } from './routers/auth/user.router';
-import { DecodeRouter } from './routers/decode.router';
 import path from 'path';
-import { AbsensiRouter } from './routers/absensi/absensi.route';
-import { PengajuanRouter } from './routers/pengajuan/pengajuan.route';
+import { PORT } from './config';
 import "./jobs/autoAlphaJob";
 import "./jobs/autoClockOutJob";
+import "./jobs/autoIsActiveRemoval";
 import "./jobs/autoPostPengajuanJob";
-import "./jobs/autoIsActiveRemoval"
-import { AdminHRRouter } from './routers/adminHR/adminHR.route';
+import { AbsensiRouter } from './routers/absensi/absensi.route';
+import { UserRouter } from './routers/auth/user.router';
+import { DecodeRouter } from './routers/decode.router';
+import { PengajuanAbsensiRouter } from './routers/pengajuan/pengajuanAbsensi.route';
+import { PengajuanLemburPerdinRouter } from './routers/pengajuan/pengajuanLembur.route';
 
 export default class App {
   private app: Express;
@@ -76,8 +75,10 @@ export default class App {
     const userRouter = new UserRouter();
     const decodeRouter = new DecodeRouter();
     const absensiRouter = new AbsensiRouter();
-    const pengajuanRouter = new PengajuanRouter();
-    const adminHRRouter = new AdminHRRouter()
+    const pengajuanAbsensiRouter = new PengajuanAbsensiRouter();
+    const pengajuanLemburPerdinRouter = new PengajuanLemburPerdinRouter()
+    
+    
 
     this.app.get('/api', (req: Request, res: Response) => {
       res.send(`welcome to ERP Aksata API`);
@@ -86,8 +87,8 @@ export default class App {
     this.app.use('/api/user', userRouter.getRouter());
     this.app.use('/api', decodeRouter.getRouter());
     this.app.use('/api/absensi', absensiRouter.getRouter());
-    this.app.use('/api/pengajuan', pengajuanRouter.getRouter());
-    this.app.use('/api/admin-hr', adminHRRouter.getRouter());
+    this.app.use('/api/pengajuan-absensi', pengajuanAbsensiRouter.getRouter());
+    this.app.use('/api/pengajuan-lembur-perdin', pengajuanLemburPerdinRouter.getRouter());
   }
 
   public start(): void {

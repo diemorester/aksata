@@ -1,5 +1,6 @@
 import prisma from "@/prisma";
 import { Pengajuan } from "@prisma/client";
+import { ObjectId } from 'mongodb';
 
 // Enum untuk tipe pengajuan
 enum OpsiLembur {
@@ -22,7 +23,7 @@ export const pengajuanLemburPerdinService = async (body: Pengajuan, userId: stri
         });
 
         // Cek apakah sudah ada pengajuan lembur atau perjalanan dinas
-        const hasLembur = checkPengajuan.some((p) => 
+        const hasLembur = checkPengajuan.some((p) =>
             [OpsiLembur.LemburSatu, OpsiLembur.LemburDua, OpsiLembur.LemburTiga].includes(p.tipePengajuan as OpsiLembur)
         );
         const hasPerdin = checkPengajuan.some((p) => p.tipePengajuan === OpsiLembur.PerjalananDinas);
@@ -59,6 +60,98 @@ export const pengajuanLemburPerdinService = async (body: Pengajuan, userId: stri
         });
 
         return pengajuan;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getAllPengajuanLemburService = async (userId: string) => {
+    try {
+        const allPengajuan = await prisma.pengajuan.findMany({
+            where: {
+                userId,
+                statusPengajuan: 'Waiting'
+            },
+            include: {
+                user: {
+                    select: {
+                        name: true
+                    }
+                }
+            }
+        });
+        return allPengajuan
+    } catch (error) {
+        throw error;
+    };
+};
+
+export const getAllUserService = async () => {
+    try {
+        const allUser = await prisma.user.findMany({
+            where: {
+                role: 'User',
+            },
+        });
+        return allUser;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getPengajuanLemburPerdinByUserIdService = async (userId: string) => {
+    try {
+        if (!ObjectId.isValid(userId)) {
+            throw new Error('UserID tidak valid');
+        }
+
+        const user = await prisma.user.findFirst({
+            where: {
+                id: userId
+            },
+            select: {
+                name: true,
+                avatar: true
+            }
+        })
+
+        if (!user) throw new Error('User tydac ditemukan');
+
+        const pengajuanUser = await prisma.pengajuan.findMany({
+            where: {
+                userId,
+                statusPengajuan: 'Approved',
+            },
+        });
+
+        return { user, pengajuanUser };
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const approvePengajuanLemburPerdinService = async (pengajuanId: string) => {
+    try {
+        const pengajuan = await prisma.pengajuan.findUnique({
+            where: { id: pengajuanId }
+        })
+
+        if (!pengajuan) {
+            throw new Error('Pengajuan tidak ditemukan')
+        };
+
+        if (pengajuan.statusPengajuan === 'Approved' || pengajuan.statusPengajuan === 'Declined') {
+            throw new Error('Pengajuan sudah direspon')
+        };
+
+        const approvedPengajuan = await prisma.pengajuan.update({
+            where: { id: pengajuanId },
+            data: {
+                statusPengajuan: 'Approved'
+            }
+        })
+
+        return approvedPengajuan
     } catch (error) {
         throw error;
     }

@@ -13,7 +13,7 @@ const useGetAllUser = () => {
     return useQuery({
         queryKey: ['get-all-users'],
         queryFn: async () => {
-            const { data } = await axiosInstance.get<ResponseGetUser>('/admin-hr/users')
+            const { data } = await axiosInstance.get<ResponseGetUser>('/pengajuan-lembur-perdin/users')
             return data
         }
     })

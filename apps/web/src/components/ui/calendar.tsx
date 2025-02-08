@@ -83,7 +83,6 @@ function Calendar({
           <ChevronRight className={cn("h-4 w-4", className)} {...props} />
         ),
       }}
-      disabled={{ dayOfWeek: [0, 6]}}
       numberOfMonths={numberOfMonths}
       {...props}
     />

@@ -15,7 +15,7 @@ const useLemburPerdin = () => {
     return useMutation({
         mutationFn: async (payload: PengajuanLemburPerdinType)=> {
             const token = await getCookie('access_token');
-            const { data } = await axiosInstance.post('/pengajuan/lembur',
+            const { data } = await axiosInstance.post('/pengajuan-absensi/lembur',
                 {
                     date: payload.date,
                     keterangan: payload.keterangan,

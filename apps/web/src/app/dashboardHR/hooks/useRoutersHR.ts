@@ -2,8 +2,8 @@
 import { usePathname } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
 import { GoGitPullRequest, GoGitPullRequestDraft } from 'react-icons/go';
+import { LuClipboardList, LuClipboardPaste } from "react-icons/lu";
 import { IoMdSettings } from 'react-icons/io';
-import { TbReportAnalytics } from 'react-icons/tb';
 import { VscSignOut } from 'react-icons/vsc';
 
 const useRouterHR = () => {
@@ -23,16 +23,22 @@ const useRouterHR = () => {
         active: pathName == '/dashboardHR',
       },
       {
-        label: 'Lembur Perdin',
+        label: 'Lembur & Perdin',
         href: '/dashboardHR/lembur-perdin',
         icon: GoGitPullRequest,
-        active: pathName.startsWith('/dashboardHR/lembur-perdin'),
+        active: pathName == '/dashboardHR/lembur-perdin',
       },
       {
         label: 'Data Absensi',
         href: '/dashboardHR/data-absensi',
-        icon: TbReportAnalytics,
+        icon: LuClipboardList,
         active: pathName == '/dashboardHR/data-absensi',
+      },
+      {
+        label: 'Data Lembur & Perdin',
+        href: '/dashboardHR/data-lembur-perdin',
+        icon: LuClipboardPaste,
+        active: pathName.startsWith('/dashboardHR/data-lembur-perdin'),
       },
       {
         label: 'Settings',

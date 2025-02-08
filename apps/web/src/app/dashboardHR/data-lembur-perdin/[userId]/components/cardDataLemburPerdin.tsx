@@ -1,6 +1,8 @@
+"use client"
+
 import { PengajuanLemburPerdinType } from '@/types/pengajuanTypes';
 
-const CardPengajuanByUser: React.FC<PengajuanLemburPerdinType> = ({
+const CardDataLemburPerdin: React.FC<PengajuanLemburPerdinType> = ({
   id,
   date,
   createdAt,
@@ -13,10 +15,11 @@ const CardPengajuanByUser: React.FC<PengajuanLemburPerdinType> = ({
 }) => {
   return (
     <div>
+      <p>{tipePengajuan}</p>
       <p>hari : {date}</p>
       <p>keterangan: {keterangan}</p>
     </div>
   );
 };
 
-export default CardPengajuanByUser;
+export default CardDataLemburPerdin;

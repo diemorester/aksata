@@ -1,23 +1,33 @@
 "use client"
 
-import ButtonSpan from "@/components/buttons/spanButtons"
-import { approvePengajuanAbsensiFetch, declinePengajuanAbsensiFetch, } from "@/libs/fetch/pengajuan";
-import { PengajuanType } from "@/types/pengajuanTypes";
-import { AxiosError } from "axios";
-import { useState } from "react"
-import toast from "react-hot-toast";
-import { FaRegCalendar } from "react-icons/fa6";
-import ModalApproval from "../../../components/modalApproval";
-import ModalRefusal from "../../../components/modalRefusal";
+import ButtonSpan from "@/components/buttons/spanButtons";
+import ModalApproval from "@/components/modalApproval";
+import ModalRefusal from "@/components/modalRefusal";
 import { pengajuanFormat } from "@/libs/date";
+import { approvePengajuanLemburPerdinFetch, declinePengajuanLemburPerdinFetch } from "@/libs/fetch/pengajuan";
+import { AxiosError } from "axios";
 import clsx from "clsx";
 import Image from "next/image";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { FaRegCalendar } from "react-icons/fa";
 
-interface RevalidateType extends PengajuanType {
+interface RevalidateType extends PengajuanLemburPerdinType {
     revalidate: () => void;
 }
 
-const CardPengajuanAbsensi: React.FC<RevalidateType> = ({ user, absensi, startDate, endDate, id, revalidate, createdAt }) => {
+interface PengajuanLemburPerdinType {
+    id: string;
+    tipePengajuan: 'LemburSatu' | 'LemburDua' | 'LemburTiga' | 'PerjalananDinas';
+    date: string;
+    keterangan: string;
+    user: {
+        name: string;
+        avatar: string | null
+    }
+}
+
+const CardPengajuanLemburPerdin: React.FC<RevalidateType> = ({ user, id, tipePengajuan, revalidate, date, keterangan }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isOpenApproval, setIsOpenApproval] = useState(false);
     const [isOpenRefusal, setIsOpenRefusal] = useState(false);
@@ -25,8 +35,8 @@ const CardPengajuanAbsensi: React.FC<RevalidateType> = ({ user, absensi, startDa
     const handleApprove = async () => {
         setIsLoading(true);
         try {
-            await approvePengajuanAbsensiFetch(id!);
-            toast.success('Pengajuan telah diterima');
+            await approvePengajuanLemburPerdinFetch(id);
+            toast.success('Pengajuan telah diterima!');
             revalidate();
             setIsOpenApproval(false);
         } catch (error) {
@@ -36,15 +46,15 @@ const CardPengajuanAbsensi: React.FC<RevalidateType> = ({ user, absensi, startDa
         } finally {
             setIsLoading(false);
         }
-    }
+    };
 
     const handleDecline = async () => {
         setIsLoading(true);
         try {
-            await declinePengajuanAbsensiFetch(id!);
-            toast.success('Pengajuan telah ditolak');
+            await declinePengajuanLemburPerdinFetch(id);
+            toast.success('Pengajuan telah ditolak!');
             revalidate();
-            setIsOpenRefusal(false);
+            setIsOpenApproval(false);
         } catch (error) {
             if (error instanceof AxiosError) {
                 toast.error(error.response?.data)
@@ -52,7 +62,7 @@ const CardPengajuanAbsensi: React.FC<RevalidateType> = ({ user, absensi, startDa
         } finally {
             setIsLoading(false);
         }
-    }
+    };
 
     return (
         <div className="flex flex-col border gap-8 px-3 pt-2 pb-3 bg-off-white rounded-lg shadow-sm shadow-black/35">
@@ -69,21 +79,24 @@ const CardPengajuanAbsensi: React.FC<RevalidateType> = ({ user, absensi, startDa
                 </div>
                 <div className="pt-1 pb-5">
                     <h2 className={clsx(`px-3 py-1 cursor-pointer text-sm rounded-lg`,
-                        absensi.status === 'Cuti' && "bg-purple-300/30",
-                        absensi.status === 'Sakit' && "bg-yellow-200/60",
-                        absensi.status === 'Izin' && "bg-blue-500/60"
-                    )}>{absensi.status}</h2>
+                        tipePengajuan === 'LemburSatu' && 'bg-[#ABC2E8]',
+                        tipePengajuan === 'LemburDua' && 'bg-[#DBC6EB]',
+                        tipePengajuan === 'LemburTiga' && 'bg-[#D1EAA3]',
+                        tipePengajuan === 'PerjalananDinas' && 'bg-[#EFEE9D]'
+                    )}>
+                        {tipePengajuan.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                    </h2>
                 </div>
             </div>
             <div className="flex flex-col justify-between gap-3 px-3">
                 <div className="w-full h-16 my-auto overflow-hidden">
                     <p className="text-sm text-start line-clamp-3">
-                        {absensi.keterangan}
+                        {keterangan}
                     </p>
                 </div>
                 <div className="flex space-x-1">
                     <FaRegCalendar className="flex fill-neutral-500" />
-                    <p className="text-xs text-neutral-500 pt-[1px]">{pengajuanFormat(startDate)} - {pengajuanFormat(endDate)}</p>
+                    <p className="text-xs text-neutral-500 pt-[1px]">{pengajuanFormat(date)}</p>
                 </div>
             </div>
             <div className="flex justify-end">
@@ -112,4 +125,4 @@ const CardPengajuanAbsensi: React.FC<RevalidateType> = ({ user, absensi, startDa
     )
 }
 
-export default CardPengajuanAbsensi
+export default CardPengajuanLemburPerdin

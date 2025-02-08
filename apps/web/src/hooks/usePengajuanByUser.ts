@@ -24,7 +24,7 @@ const usePengajuanByUser = (params: PengajuanQuery) => {
         queryKey: ['pengajuan-user', params.page, params.search, params.take],
         queryFn: async () => {
             const token = await getCookie('access_token');
-            const { data } = await axiosInstance.get<PengajuanUserType>('/pengajuan/get-pengajuan-by-user-id', {
+            const { data } = await axiosInstance.get<PengajuanUserType>('/pengajuan-absensi/get-pengajuan-by-user-id', {
                 params,
                 headers: {
                     Authorization: `Bearer ${token?.value}`

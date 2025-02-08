@@ -23,8 +23,8 @@ const AppSidebarHr = () => {
   const { name, avatar } = useAppSelector((user) => user.user);
 
   const pengajuanMenu = router.slice(0, 2);
-  const dataKaryawanMenu = router.slice(2, 3);
-  const utilityMenu = router.slice(3, 5);
+  const dataKaryawanMenu = router.slice(2, 4);
+  const utilityMenu = router.slice(4, 6);
 
   return (
     <Sidebar collapsible="icon" color="white">

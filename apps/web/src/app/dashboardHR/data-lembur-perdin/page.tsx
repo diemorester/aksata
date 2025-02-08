@@ -1,0 +1,1 @@
+export { default } from '@/app/dashboardHR/data-lembur-perdin/components/ListUser';
