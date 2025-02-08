@@ -53,6 +53,9 @@ model Absensi {
   keterangan String?
   pengajuan  PengajuanAbsensi[]
   userId     String             @db.ObjectId
+
+  latitude  Float?
+  longitude Float?
 }
 
 enum Status {

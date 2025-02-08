@@ -13,17 +13,12 @@ enum Status {
 
 const AbsensiHistory = () => {
   const { data } = useGetAllAbsensiByUserId();
+  
   const variableFormatData = data?.allAbsensi.reduce((acc, absensi) => {
     const dataAbsensi = new Date(absensi.date).toISOString().split('T')[0]
     acc[dataAbsensi] = absensi.status
     return acc
   }, {} as Record<string, Status>) || {}
-
-  // const styleModifier = {
-  //   Hadir: {}
-  // }
-
-  console.log(variableFormatData, 'pakai tanda donk');
   
   return (
     <Calendar

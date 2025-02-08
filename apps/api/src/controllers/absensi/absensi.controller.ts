@@ -17,9 +17,10 @@ export class AbsensiController {
         timeZone: 'Asia/Jakarta',
         hour: '2-digit',
         minute: '2-digit',
-        hour12: false
+        hour12: false,
       });
-      const response = await clockInService(req.user?.id!);
+
+      const response = await clockInService(req.user?.id!, req.body);
       return res.status(200).send({
         msg: `Anda melakukan clock-in pada jam ${time}`,
         response,
@@ -36,7 +37,7 @@ export class AbsensiController {
         timeZone: 'Asia/Jakarta',
         hour: '2-digit',
         minute: '2-digit',
-        hour12: false
+        hour12: false,
       });
       const response = await clockOutService(req.user?.id!);
       return res.status(200).send({
@@ -50,42 +51,47 @@ export class AbsensiController {
 
   async getUserAttendance(req: Request, res: Response) {
     try {
-      const userId = req.user?.id!
-      const { hadir, cuti, izin, sakit, alpha, total } = await pieData(userId)
+      const userId = req.user?.id!;
+      const { hadir, cuti, izin, sakit, alpha, total } = await pieData(userId);
       res.status(200).send({
         status: 'ok',
-        hadir, cuti, izin, sakit, alpha, total
+        hadir,
+        cuti,
+        izin,
+        sakit,
+        alpha,
+        total,
       });
     } catch (error) {
       res.status(400).send({
-        status: 'error'
-      })
+        status: 'error',
+      });
     }
   }
 
   async getAttendanceById(req: Request, res: Response, next: NextFunction) {
     try {
-      const absensi = await getAttendanceByUserIdService(req.user?.id!)
+      const absensi = await getAttendanceByUserIdService(req.user?.id!);
       return res.status(200).send({
         status: 'ok',
-        absensi
-      })
+        absensi,
+      });
     } catch (error) {
-      next(error)
-    };
-  };
+      next(error);
+    }
+  }
 
   async getAllAttendanceById(req: Request, res: Response, next: NextFunction) {
     try {
-      const allAbsensi = await getAllAttendanceByUserIdService(req.user?.id!)
+      const allAbsensi = await getAllAttendanceByUserIdService(req.user?.id!);
       return res.status(200).send({
         status: 'ok baaang',
-        allAbsensi
-      })
+        allAbsensi,
+      });
     } catch (error) {
-      next(error)
-    };
-  };
+      next(error);
+    }
+  }
 
   async getAllAttendance(req: Request, res: Response, next: NextFunction) {
     try {
@@ -110,7 +116,7 @@ export class AbsensiController {
 
   async exportExcel(req: Request, res: Response, next: NextFunction) {
     try {
-      const { startDate, endDate } = req.body
+      const { startDate, endDate } = req.body;
       const excelFile = await exportExcelService();
 
       res.setHeader(

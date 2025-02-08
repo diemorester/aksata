@@ -40,7 +40,7 @@ const Modal: React.FC<ModalProps> = ({
           <div className="fixed inset-0 bg-gray-500 opacity-60 transition-opacity" />
         </Transition.Child>
 
-        <div className="fixed inset-0 z-10 overflow-y-auto scrollbar-none">
+        <div className="fixed inset-0 z-[100] overflow-y-auto scrollbar-none">
           <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
             <Transition.Child
               as={Fragment}
