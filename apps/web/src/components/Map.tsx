@@ -1,7 +1,4 @@
 import {
-  Circle,
-  LayerGroup,
-  LayersControl,
   MapContainer,
   Marker,
   Popup,

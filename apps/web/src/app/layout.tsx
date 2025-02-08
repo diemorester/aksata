@@ -5,7 +5,7 @@ import ToastComp from '@/components/toasts';
 import StoreProvider from '@/providers/storeProvider';
 import { SidebarProvider, } from '@/components/ui/sidebar';
 
-const inter = Inter({ subsets: ['latin'] });
+// const inter = Inter({ subsets: ['latin'] });
 
 export default function RootLayout({
   children,
@@ -14,7 +14,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className}`}>
+      {/* <body className={`${inter.className}`}> */}
+      <body>
         <StoreProvider>
           <SidebarProvider>
             <ToastComp />
