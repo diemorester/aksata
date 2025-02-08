@@ -75,8 +75,8 @@ const CardPengajuanLemburPerdin: React.FC<RevalidateType> = ({ user, id, tipePen
                         src={user?.avatar || '/profileplaceholder.png'}
                         className="rounded-full object-cover w-8 h-8"
                     />
+                    <h1 className="text-md p-1 font-bold">{user?.name}</h1>
                 </div>
-                <h1 className="text-md pt-1 font-bold">{user?.name}</h1>
                 <div className="pt-1 pb-5">
                     <h2 className={clsx(`px-3 py-1 cursor-pointer text-sm rounded-lg`,
                         tipePengajuan === 'LemburSatu' && 'bg-[#ABC2E8]',
