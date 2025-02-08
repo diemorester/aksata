@@ -1,5 +1,6 @@
 import prisma from "@/prisma";
 import { Pengajuan } from "@prisma/client";
+import { ObjectId } from 'mongodb';
 
 // Enum untuk tipe pengajuan
 enum OpsiLembur {
@@ -70,6 +71,13 @@ export const getAllPengajuanLemburService = async (userId: string) => {
             where: {
                 userId,
                 statusPengajuan: 'Waiting'
+            },
+            include: {
+                user: {
+                    select: {
+                        name: true
+                    }
+                }
             }
         });
         return allPengajuan
@@ -91,15 +99,32 @@ export const getAllUserService = async () => {
     }
 };
 
-export const getPengajuanByUserIdService = async (userId: string) => {
+export const getPengajuanLemburPerdinByUserIdService = async (userId: string) => {
     try {
+        if (!ObjectId.isValid(userId)) {
+            throw new Error('UserID tidak valid');
+        }
+
+        const user = await prisma.user.findFirst({
+            where: {
+                id: userId
+            },
+            select: {
+                name: true,
+                avatar: true
+            }
+        })
+
+        if (!user) throw new Error('User tydac ditemukan');
+
         const pengajuanUser = await prisma.pengajuan.findMany({
             where: {
                 userId,
-                statusPengajuan: 'Approved'
+                statusPengajuan: 'Approved',
             },
         });
-        return pengajuanUser;
+
+        return { user, pengajuanUser };
     } catch (error) {
         throw error;
     }
@@ -118,7 +143,7 @@ export const approvePengajuanLemburPerdinService = async (pengajuanId: string) =
         if (pengajuan.statusPengajuan === 'Approved' || pengajuan.statusPengajuan === 'Declined') {
             throw new Error('Pengajuan sudah direspon')
         };
-        
+
         const approvedPengajuan = await prisma.pengajuan.update({
             where: { id: pengajuanId },
             data: {

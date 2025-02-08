@@ -23,7 +23,7 @@ const useRouterHR = () => {
         active: pathName == '/dashboardHR',
       },
       {
-        label: 'Lembur Perdin',
+        label: 'Lembur & Perdin',
         href: '/dashboardHR/lembur-perdin',
         icon: GoGitPullRequest,
         active: pathName == '/dashboardHR/lembur-perdin',

@@ -1,17 +1,23 @@
+import { cn } from '@/libs/utils';
 import Image from 'next/image';
 
 interface AvatarProps {
   image: string | null;
+  size?: 'Icon' | 'Medium' | 'Large'
 }
 
-const Avatar = (props: AvatarProps) => {
+const Avatar: React.FC<AvatarProps> = ({ image, size = 'Icon', }) => {
   return (
     <Image
-      src={props.image || '/profileplaceholder.png'}
-      width={33}
-      height={33}
+      src={image || '/profileplaceholder.png'}
+      width={666}
+      height={666}
       alt="avatar"
-      className="rounded-full w-8 h-8"
+      className={cn(`rounded-full object-cover`,
+        size === 'Icon' && 'w-8 h-8',
+        size === 'Medium' && 'w-16 h-16',
+        size === 'Large' && 'w-28 h-28'
+      )}
     />
   );
 };

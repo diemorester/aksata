@@ -14,7 +14,7 @@ export class PengajuanLemburPerdinRouter {
     private initializeRoutes(): void {
         this.router.get('/all-pengajuan', this.pengajuanLemburPerdin.getAllPengajuanLembur);
         this.router.get('/users', this.pengajuanLemburPerdin.getAllUser);
-        this.router.get('/:userId', this.pengajuanLemburPerdin.getPengajuanByUserId);
+        this.router.get('/:userId', this.pengajuanLemburPerdin.getPengajuanLemburPerdinByUserId);
         this.router.patch('/approve-pengajuan/:pengajuanId', this.pengajuanLemburPerdin.approvePengajuanLemburPerdin);
     }
 
