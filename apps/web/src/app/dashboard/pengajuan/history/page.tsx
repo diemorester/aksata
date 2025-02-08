@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 import ListApproval from "../../components/ListApproval"
 import { FaArrowLeftLong } from "react-icons/fa6"
