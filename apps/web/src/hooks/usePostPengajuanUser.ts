@@ -9,7 +9,7 @@ const usePostPengajuanUser = () => {
     return useMutation({
         mutationFn: async (payload: { status: string, startDatePengajuan: string | undefined, endDatePengajuan: string | undefined, keterangan: string }) => {
             const token = await getCookie('access_token');
-            const { data } = await axiosInstance.post('/pengajuan', {
+            const { data } = await axiosInstance.post('/pengajuan-absensi', {
                 status: payload.status,
                 startDate: payload.startDatePengajuan,
                 endDate: payload.endDatePengajuan,
