@@ -16,7 +16,6 @@ const LocationsHistory = () => {
   return (
     <div className="w-full">
       <h1 className="font-semibold">History Clock-In</h1>
-
       <div className="scrollbar-none flex flex-col gap-3 max-h-[230px] overflow-y-auto">
         {data?.allAbsensi.map((absensi) => {
           return (
