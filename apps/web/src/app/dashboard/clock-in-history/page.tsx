@@ -1,5 +1,3 @@
-"use client"
-
 import LocationHistory from "../components/LocationHistory"
 
 const LocationHistories = () => {

@@ -1,1 +1,11 @@
-export { default } from '@/app/dashboardHR/settings/components/settingsHRconfig';
+import SettingsHRconfig from './components/settingsHRconfig'
+
+const SettingsHR = () => {
+  return (
+    <div>
+        <SettingsHRconfig />
+    </div>
+  )
+}
+
+export default SettingsHR

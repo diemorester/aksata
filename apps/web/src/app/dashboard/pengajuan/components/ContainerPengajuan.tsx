@@ -7,14 +7,6 @@ import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import useLemburPerdin from '@/hooks/useLemburPerdin';
 
-// Dua jenis pengajuan
-// 1. Pengajuan lembur
-// 2. Pengajuan PERDIN
-// Intinya ada dua tab --> Tab Lembur dan Tab PERDIN
-
-// Content dari lembur option dropdown jenis lembur, keterangan lembur.
-// Content dari PERDIN option dropdown jenis lembur, keterangan PERDIN.
-
 type VariantPengajuan = 'LEMBUR' | 'PERDIN';
 
 export default function ContainerPengajuan() {
@@ -24,7 +16,6 @@ export default function ContainerPengajuan() {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const { mutateAsync, isPending } = useLemburPerdin();
 
-  // Kirim ke BE
   const [date, setDate] = useState<Date | undefined>();
   const [selectLembur, setSelectLembur] = useState<string>('');
   const [keterangan, setKeterangan] = useState('');

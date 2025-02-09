@@ -1,1 +1,11 @@
-export { default } from '@/app/dashboardHR/lembur-perdin/components/containerPengajuanLemburPerdin'
+import ContainerPengajuanLemburPerdin from "./components/containerPengajuanLemburPerdin"
+
+const LemburPerdin = () => {
+    return (
+      <div>
+          <ContainerPengajuanLemburPerdin />
+      </div>
+    )
+  }
+  
+  export default LemburPerdin
