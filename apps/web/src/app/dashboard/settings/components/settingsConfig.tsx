@@ -1,4 +1,5 @@
 'use client';
+
 import { useAppSelector } from '@/redux/hooks';
 import Image from 'next/image';
 import UserSettings from './editUser';

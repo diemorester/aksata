@@ -1,4 +1,5 @@
 "use client"
+
 import { useState } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
 import EditNameModal from "./editNameModal";

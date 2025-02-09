@@ -1,9 +1,9 @@
 import ListPengajuanAbsensi from "./listPengajuanAbsensi"
 
-const ContainerHRDashboard = () => {
+const ContainerPengajuanAbsensi = () => {
     return (
         <ListPengajuanAbsensi />
     )
 }
 
-export default ContainerHRDashboard
+export default ContainerPengajuanAbsensi

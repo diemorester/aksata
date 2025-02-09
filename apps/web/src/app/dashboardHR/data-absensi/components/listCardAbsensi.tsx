@@ -1,4 +1,5 @@
 'use client';
+
 import CardDataAbsensi from './cardDataAbsensi';
 import { Absensi } from '@/types/absensiTypes';
 import SkeletonAbsensi from './skeletonAbsensi';

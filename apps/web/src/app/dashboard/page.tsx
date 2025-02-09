@@ -1,6 +1,6 @@
 import ContainerAbsensi from "./components/ContainerAbsensi"
 
-const dashboard = () => {
+const Dashboard = () => {
   return (
     <div>
         <ContainerAbsensi />
@@ -8,4 +8,4 @@ const dashboard = () => {
   )
 }
 
-export default dashboard
+export default Dashboard

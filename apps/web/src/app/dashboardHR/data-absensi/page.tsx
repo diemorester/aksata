@@ -1,1 +1,11 @@
-export { default } from '@/app/dashboardHR/data-absensi/components/tabelAbsensi';
+import TabelAbsensi from "./components/tabelAbsensi"
+
+const DataAbsensi = () => {
+  return (
+    <div>
+        <TabelAbsensi />
+    </div>
+  )
+}
+
+export default DataAbsensi

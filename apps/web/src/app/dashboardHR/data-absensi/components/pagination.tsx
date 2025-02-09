@@ -1,4 +1,5 @@
 'use client'
+
 import ReactPaginate from "react-paginate";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
 
