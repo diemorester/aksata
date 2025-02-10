@@ -1,6 +1,6 @@
-import { excelDateFormat, hourFormat } from '@/helpers/convertDate';
+import { hourFormat } from '@/helpers/convertDate';
 import { durationCounter } from '@/helpers/durationCounter';
-import { getDayRange } from '@/helpers/timezoneConverter';
+import { convertToWIB, getDayRange } from '@/helpers/timezoneConverter';
 import prisma from '@/prisma';
 import { AbsensiQuery } from '@/types/absensi';
 import { Status } from '@prisma/client';
@@ -424,7 +424,7 @@ export const exportExcelService = async () => {
       horizontal: 'center',
       vertical: 'middle',
     };
-    sheet.getColumn('B').width = 15;
+    sheet.getColumn('B').width = 25;
     sheet.getCell('B1').border = {
       top: { style: 'thin' },
       left: { style: 'thin' },
@@ -514,7 +514,7 @@ export const exportExcelService = async () => {
       horizontal: 'center',
       vertical: 'middle',
     };
-    sheet.getColumn('H').width = 30;
+    sheet.getColumn('H').width = 35;
     sheet.getCell('H1').border = {
       top: { style: 'thin' },
       left: { style: 'thin' },
@@ -601,7 +601,8 @@ export const exportExcelService = async () => {
       // jam masuk
       const cellClockIn = customRow.getCell(4);
       const lastClockIn = lastRow.getCell(4);
-      cellClockIn.value = hourFormat(item.clockIn);
+      // cellClockIn.value = hourFormat(item.clockIn);
+      cellClockIn.value = item.clockIn ? hourFormat(convertToWIB(item.clockIn)) : "-";
       cellClockIn.alignment = {
         horizontal: 'center',
         vertical: 'middle',
@@ -619,7 +620,8 @@ export const exportExcelService = async () => {
       // jam keluar
       const cellClockOut = customRow.getCell(5);
       const lastClockOut = lastRow.getCell(5);
-      cellClockOut.value = hourFormat(item.clockOut);
+      // cellClockOut.value = hourFormat(item.clockOut);
+      cellClockOut.value = item.clockOut ? hourFormat(convertToWIB(item.clockOut)) : "-";
       cellClockOut.alignment = {
         horizontal: 'center',
         vertical: 'middle',
@@ -692,12 +694,6 @@ export const exportExcelService = async () => {
     });
 
     const buffer = await workbook.xlsx.writeBuffer();
-    // const templatePath = path.join(
-    //   __dirname,
-    //   '../../../public/excel',
-    //   'absensi.xlsx',
-    // );
-    // fs.writeFileSync(templatePath, buffer as any);
 
     return buffer;
   } catch (error) {

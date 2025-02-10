@@ -1,3 +1,5 @@
+import { toZonedTime } from 'date-fns-tz'
+
 const getWIBToUTC = (date: Date): Date => {
     const offset = 7 * 60 * 60 * 1000;
     return new Date(date.getTime() - offset);
@@ -30,3 +32,7 @@ export const getCurrentWIBTime = () => {
     const now = new Date();
     return getUTCToWIB(now);
 };
+
+export const convertToWIB = (date: Date): Date => {
+    return toZonedTime(date, 'Asia/Jakarta')
+}
