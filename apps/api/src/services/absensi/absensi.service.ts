@@ -1,4 +1,4 @@
-import { excelDateFormat, hourFormat } from '@/helpers/convertDate';
+import { hourFormat } from '@/helpers/convertDate';
 import { durationCounter } from '@/helpers/durationCounter';
 import { convertToWIB, getDayRange } from '@/helpers/timezoneConverter';
 import prisma from '@/prisma';
@@ -694,12 +694,6 @@ export const exportExcelService = async () => {
     });
 
     const buffer = await workbook.xlsx.writeBuffer();
-    // const templatePath = path.join(
-    //   __dirname,
-    //   '../../../public/excel',
-    //   'absensi.xlsx',
-    // );
-    // fs.writeFileSync(templatePath, buffer as any);
 
     return buffer;
   } catch (error) {
