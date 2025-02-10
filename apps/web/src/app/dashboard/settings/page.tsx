@@ -2,7 +2,7 @@ import SettingsConfig from './components/settingsConfig'
 
 const Settings = () => {
   return (
-    <div>
+    <div className='w-full'>
         <SettingsConfig />
     </div>
   )

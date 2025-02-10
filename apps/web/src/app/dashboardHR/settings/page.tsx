@@ -2,7 +2,7 @@ import SettingsHRconfig from './components/settingsHRconfig'
 
 const SettingsHR = () => {
   return (
-    <div>
+    <div className='w-full'>
         <SettingsHRconfig />
     </div>
   )
