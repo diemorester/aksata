@@ -19,7 +19,7 @@ export interface PengajuanLemburPerdinType {
     id: string;
     userId: string;
     nominal: number | null;
-    tipePengajuan: 'LemburSatu' | 'LemburDua' | 'LemburTiga' | 'PerjalananDinas';
+    tipePengajuan: 'Lembur' | 'PerjalananDinas';
     date: string;
     createdAt: string;
     updatedAt: string;

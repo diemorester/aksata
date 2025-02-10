@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useState, useMemo, useEffect } from 'react';
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { usePathname } from 'next/navigation';
+import LoadingAnimation from '@/components/ui/loadingAnimation';
 
 const LocationHistory = () => {
   const { data, isPending } = useGetAllAbsensiByUserId();
@@ -22,7 +23,7 @@ const LocationHistory = () => {
     }
   }, [latestAbsensi]);
 
-  if (isPending) return "Loading...";
+  if (isPending) return (<div className='w-full h-full place-content-center text-center'><LoadingAnimation /></div>);
 
   if (!data?.allAbsensi.length) return "Belum ada absensi";
 

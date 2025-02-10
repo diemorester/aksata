@@ -18,7 +18,7 @@ interface RevalidateType extends PengajuanLemburPerdinType {
 
 interface PengajuanLemburPerdinType {
     id: string;
-    tipePengajuan: 'LemburSatu' | 'LemburDua' | 'LemburTiga' | 'PerjalananDinas';
+    tipePengajuan: 'Lembur' | 'PerjalananDinas';
     date: string;
     keterangan: string;
     user: {
@@ -79,9 +79,7 @@ const CardPengajuanLemburPerdin: React.FC<RevalidateType> = ({ user, id, tipePen
                 </div>
                 <div className="pt-1 pb-5">
                     <h2 className={clsx(`px-3 py-1 cursor-pointer text-sm rounded-lg`,
-                        tipePengajuan === 'LemburSatu' && 'bg-[#ABC2E8]',
-                        tipePengajuan === 'LemburDua' && 'bg-[#DBC6EB]',
-                        tipePengajuan === 'LemburTiga' && 'bg-[#D1EAA3]',
+                        tipePengajuan === 'Lembur' && 'bg-[#DBC6EB]',
                         tipePengajuan === 'PerjalananDinas' && 'bg-[#EFEE9D]'
                     )}>
                         {tipePengajuan.replace(/([a-z])([A-Z])/g, '$1 $2')}
