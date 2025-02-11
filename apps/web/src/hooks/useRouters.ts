@@ -22,7 +22,7 @@ const useRouter = () => {
             label: "Absensi",
             href: "/dashboard",
             icon: RiCalendarCheckLine,
-            active: pathName == "/dashboard"
+            active: pathName.startsWith("/dashboard")
         },
         {
             label: "Pengajuan",
