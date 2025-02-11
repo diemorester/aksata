@@ -1,9 +1,23 @@
 import { durationCounter } from "@/helpers/durationCounter";
-import { getDayRange } from "@/helpers/timezoneConverter";
+import { convertToWIB, getDayRange } from "@/helpers/timezoneConverter";
 import prisma from "@/prisma";
+import { isWeekend } from "date-fns";
+import Holidays from "date-holidays";
 
 export const autoAlphaAttendance = async () => {
     const { startDayUTC, endDayUTC } = getDayRange();
+    const todayLocal = new Date();
+    const todayUTC = convertToWIB(todayLocal);
+
+    if (isWeekend(todayUTC)) {
+        return;
+    }
+    
+    const localHoliday = new Holidays('ID');
+    if (localHoliday.isHoliday(todayLocal)) {
+        return;
+    }
+
     try {
         const users = await prisma.user.findMany();
 
@@ -46,6 +60,9 @@ export const autoClockOutAttendance = async () => {
                 status: 'Hadir',
                 clockIn: {
                     not: null
+                },
+                clockOut: {
+                    equals: null
                 },
                 date: {
                     gte: startDayUTC,
