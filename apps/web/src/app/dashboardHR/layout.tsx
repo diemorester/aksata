@@ -1,17 +1,9 @@
-import { SidebarHR } from "./components/sidebarHR";
+import ConfigLayoutHr from './components/ConfigLayoutHr';
 
 export default function RootLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-    return (
-        <div>
-            <SidebarHR>
-                <div className="w-full h-full">
-                    {children}
-                </div>
-            </SidebarHR>
-        </div>
-    )
+  return <ConfigLayoutHr>{children}</ConfigLayoutHr>;
 }

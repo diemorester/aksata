@@ -1,17 +1,9 @@
-import { Sidebar } from "@/components/sidebar";
+import ConfigLayoutUser from './settings/components/ConfigLayoutUser';
 
 export default function RootLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-    return (
-        <div>
-            <Sidebar>
-                <div className="w-full h-full text-neutral-300">
-                    {children}
-                </div>
-            </Sidebar>
-        </div>
-    );
+  return <ConfigLayoutUser>{children}</ConfigLayoutUser>;
 }

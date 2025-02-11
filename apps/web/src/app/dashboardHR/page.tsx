@@ -1,11 +1,11 @@
-import TabelAbsensi from "./components/tabelAbsensi"
+import ContainerPengajuanAbsensi from '@/app/dashboardHR/components/containerPengajuanAbsensi';
 
 const DashboardHR = () => {
-  return (
-    <div>
-        <TabelAbsensi />
-    </div>
-  )
-}
-
-export default DashboardHR
+    return (
+      <div className='w-full'>
+        <ContainerPengajuanAbsensi />
+      </div>
+    )
+  }
+  
+  export default DashboardHR

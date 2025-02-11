@@ -1,4 +1,5 @@
 'use client'
+
 import ButtonSpan from '@/components/buttons/spanButtons'
 import { useAppSelector } from '@/redux/hooks'
 import clsx from 'clsx'
@@ -19,7 +20,7 @@ const SendOTP: React.FC<SendOTPprops> = ({ isLoading, onClose, handleSendOTP, is
                 <h1 className="text-center mt-1 text-2xl font-bold">Change email</h1>
             </div>
             <div className="mx-11 mt-8">
-                <p className="text-center mb-6 font-extralight">we'll need to verify your old email address, <span className="font-medium">{email}</span>, in order to change it.</p>
+                <p className="text-center mb-6 font-extralight">we&apos;ll need to verify your old email address, <span className="font-medium">{email}</span>, in order to change it.</p>
             </div>
             <div className="flex justify-end gap-6">
                 <ButtonSpan type="button" onClick={onClose} ristoan>

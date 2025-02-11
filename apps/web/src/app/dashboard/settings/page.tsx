@@ -1,9 +1,11 @@
-import SettingsConfig from "./components/settingsConfig";
+import SettingsConfig from './components/settingsConfig'
 
-export default function Settings() {
+const Settings = () => {
   return (
-    <div>
-      <SettingsConfig />
+    <div className='w-full'>
+        <SettingsConfig />
     </div>
   )
 }
+
+export default Settings

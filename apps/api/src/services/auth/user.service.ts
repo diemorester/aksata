@@ -1,4 +1,4 @@
-import { createAccessToken, createRefreshToken, createToken } from '@/helpers/createToken';
+import { createToken } from '@/helpers/createToken';
 import { hashPassword } from '@/helpers/hashPassword';
 import prisma from '@/prisma';
 import { User } from '@prisma/client';
@@ -40,7 +40,8 @@ export const RegisterUserService = async (body: User) => {
       role: newUser.role,
     };
 
-    const templatePath = path.join(__dirname, '../../templates', 'verify.hbs');
+    // const templatePath = path.join(__dirname, '../../templates', 'verify.hbs');
+    const templatePath = path.join(__dirname, '../../../src/templates', 'verify.hbs');
 
     const token = createToken(payload, '5m');
     const link = process.env.BASE_URL_WEB + `/verify/${token}`;
@@ -60,7 +61,7 @@ export const RegisterUserService = async (body: User) => {
   }
 };
 
-export const verifyUserService = async (id: number) => {
+export const verifyUserService = async (id: string) => {
   try {
     const user = await prisma.user.findUnique({
       where: {
@@ -110,17 +111,9 @@ export const loginUserService = async (body: User) => {
     };
 
     // Buat Access Token (berlaku singkat) dan Refresh Token (berlaku panjang)
-    const accessToken = createAccessToken(payload); // Expires in 15m
-    const refreshToken = createRefreshToken(payload); // Expires in 7d
-    
+    const accessToken = createToken(payload, '1d');
 
-    // Simpan Refresh Token di database untuk user ini
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { refreshToken }, // Asumsi ada kolom `refreshToken` di tabel `user`
-    });
-
-    return { user, accessToken, refreshToken }; // Kirim kedua token ke client
+    return { user, accessToken };
   } catch (error) {
     throw error;
   }
@@ -137,7 +130,7 @@ export const forgotPasswordService = async (email: string) => {
       email: user.email
     };
 
-    const templatePath = path.join(__dirname, '../../templates', 'forgot-password.hbs');
+    const templatePath = path.join(__dirname, '../../../src/templates', 'forgot-password.hbs');
     const token = createToken(payload, '60m');
     const link = process.env.BASE_URL_WEB + `/forgot-password/${token}`;
     const dataEmail = {
@@ -177,7 +170,7 @@ export const resetPasswordService = async (password: string, email: string) => {
   }
 };
 
-export const editUserService = async (body: User, id: number, file?: string) => {
+export const editUserService = async (body: User, id: string, file?: string) => {
   try {
     const { name, phone } = body;
     const theUser = await prisma.user.findUnique({
@@ -206,14 +199,14 @@ export const editUserService = async (body: User, id: number, file?: string) => 
       phone: updatedUser.phone!
     };
 
-    const token = createAccessToken(payload);
+    const token = createToken(payload, '1d');
     return { updatedUser, token };
   } catch (error) {
     throw error;
   }
 };
 
-export const removePhoneService = async (id: number) => {
+export const removePhoneService = async (id: string) => {
   try {
     const theUser = await prisma.user.findUnique({
       where: { id }
@@ -230,7 +223,7 @@ export const removePhoneService = async (id: number) => {
   }
 };
 
-export const removeAvatarService = async (id: number) => {
+export const removeAvatarService = async (id: string) => {
   try {
     const theUser = await prisma.user.findUnique({
       where: { id }
@@ -247,7 +240,7 @@ export const removeAvatarService = async (id: number) => {
   }
 };
 
-export const changePasswordService = async (id: number, oldPass: string, newPass: string) => {
+export const changePasswordService = async (id: string, oldPass: string, newPass: string) => {
   try {
     const now = new Date()
     const theUser = await prisma.user.findUnique({
@@ -300,7 +293,7 @@ export const sendVerificationChangeMailService = async (email: string) => {
       otp: newOtp.otp
     }
 
-    const templatePath = path.join(__dirname, '../../templates', 'otp.hbs');
+    const templatePath = path.join(__dirname, '../../../src/templates', 'otp.hbs');
     const templateSource = fs.readFileSync(templatePath, 'utf-8');
     const compiledTemplate = handlebars.compile(templateSource);
     const html = compiledTemplate(dataMail);
@@ -369,7 +362,7 @@ export const changeEmailService = async (email: string, newMail: string) => {
       email: newEmail.email,
     };
 
-    const token = createAccessToken(payload)
+    const token = createToken(payload, '1d')
 
     return { newEmail, token }
   } catch (error) {

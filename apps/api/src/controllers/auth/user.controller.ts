@@ -1,5 +1,3 @@
-import { createToken } from '@/helpers/createToken';
-import prisma from '@/prisma';
 import {
   changeEmailService,
   changePasswordService,
@@ -14,8 +12,7 @@ import {
   verificationOtpService,
   verifyUserService,
 } from '@/services/auth/user.service';
-import { NextFunction, request, Request, Response } from 'express';
-import { verify } from 'jsonwebtoken';
+import { NextFunction, Request, Response } from 'express';
 
 export class UserController {
   async RegisterUser(
@@ -42,7 +39,6 @@ export class UserController {
         msg: 'User verified',
         updateUser,
       });
-
     } catch (error) {
       next(error);
     }
@@ -50,62 +46,13 @@ export class UserController {
 
   async LoginUser(req: Request, res: Response, next: NextFunction) {
     try {
-      const { user, accessToken, refreshToken } = await loginUserService(req.body);
-      res.cookie('refreshToken', refreshToken, {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'strict',
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-      });
-
+      const { user, accessToken } = await loginUserService(req.body);
       return res.status(200).send({
         status: 'ok',
         msg: 'Login succeeded',
         user,
-        accessToken,
-        refreshToken
+        accessToken
       });
-    } catch (error) {
-      next(error)
-    }
-  }
-
-  async RefreshToken(req: Request, res: Response, next: NextFunction) {
-    try {
-      const refreshToken = req.cookies.refreshToken;
-      if (!refreshToken) {
-        return res.status(400).send({
-          status: 'error',
-          msg: 'No refresh token provided',
-        });
-      }
-
-      const decoded = verify(refreshToken, process.env.SECRET_KEY || 'real madrid') as { email: string }
-
-      const user = await prisma.user.findFirst({
-        where: { email: decoded.email },
-      });
-
-      if (!user) {
-        return res.status(400).send({
-          status: 'error',
-          msg: 'User not found',
-        });
-      }
-
-      const payload = {
-        id: user.id,
-        role: user.role,
-        email: user.email
-      };
-      const newAccessToken = createToken(payload, '15m');
-
-      return res.status(200).send({
-        status: 'ok',
-        msg: 'Token refreshed',
-        accessToken: newAccessToken
-      })
-
     } catch (error) {
       next(error)
     }

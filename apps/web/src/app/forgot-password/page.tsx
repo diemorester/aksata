@@ -1,4 +1,5 @@
 "use client"
+
 import Button from "@/components/buttons/button"
 import Input from "@/components/input/input"
 import { forgotPasswordFetch } from "@/libs/fetch/auth"

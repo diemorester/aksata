@@ -24,15 +24,27 @@ export class AbsensiRouter {
       this.absensiController.clockOut,
     );
     this.router.get('/export-excel', this.absensiController.exportExcel);
-    this.router.get(
-      '/getall-attendance',
-      // authMiddleware,
-      // accessAdminHr,
-      this.absensiController.getAllAttendance,
+    this.router.get('/attendance',
+      authMiddleware,
+      this.absensiController.getUserAttendance
     );
-  }
+    this.router.get(
+      '/attendances',
+      this.absensiController.getAllAttendance
+    );
+    this.router.get(
+      '/attendance-by-id',
+      authMiddleware,
+      this.absensiController.getAttendanceById
+    );
+    this.router.get(
+      '/all-attendance-by-id',
+      authMiddleware,
+      this.absensiController.getAllAttendanceById
+    );
+  };
 
   getRouter(): Router {
     return this.router;
-  }
-}
+  };
+};

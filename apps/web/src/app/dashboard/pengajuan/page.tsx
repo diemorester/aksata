@@ -1,7 +1,11 @@
-export default function Pengajuan() {
+import ContainerPengajuan from './components/ContainerPengajuan'
+
+const Pengajuan = () => {
   return (
-    <div className="min-h-screen place-content-center text-5xl text-neutral-300 text-center">
-        pengajuan
+    <div>
+        <ContainerPengajuan />
     </div>
   )
 }
+
+export default Pengajuan

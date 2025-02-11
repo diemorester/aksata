@@ -1,0 +1,150 @@
+'use client';
+
+import ButtonSpan from '@/components/buttons/spanButtons';
+import ListCardAbsensi from './listCardAbsensi';
+import Pagination from './pagination';
+import { useState } from 'react';
+import useAbsensi from '@/hooks/useAbsensi';
+import SearchBarInput from './searchBarHR';
+import useDebounce from '@/hooks/useDebounce';
+import DropDown from '@/components/dropdowns/dropDown';
+import { AxiosError } from 'axios';
+import toast from 'react-hot-toast';
+import { excelFetch } from '@/libs/fetch/absensi';
+import { Empty } from 'antd';
+import { IoSearch } from "react-icons/io5";
+
+const TabelAbsensi = () => {
+    const [search, setSearch] = useState('');
+    const [filterBy, setFilterBy] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [isOpenSearch, setIsOpenSearch] = useState(false);
+
+    const [page, setPage] = useState(1);
+
+    const filterDebounce = useDebounce(filterBy, 300);
+    const searchDebounce = useDebounce(search, 300);
+    const { data, isPending } = useAbsensi({ page, take: 9, search: searchDebounce, filterBy: filterDebounce });
+
+    const option = [
+        {
+            label: 'Harian',
+            value: 'daily'
+        },
+        {
+            label: 'Mingguan',
+            value: 'weekly'
+        },
+        {
+            label: 'Bulanan',
+            value: 'monthly'
+        },
+        {
+            label: 'Tahunan',
+            value: 'yearly'
+        }
+    ];
+
+    const handleSelect = (value: string) => {
+        setFilterBy(value)
+
+    };
+
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearch(e.target.value)
+    };
+
+    const handleChange = ({ selected }: { selected: number }) => {
+        setPage(selected + 1);
+    };
+
+    const handleToggle = () => {
+        setIsOpenSearch(!isOpenSearch)
+    }
+
+    const handleDownload = async () => {
+        setIsLoading(true);
+        try {
+            const res = await excelFetch();
+            const link = document.createElement('a');
+            const url = window.URL.createObjectURL(new Blob([res.data]));
+            link.href = url
+            link.setAttribute('download', 'Data-Absensi.xlsx')
+            document.body.appendChild(link);
+            link.click()
+            link.parentNode?.removeChild(link)
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                toast.error('download failed')
+            }
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
+    return (
+        <div className="flex flex-col">
+            <div className="w-full mx-auto">
+                <div className="flex flex-col justify-between rounded-md mx-5 px-3 bg-slate-100">
+                    <table className="mt-2 md:w-full table-fixed border-collapse">
+                        <thead className="pb-5 text-black">
+                            <tr className="border-b-[2px] text-start border-black">
+                                <th className="p-3 text-start font-semibold" style={{ width: "30%" }}>
+                                    <div className='flex items-center justify-between'>
+                                        {isOpenSearch ? (
+                                            <SearchBarInput search={search} onChange={handleSearch} />
+                                        ) : (
+                                            <button className='w-full text-start' onClick={() => setIsOpenSearch(true)}>Nama</button>
+                                        )}
+                                        <IoSearch onClick={handleToggle} />
+                                    </div>
+                                </th>
+                                <th className="hidden p-3 text-center md:table-cell font-semibold" style={{ width: "15%" }}>
+                                    Clock-In
+                                </th>
+                                <th className="hidden p-3 text-center md:table-cell font-semibold" style={{ width: "15%" }}>
+                                    Clock-Out
+                                </th>
+                                <th className="hidden p-3 text-center md:table-cell font-semibold" style={{ width: "20%" }}>
+                                    Durasi
+                                </th>
+                                <th className="hidden p-3 md:table-cell font-semibold" style={{ width: "30%" }}>
+                                    <div className="relative">
+                                        <div className='md:pl-[56px] md:pr-9'>
+                                            <DropDown onSelect={handleSelect} options={option} pengajuanHR />
+                                        </div>
+                                    </div>
+                                </th>
+                                <th className="p-3 text-center" style={{ width: "10%" }}>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ListCardAbsensi
+                                attendance={data?.attendance!}
+                                isPending={isPending}
+                            />
+                        </tbody>
+                    </table>
+                    {data?.attendance.length === 0 && (
+                        <div className='flex w-full h-full place-content-center px-48 items-center'>
+                            <Empty />
+                        </div>
+                    )}
+                    <div className="my-3 flex justify-center">
+                        <Pagination
+                            total={data?.meta.totalPages!}
+                            onPageChange={handleChange}
+                        />
+                    </div>
+                </div>
+                <div className="flex justify-end  items-center px-8 pt-[11px]">
+                    <ButtonSpan type="submit" fill="bg-green-500" onClick={handleDownload} disabled={isLoading}>
+                        PRINT
+                    </ButtonSpan>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default TabelAbsensi;

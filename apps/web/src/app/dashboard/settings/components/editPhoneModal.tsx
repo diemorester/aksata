@@ -1,17 +1,17 @@
 "use client"
+
 import ButtonSpan from "@/components/buttons/spanButtons"
 import PhoneInputEdit from "@/components/input/phoneInput"
 import Modal from "@/components/Modal"
 import { useAppSelector } from "@/redux/hooks"
 import { EditModalProps } from "@/types/userTypes"
-import clsx from "clsx"
 import { Form, Formik } from "formik"
 import * as yup from 'yup'
 
 const EditPhoneModal: React.FC<EditModalProps> = ({ isOpen, onClose, isLoading, handleUpdate }) => {
     const { phone } = useAppSelector(user => user.user);
     const validation = yup.object().shape({
-        phone: yup.string().required("phone number can't be empty").min(10, 'phone numbers must be at least 10').max(13, "phone number can't be more than 13")
+        phone: yup.string().required("phone number can't be empty").min(10, 'phone numbers must be at least 10').max(17, "phone number can't be more than 13")
     })
 
     return (
@@ -42,7 +42,7 @@ const EditPhoneModal: React.FC<EditModalProps> = ({ isOpen, onClose, isLoading, 
                             {/* {values.phone == phone && (
                                 <div className="mx-4 text-sm text-red-500 font-extralight">phone can not be same</div>
                             )} */}
-                            <p className="text-center text-xs text-neutral-300 font-extralight">phone must be number, can't be same, and can't be empty</p>
+                            <p className="text-center text-xs text-neutral-300 font-extralight">phone must be number, can&apos;t be same, and can&apos;t be empty</p>
                             <div className="flex justify-end gap-6 mt-10">
                                 <ButtonSpan type="button" onClick={onClose} ristoan>
                                     cancel

@@ -1,4 +1,5 @@
 'use client'
+
 import ButtonSpan from "@/components/buttons/spanButtons";
 import InputEdit from "@/components/input/inputEdit";
 import Modal from "@/components/Modal";

@@ -1,4 +1,5 @@
 "use client"
+
 import ButtonSpan from "@/components/buttons/spanButtons";
 import Modal from "@/components/Modal";
 import { removeAvatarFetch } from "@/libs/fetch/auth";

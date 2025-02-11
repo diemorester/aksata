@@ -1,4 +1,5 @@
 'use client';
+
 import AvatarButton from '@/components/buttons/avatarButton';
 import ButtonSpan from '@/components/buttons/spanButtons';
 import Modal from '@/components/Modal';
@@ -34,10 +35,6 @@ const EditAvatarModal: React.FC<EditAvatarModalProps> = ({
   const initialValue: OnValueBebas = {
     avatar: null,
   };
-
-  const validation = yup.object().shape({
-    avatar: yup.string().required("file can't be empty"),
-  });
 
   const handleImageCropper = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -92,7 +89,6 @@ const EditAvatarModal: React.FC<EditAvatarModalProps> = ({
         onSubmit={(value) => {
           handleUpdate(value);
         }}
-        // validationSchema={validation}
       >
         {({ setFieldValue, errors }) => {
           return (

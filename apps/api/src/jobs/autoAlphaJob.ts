@@ -1,8 +1,6 @@
-import { autoAlphaAttendance } from '@/services/absensi/absensi.service';
+import { autoAlphaAttendance } from '@/services/jobservices/jobServices';
 import cron from 'node-cron';
 
-cron.schedule('0 13 * * *', async () => {
-  console.log('RUNNING AUTO SET ALPHA STATUS');
+cron.schedule('0 6 * * *', async () => {
   await autoAlphaAttendance();
-  console.log('ALPHA STATUS COMPLETED ALPHA');
 });

@@ -1,4 +1,5 @@
 'use client'
+
 import ButtonSpan from "@/components/buttons/spanButtons"
 import InputEdit from "@/components/input/inputEdit"
 import clsx from "clsx"
@@ -24,7 +25,7 @@ const VerifyOTP: React.FC<VerifyOTPprops> = ({ isOpen, handleOTP, isLoading, onC
             <Form className={clsx(`text-neutral-300 flex-col gap-12 justify-between`, isOpen ? 'flex' : 'hidden')}>
                 <div>
                     <h1 className="text-center mt-1 text-2xl font-bold">Enter OTP</h1>
-                    <p className="text-center text-sm mb-8 font-extralight">enter the code we've sent to your email to prove that you're really you</p>
+                    <p className="text-center text-sm mb-8 font-extralight">enter the code we&apos;ve sent to your email to prove that you&apos;re really you</p>
                 </div>
                 <div className="mt-5">
                     <InputEdit

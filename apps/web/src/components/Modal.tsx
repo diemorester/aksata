@@ -1,4 +1,5 @@
 'use client';
+
 import clsx from 'clsx';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
@@ -40,7 +41,7 @@ const Modal: React.FC<ModalProps> = ({
           <div className="fixed inset-0 bg-gray-500 opacity-60 transition-opacity" />
         </Transition.Child>
 
-        <div className="fixed inset-0 z-10 overflow-y-auto">
+        <div className="fixed inset-0 z-[100] overflow-y-auto scrollbar-none">
           <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
             <Transition.Child
               as={Fragment}
@@ -51,7 +52,7 @@ const Modal: React.FC<ModalProps> = ({
               leaveFrom="opacity-100 translate-y-0  sm:scale-100 "
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className={clsx(`relative w-full transform overflow-hidden px-4 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6`,
+              <Dialog.Panel className={clsx(`relative w-full transform px-4 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6`,
                 aksata && `rounded-md bg-off-white`,
                 ristoan && `rounded-2xl bg-neutral-800`
               )}>
@@ -60,7 +61,7 @@ const Modal: React.FC<ModalProps> = ({
                     <button
                       type="button"
                       onClick={onClose}
-                      className={`rounded-md text-gray-400 hover:text-gray-500 ${backgroundClose ? 'bg-none' : 'bg-white'}`}
+                      className={`rounded-md text-neutral-500 hover:text-off-white ${backgroundClose ? 'bg-none' : 'bg-white'}`}
                     >
                       <IoClose className="h-6 w-6" />
                     </button>

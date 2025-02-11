@@ -1,4 +1,5 @@
 'use client'
+
 import Modal from "@/components/Modal";
 import { AxiosError } from "axios";
 import toast from "react-hot-toast";
@@ -29,7 +30,7 @@ const ChangeEmailModal: React.FC<ChangeEmailModalProps> = ({ isOpen, setIsChange
         setIsEmailField(false)
         setIsOTPField(false)
         setIsSendEmail(true)
-    }, [isOTPField, isOTPField, isSendEmail, isOpen])
+    }, [setIsChangeEmailModal])
 
     const handleSendOTP = async () => {
         setIsLoading(true);
