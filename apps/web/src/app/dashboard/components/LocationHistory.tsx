@@ -27,7 +27,7 @@ const LocationHistory = () => {
 
   if (!data?.allAbsensi.length) return "Belum ada absensi";
 
-  const isHistoryPage = pathname === "/dashboard/history";
+  const isHistoryPage = pathname === "/dashboard/clock-in-history";
   const displayedData = isHistoryPage ? data.allAbsensi : data.allAbsensi.slice(0, 10);
 
   return (

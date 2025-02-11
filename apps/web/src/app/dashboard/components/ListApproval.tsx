@@ -4,11 +4,15 @@ import usePengajuanByUser from "@/hooks/usePengajuanByUser"
 import Approval from "./Approval"
 import Link from "next/link";
 import { FaArrowRightLong } from "react-icons/fa6";
+import { usePathname } from "next/navigation";
 
 const ListApproval = () => {
+    const pathname = usePathname();
     const { data } = usePengajuanByUser({
         take: 10
     });
+
+    const isAbsensiPage = pathname === '/dashboard/absensi-history'
 
     return (
         <>
@@ -42,7 +46,7 @@ const ListApproval = () => {
                             <Approval key={item.id} startDate={item.startDate} endDate={item.endDate} status={item.status} absensi={item.absensi} />
                         )
                     })}
-                    {data?.length! > 10 && (
+                    {!isAbsensiPage && data?.length! > 10 && (
                         <Link
                             href="/dashboard/absensi-history"
                             className="text-sm italic"
