@@ -44,7 +44,7 @@ const ListApproval = () => {
                     })}
                     {data?.length! > 10 && (
                         <Link
-                            href="/dashboard/pengajuan/history"
+                            href="/dashboard/absensi-history"
                             className="text-sm italic"
                         >
                             show more
