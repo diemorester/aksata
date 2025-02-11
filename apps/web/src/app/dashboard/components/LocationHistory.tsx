@@ -97,7 +97,7 @@ const LocationHistory = () => {
       {!isHistoryPage && data.allAbsensi.length > 10 && (
         <div className="flex justify-center pt-2">
           <Link
-            href="/dashboard/history"
+            href="/dashboard/clock-in-history"
             className="text-sm text-center relative group w-fit inline-block italic"
           >
             show more
