@@ -2,7 +2,7 @@ import ContainerPengajuanAbsensi from '@/app/dashboardHR/components/containerPen
 
 const DashboardHR = () => {
     return (
-      <div>
+      <div className='w-full'>
         <ContainerPengajuanAbsensi />
       </div>
     )

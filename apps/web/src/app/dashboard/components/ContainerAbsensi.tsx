@@ -25,7 +25,7 @@ const ContainerAbsensi = () => {
         )}
       </div>
       <div className="md:col-span-4 md:row-span-3 md:row-start-4 bg-black rounded-xl h-fit p-3">
-        <div className='max-h-[260px] overflow-y-auto scrollbar-none'>
+        <div className='h-[260px] overflow-y-auto scrollbar-none'>
           <LocationsHistory />
         </div>
       </div>
@@ -34,7 +34,7 @@ const ContainerAbsensi = () => {
       </div>
       <div className="md:col-span-4 md:row-span-3 md:col-start-3 md:row-start-1 bg-black rounded-xl p-3">
         <div className="w-full h-full gap-y-2 justify-center gap-x-3 flex flex-col-reverse md:flex-row">
-          <div className="md:w-2/3 max-h-[240px] overflow-y-auto scrollbar-none">
+          <div className="md:w-2/3 h-[240px] overflow-y-auto scrollbar-none">
             <ListApproval />
           </div>
           <div className="md:w-1/3">

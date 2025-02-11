@@ -8,6 +8,8 @@ interface PengajuanLemburPerdinType {
     date: string | undefined;
     keterangan: string;
     tipePengajuan: string;
+    durationHours?: number;
+    kota?: string;
 }
 
 const useLemburPerdin = () => {
@@ -15,11 +17,13 @@ const useLemburPerdin = () => {
     return useMutation({
         mutationFn: async (payload: PengajuanLemburPerdinType)=> {
             const token = await getCookie('access_token');
-            const { data } = await axiosInstance.post('/pengajuan-absensi/lembur',
+            const { data } = await axiosInstance.post('/pengajuan-lembur-perdin/ajukan',
                 {
                     date: payload.date,
                     keterangan: payload.keterangan,
                     tipePengajuan: payload.tipePengajuan,
+                    durationHours: payload.durationHours,
+                    kota: payload.kota
                 },
                 {
                     headers: {

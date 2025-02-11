@@ -8,47 +8,36 @@ import toast from 'react-hot-toast';
 import useLemburPerdin from '@/hooks/useLemburPerdin';
 
 type VariantPengajuan = 'LEMBUR' | 'PERDIN';
+type TipePengajuan = 'Lembur' | 'Perdin'
 
 export default function ContainerPengajuan() {
-  const [variantPengajuan, setVariantPengajuan] =
-    useState<VariantPengajuan>('LEMBUR');
-
+  const [variantPengajuan, setVariantPengajuan] = useState<VariantPengajuan>('LEMBUR');
+  const [tipePengajuan, setTipePengajuan] = useState<TipePengajuan>('Lembur');
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const { mutateAsync, isPending } = useLemburPerdin();
 
   const [date, setDate] = useState<Date | undefined>();
-  const [selectLembur, setSelectLembur] = useState<string>('');
+  const [durationHours, setDurationHours] = useState<number | undefined>(1);
   const [keterangan, setKeterangan] = useState('');
+  const [kota, setKota] = useState('');
 
   const handleChangeVariantPengajuan = () => {
     if (variantPengajuan === 'LEMBUR') {
       setVariantPengajuan('PERDIN');
+      setTipePengajuan('Perdin');
     } else {
       setVariantPengajuan('LEMBUR');
+      setTipePengajuan('Lembur');
     }
   };
-
-  const optionLembur = [
-    {
-      label: 'Lembur 1',
-      value: 'LemburSatu',
-    },
-    {
-      label: 'Lembur 2',
-      value: 'LemburDua',
-    },
-    {
-      label: 'Lembur 1 & 2',
-      value: 'LemburTiga',
-    },
-  ];
 
   const handleSubmitPengajuan = async () => {
     if (variantPengajuan === 'LEMBUR') {
       const payload = {
         date: date?.toISOString(),
         keterangan: keterangan,
-        tipePengajuan: selectLembur
+        tipePengajuan: tipePengajuan,
+        durationHours: durationHours,
       }
       try {
         const res = await mutateAsync(payload)
@@ -65,7 +54,8 @@ export default function ContainerPengajuan() {
       const payload = {
         date: date?.toISOString(),
         keterangan: keterangan,
-        tipePengajuan: 'PerjalananDinas'
+        tipePengajuan: 'PerjalananDinas',
+        kota: kota
       }
       try {
         await mutateAsync(payload);
@@ -77,10 +67,6 @@ export default function ContainerPengajuan() {
         }
       }
     }
-  };
-
-  const handleSelectOptionLembur = (value: string) => {
-    setSelectLembur(value);
   };
 
   const thisYear = new Date().getFullYear();
@@ -108,13 +94,14 @@ export default function ContainerPengajuan() {
         date={date}
         isOpen={isOpenModal}
         isLoading={isPending}
-        optionLembur={optionLembur}
         variantPengajuan={variantPengajuan}
         setKeterangan={setKeterangan}
+        durationHours={durationHours}
+        setDurationHours={setDurationHours}
+        setKota={setKota}
         onClose={() => setIsOpenModal(false)}
         handleSubmitPengajuan={handleSubmitPengajuan}
         handleChangeVariantPengajuan={handleChangeVariantPengajuan}
-        handleSelectOptionLembur={(value) => handleSelectOptionLembur(value)}
       />
     </div>
   );

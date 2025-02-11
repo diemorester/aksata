@@ -78,16 +78,4 @@ export class PengajuanController {
             next(error);
         };
     };
-
-    async pengajuanLemburPerdin(req: Request, res: Response, next: NextFunction) {
-        try {
-            await pengajuanLemburPerdinService(req.body, req.user?.id!)
-            return res.status(200).send({
-                status: 'ok',
-                msg: 'Pengajuan Berhasil'
-            })
-        } catch (error) {
-            next(error);
-        };
-    };
 }

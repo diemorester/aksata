@@ -1,9 +1,8 @@
 'use client';
 
 import ButtonSpan from '@/components/buttons/spanButtons';
-import DropDown from '@/components/dropdowns/dropDown';
 import Modal from '@/components/Modal';
-import { FaAngleDown, FaArrowRightLong  } from 'react-icons/fa6';
+import { FaAngleDown, FaRegCalendar } from 'react-icons/fa6';
 
 interface ModalPengajuanProps {
   date: Date | undefined;
@@ -11,10 +10,11 @@ interface ModalPengajuanProps {
   isLoading: boolean;
   onClose: () => void;
   variantPengajuan: 'LEMBUR' | 'PERDIN';
-  optionLembur: { label: string; value: string }[];
   setKeterangan: React.Dispatch<React.SetStateAction<string>>
+  durationHours: number | undefined;
+  setDurationHours: React.Dispatch<React.SetStateAction<number | undefined>>
+  setKota: React.Dispatch<React.SetStateAction<string>>
   handleSubmitPengajuan: () => void;
-  handleSelectOptionLembur: (value: string) => void;
   handleChangeVariantPengajuan: () => void;
 }
 
@@ -23,11 +23,12 @@ const ModalPengajuan: React.FC<ModalPengajuanProps> = ({
   isOpen,
   isLoading,
   onClose,
-  optionLembur,
   variantPengajuan,
   setKeterangan,
+  durationHours,
+  setDurationHours,
+  setKota,
   handleSubmitPengajuan,
-  handleSelectOptionLembur,
   handleChangeVariantPengajuan,
 }) => {
   return (
@@ -47,27 +48,38 @@ const ModalPengajuan: React.FC<ModalPengajuanProps> = ({
         </div>
         <div className="flex flex-col gap-3 border-b-[1px] border-t-[1px] py-5 border-neutral-500">
           {variantPengajuan === 'LEMBUR' ? (
-            <div className='flex items-center text-off-white'>
-              <div className='px-2 w-1/3'>
-                <p>Tipe Lembur</p>
+            <div className='flex px-2 items-center text-off-white pt-2'>
+              <div className='w-1/3'>
+                <p>Durasi Lembur</p>
               </div>
-              <div className='w-2/3'>
-                <DropDown
-                  pengajuan
-                  options={optionLembur}
-                  placeholder="Pilih jenis pengajuan"
-                  onSelect={handleSelectOptionLembur}
-                />
+              <div className='w-2/3 h-14 flex justify-end gap-8 items-center text-center'>
+                <div className='flex items-center'>
+                  <button
+                    onClick={() => setDurationHours(durationHours! - 1)}
+                    disabled={durationHours! <= 1}
+                    className='w-5 h-5 rounded-full text-xs border hover:bg-off-white/85 hover:text-black active:scale-95 hover:border-none disabled:cursor-not-allowed disabled:scale-100'
+                  >
+                    -
+                  </button>
+                  <p className='w-12 px-3 text-lg font-semibold'>{durationHours}</p>
+                  <button
+                    onClick={() => setDurationHours(durationHours! + 1)}
+                    disabled={durationHours! >= 7}
+                    className='w-5 h-5 rounded-full text-xs border hover:bg-off-white/85 hover:text-black active:scale-95 hover:border-none disabled:cursor-not-allowed disabled:scale-100'
+                  >
+                    +
+                  </button>
+                </div>
+                <div className='font-extralight'>Jam</div>
               </div>
             </div>
           ) : (
-            <div className='flex items-center text-off-white'>
+            <div className='flex items-center text-off-white pt-2'>
               <div className='px-2 w-1/3'>
-                <p>Tipe Perdin</p>
+                <p>Kota Tujuan</p>
               </div>
-              <div className='w-2/3 flex justify-between items-center hover:cursor-not-allowed text-center border-2 border-neutral-500 text-neutral-500 py-[15px] px-5 rounded-md'>
-                <p>Luar Jabodetabek</p>
-                <FaAngleDown />
+              <div className='w-2/3'>
+                <input onChange={(e) => setKota(e.target.value)} className='w-full h-14 px-5 placeholder:text-left text-left resize-none bg-transparent border-2 outline-none border-off-white text-off-white rounded-md'></input>
               </div>
             </div>
           )}
@@ -75,15 +87,8 @@ const ModalPengajuan: React.FC<ModalPengajuanProps> = ({
             <div className='w-1/3'>
               <p className=''>Tanggal</p>
             </div>
-            <div className='flex justify-around items-center w-2/3'>
-              <p className='font-extralight'>
-                {date?.toLocaleDateString("id-ID", {
-                  day: "numeric",
-                  month: "short",
-                  year: "numeric"
-                })}
-              </p>
-              <FaArrowRightLong />
+            <div className='flex justify-end gap-3 items-center w-2/3'>
+              <FaRegCalendar />
               <p className='font-extralight'>
                 {date?.toLocaleDateString("id-ID", {
                   day: "numeric",

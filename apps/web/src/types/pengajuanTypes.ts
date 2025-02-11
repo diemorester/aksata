@@ -19,14 +19,16 @@ export interface PengajuanLemburPerdinType {
     id: string;
     userId: string;
     nominal: number | null;
-    tipePengajuan: 'LemburSatu' | 'LemburDua' | 'LemburTiga' | 'PerjalananDinas';
+    tipePengajuan: 'Lembur' | 'PerjalananDinas';
     date: string;
     createdAt: string;
     updatedAt: string;
     statusPengajuan: 'Waiting' | 'Approved' | 'Cancelled' | 'Declined';
     keterangan: string;
+    durationHours: number | undefined;
+    kota: string | undefined;
     user?: {
         name: string;
-        avatar: string | null
+        avatar: string | null;
     }
   };

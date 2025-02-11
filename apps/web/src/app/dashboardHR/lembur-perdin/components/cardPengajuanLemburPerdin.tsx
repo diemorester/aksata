@@ -18,16 +18,18 @@ interface RevalidateType extends PengajuanLemburPerdinType {
 
 interface PengajuanLemburPerdinType {
     id: string;
-    tipePengajuan: 'LemburSatu' | 'LemburDua' | 'LemburTiga' | 'PerjalananDinas';
+    tipePengajuan: 'Lembur' | 'PerjalananDinas';
     date: string;
     keterangan: string;
+    durationHours?: number
+    kota?: string
     user: {
         name: string;
         avatar: string | null
     }
 }
 
-const CardPengajuanLemburPerdin: React.FC<RevalidateType> = ({ user, id, tipePengajuan, revalidate, date, keterangan }) => {
+const CardPengajuanLemburPerdin: React.FC<RevalidateType> = ({ user, id, tipePengajuan, revalidate, date, keterangan, durationHours, kota }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isOpenApproval, setIsOpenApproval] = useState(false);
     const [isOpenRefusal, setIsOpenRefusal] = useState(false);
@@ -65,8 +67,8 @@ const CardPengajuanLemburPerdin: React.FC<RevalidateType> = ({ user, id, tipePen
     };
 
     return (
-        <div className="flex flex-col border gap-8 px-3 pt-2 pb-3 bg-off-white rounded-lg shadow-sm shadow-black/35">
-            <div className="flex items-center justify-between">
+        <div className="flex flex-col w-full h-full border px-3 pt-2 pb-3 bg-off-white rounded-lg shadow-sm shadow-black/35">
+            <div className="flex items-center justify-between pb-2">
                 <div className="flex pt-4 px-2 space-x-2">
                     <Image
                         width={168}
@@ -75,28 +77,31 @@ const CardPengajuanLemburPerdin: React.FC<RevalidateType> = ({ user, id, tipePen
                         src={user?.avatar || '/profileplaceholder.png'}
                         className="rounded-full object-cover w-8 h-8"
                     />
-                    <h1 className="text-md p-1 font-bold">{user?.name}</h1>
+                    <h1 className="text-lg p-1 font-bold">{user?.name}</h1>
                 </div>
                 <div className="pt-1 pb-5">
                     <h2 className={clsx(`px-3 py-1 cursor-pointer text-sm rounded-lg`,
-                        tipePengajuan === 'LemburSatu' && 'bg-[#ABC2E8]',
-                        tipePengajuan === 'LemburDua' && 'bg-[#DBC6EB]',
-                        tipePengajuan === 'LemburTiga' && 'bg-[#D1EAA3]',
+                        tipePengajuan === 'Lembur' && 'bg-[#DBC6EB]',
                         tipePengajuan === 'PerjalananDinas' && 'bg-[#EFEE9D]'
                     )}>
-                        {tipePengajuan.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                        {tipePengajuan}
                     </h2>
                 </div>
             </div>
-            <div className="flex flex-col justify-between gap-3 px-3">
-                <div className="w-full h-16 my-auto overflow-hidden">
-                    <p className="text-sm text-start line-clamp-3">
+            <div className="flex flex-col min-h-40 justify-between px-3 pt-5">
+                <div className="w-full overflow-hidden">
+                    <p className="text-start line-clamp-3">
                         {keterangan}
                     </p>
                 </div>
-                <div className="flex space-x-1">
-                    <FaRegCalendar className="flex fill-neutral-500" />
-                    <p className="text-xs text-neutral-500 pt-[1px]">{pengajuanFormat(date)}</p>
+                <div>
+                    <div className="flex space-x-1 pt-6 text-sm items-center pb-2">
+                        <FaRegCalendar className="flex fill-neutral-500" />
+                        <p className="text-neutral-500">{pengajuanFormat(date)}</p>
+                    </div>
+                    <div className="font-semibold text-sm">
+                        {tipePengajuan === 'Lembur' ? `${durationHours} jam` : kota}
+                    </div>
                 </div>
             </div>
             <div className="flex justify-end">
