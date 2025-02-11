@@ -33,6 +33,9 @@ export const pengajuanLemburPerdinService = async (body: Pengajuan, userId: stri
             if (kota) {
                 throw new Error('Kota hanya untuk Pengajuan Dinas');
             }
+            if (!keterangan) {
+                throw new Error('Keterangan tidak boleh kosong')
+            }
         }
 
         if (tipePengajuan === OpsiPengajuan.PerjalananDinas) {
@@ -41,6 +44,9 @@ export const pengajuanLemburPerdinService = async (body: Pengajuan, userId: stri
             }
             if (!kota) {
                 throw new Error('Kota tujuan Perjalanan Dinas tidak boleh kosong');
+            }
+            if (!keterangan) {
+                throw new Error('Keterangan tidak boleh kosong')
             }
         }
 
@@ -126,7 +132,7 @@ export const getAllPengajuanLemburService = async (userId: string) => {
             include: {
                 user: {
                     select: {
-                        name: true
+                        name: true,
                     }
                 }
             }

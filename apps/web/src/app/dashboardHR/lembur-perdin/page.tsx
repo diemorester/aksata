@@ -2,7 +2,7 @@ import ContainerPengajuanLemburPerdin from "./components/containerPengajuanLembu
 
 const LemburPerdin = () => {
     return (
-      <div>
+      <div className="w-full">
           <ContainerPengajuanLemburPerdin />
       </div>
     )

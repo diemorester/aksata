@@ -19,6 +19,7 @@ export default function ContainerPengajuan() {
   const [date, setDate] = useState<Date | undefined>();
   const [durationHours, setDurationHours] = useState<number | undefined>(1);
   const [keterangan, setKeterangan] = useState('');
+  const [kota, setKota] = useState('');
 
   const handleChangeVariantPengajuan = () => {
     if (variantPengajuan === 'LEMBUR') {
@@ -36,7 +37,7 @@ export default function ContainerPengajuan() {
         date: date?.toISOString(),
         keterangan: keterangan,
         tipePengajuan: tipePengajuan,
-        durationHours: durationHours
+        durationHours: durationHours,
       }
       try {
         const res = await mutateAsync(payload)
@@ -53,7 +54,8 @@ export default function ContainerPengajuan() {
       const payload = {
         date: date?.toISOString(),
         keterangan: keterangan,
-        tipePengajuan: 'PerjalananDinas'
+        tipePengajuan: 'PerjalananDinas',
+        kota: kota
       }
       try {
         await mutateAsync(payload);
@@ -96,6 +98,7 @@ export default function ContainerPengajuan() {
         setKeterangan={setKeterangan}
         durationHours={durationHours}
         setDurationHours={setDurationHours}
+        setKota={setKota}
         onClose={() => setIsOpenModal(false)}
         handleSubmitPengajuan={handleSubmitPengajuan}
         handleChangeVariantPengajuan={handleChangeVariantPengajuan}

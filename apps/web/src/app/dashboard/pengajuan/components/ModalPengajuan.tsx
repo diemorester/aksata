@@ -13,6 +13,7 @@ interface ModalPengajuanProps {
   setKeterangan: React.Dispatch<React.SetStateAction<string>>
   durationHours: number | undefined;
   setDurationHours: React.Dispatch<React.SetStateAction<number | undefined>>
+  setKota: React.Dispatch<React.SetStateAction<string>>
   handleSubmitPengajuan: () => void;
   handleChangeVariantPengajuan: () => void;
 }
@@ -26,6 +27,7 @@ const ModalPengajuan: React.FC<ModalPengajuanProps> = ({
   setKeterangan,
   durationHours,
   setDurationHours,
+  setKota,
   handleSubmitPengajuan,
   handleChangeVariantPengajuan,
 }) => {
@@ -46,11 +48,11 @@ const ModalPengajuan: React.FC<ModalPengajuanProps> = ({
         </div>
         <div className="flex flex-col gap-3 border-b-[1px] border-t-[1px] py-5 border-neutral-500">
           {variantPengajuan === 'LEMBUR' ? (
-            <div className='flex px-2 items-center text-off-white'>
+            <div className='flex px-2 items-center text-off-white pt-2'>
               <div className='w-1/3'>
                 <p>Durasi Lembur</p>
               </div>
-              <div className='w-2/3 h-16 flex justify-end gap-8 items-center text-center'>
+              <div className='w-2/3 h-14 flex justify-end gap-8 items-center text-center'>
                 <div className='flex items-center'>
                   <button
                     onClick={() => setDurationHours(durationHours! - 1)}
@@ -72,13 +74,12 @@ const ModalPengajuan: React.FC<ModalPengajuanProps> = ({
               </div>
             </div>
           ) : (
-            <div className='flex items-center text-off-white'>
+            <div className='flex items-center text-off-white pt-2'>
               <div className='px-2 w-1/3'>
-                <p>Tipe Perdin</p>
+                <p>Kota Tujuan</p>
               </div>
-              <div className='w-2/3 h-16 flex justify-between items-center hover:cursor-not-allowed text-center border-2 border-neutral-500 text-neutral-500 px-5 rounded-md'>
-                <p>Luar Jabodetabek</p>
-                <FaAngleDown />
+              <div className='w-2/3'>
+                <input onChange={(e) => setKota(e.target.value)} className='w-full h-14 px-5 placeholder:text-left text-left resize-none bg-transparent border-2 outline-none border-off-white text-off-white rounded-md'></input>
               </div>
             </div>
           )}

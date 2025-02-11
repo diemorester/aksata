@@ -61,7 +61,7 @@ const Modal: React.FC<ModalProps> = ({
                     <button
                       type="button"
                       onClick={onClose}
-                      className={`rounded-md text-gray-400 hover:text-gray-500 ${backgroundClose ? 'bg-none' : 'bg-white'}`}
+                      className={`rounded-md text-neutral-500 hover:text-off-white ${backgroundClose ? 'bg-none' : 'bg-white'}`}
                     >
                       <IoClose className="h-6 w-6" />
                     </button>

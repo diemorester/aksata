@@ -25,8 +25,10 @@ export interface PengajuanLemburPerdinType {
     updatedAt: string;
     statusPengajuan: 'Waiting' | 'Approved' | 'Cancelled' | 'Declined';
     keterangan: string;
+    durationHours: number | undefined;
+    kota: string | undefined;
     user?: {
         name: string;
-        avatar: string | null
+        avatar: string | null;
     }
   };

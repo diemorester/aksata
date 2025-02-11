@@ -17,7 +17,7 @@ const ListPengajuanAbsensi = () => {
                 })}
             </div>
             {data?.response.length! < 1 && (
-                <div className="py-32">
+                <div className="py-48">
                     <Empty />
                 </div>
             )}

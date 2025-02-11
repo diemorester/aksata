@@ -9,6 +9,7 @@ interface PengajuanLemburPerdinType {
     keterangan: string;
     tipePengajuan: string;
     durationHours?: number;
+    kota?: string;
 }
 
 const useLemburPerdin = () => {
@@ -21,7 +22,8 @@ const useLemburPerdin = () => {
                     date: payload.date,
                     keterangan: payload.keterangan,
                     tipePengajuan: payload.tipePengajuan,
-                    durationHours: payload.durationHours
+                    durationHours: payload.durationHours,
+                    kota: payload.kota
                 },
                 {
                     headers: {
