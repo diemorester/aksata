@@ -12,7 +12,7 @@ export const autoAlphaAttendance = async () => {
     if (isWeekend(todayUTC)) {
         return;
     }
-    
+
     const localHoliday = new Holidays('ID');
     if (localHoliday.isHoliday(todayLocal)) {
         return;
@@ -77,8 +77,7 @@ export const autoClockOutAttendance = async () => {
                     id: attend.id,
                 },
                 data: {
-                    clockOut: new Date(),
-                    isActive: false
+                    clockOut: new Date()
                 },
             });
 
@@ -139,28 +138,26 @@ export const autoIsActiveRemoval = async () => {
 export const autoPostPengajuanService = async () => {
     const { startDayUTC, endDayUTC } = getDayRange();
     try {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0)
         const pengajuanToday = await prisma.pengajuanAbsensi.findMany({
             where: {
                 status: 'Approved',
                 startDate: {
-                    lte: today
+                    lte: startDayUTC,
                 },
                 endDate: {
-                    gte: today
-                }
+                    gte: endDayUTC,
+                },
             },
             include: {
                 absensi: {
                     select: {
                         id: true,
                         status: true,
-                        keterangan: true
-                    }
-                }
-            }
-        })
+                        keterangan: true,
+                    },
+                },
+            },
+        });
 
         for (const pengajuan of pengajuanToday) {
             const existingAbsensi = await prisma.absensi.findFirst({
@@ -168,10 +165,10 @@ export const autoPostPengajuanService = async () => {
                     userId: pengajuan.userId,
                     date: {
                         gte: startDayUTC,
-                        lte: endDayUTC,
-                    }
-                }
-            })
+                        lte: endDayUTC
+                    },
+                },
+            });
 
             if (!existingAbsensi) {
                 await prisma.absensi.create({
@@ -179,10 +176,10 @@ export const autoPostPengajuanService = async () => {
                         userId: pengajuan.userId,
                         status: pengajuan.absensi.status,
                         keterangan: pengajuan.absensi.keterangan
-                    }
-                })
-            }
-        }
+                    },
+                });
+            };
+        };
 
     } catch (error) {
         throw error;
