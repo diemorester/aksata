@@ -61,39 +61,40 @@ export const autoClockOutAttendance = async () => {
                 clockIn: {
                     not: null
                 },
-                clockOut: {
-                    equals: null
-                },
                 date: {
                     gte: startDayUTC,
                     lte: endDayUTC
                 }
+            },
+            include: {
+                user: true
             }
         });
 
         for (const attend of attendance) {
-            const updateClockOut = await prisma.absensi.update({
-                where: {
-                    id: attend.id,
-                },
-                data: {
-                    clockOut: new Date()
-                },
-            });
+            if (!attend.clockOut) {
+                const updateClockOut = await prisma.absensi.update({
+                    where: {
+                        id: attend.id,
+                    },
+                    data: {
+                        clockOut: new Date()
+                    },
+                });
+                const duration = durationCounter(
+                    updateClockOut.clockIn,
+                    updateClockOut.clockOut,
+                );
 
-            const duration = durationCounter(
-                updateClockOut.clockIn,
-                updateClockOut.clockOut,
-            );
-
-            await prisma.absensi.update({
-                where: {
-                    id: attend.id,
-                },
-                data: {
-                    duration,
-                },
-            });
+                await prisma.absensi.update({
+                    where: {
+                        id: attend.id,
+                    },
+                    data: {
+                        duration,
+                    },
+                });
+            };
         }
     } catch (error) {
         throw error;

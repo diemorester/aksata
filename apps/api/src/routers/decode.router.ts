@@ -1,6 +1,6 @@
 import { DecodeController } from '@/controllers/decode.controller';
 import { authMiddleware } from '@/middleware/auth.middleware';
-import { autoIsActiveRemoval } from '@/services/jobservices/jobServices';
+import { autoClockOutAttendance, autoIsActiveRemoval } from '@/services/jobservices/jobServices';
 import { Router } from 'express';
 
 export class DecodeRouter {
@@ -15,7 +15,7 @@ export class DecodeRouter {
 
   private initializeRoutes(): void {
     this.router.get('/decode', authMiddleware, this.decodeController.DecodeController);
-    this.router.get('/is-active-removal', autoIsActiveRemoval)
+    this.router.get('/is-active-removal', autoClockOutAttendance);
   }
 
   getRouter(): Router {

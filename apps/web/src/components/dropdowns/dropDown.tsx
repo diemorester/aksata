@@ -50,15 +50,15 @@ const DropDown: React.FC<DropDownProps> = ({ onSelect, options, pengajuan, penga
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
                 className={clsx(
-                    `flex gap-2 items-center w-full rounded-md justify-between transition-all`,
+                    `flex gap-2 items-center w-full border-2 rounded-md justify-between transition-all`,
                     selected === placeholder
                         ? `border-2 py-[15px] px-5 text-neutral-500/65 border-off-white`
                         : pengajuan
                         ? `border-2 py-[15px] px-5 text-off-white border-off-white`
-                        : `py-2 px-3 text-black`
+                        : `py-2 px-3 text-black border-black`
                 )}
             >
-                {pengajuan ? `${selected}` : `Filter: ${selected}`}
+                {pengajuan ? `${selected}` : `${selected} ini`}
                 <FaAngleDown
                     className={clsx(
                         `transition-all duration-600`,

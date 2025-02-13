@@ -28,19 +28,19 @@ const TabelAbsensi = () => {
 
     const option = [
         {
-            label: 'Harian',
+            label: 'Hari',
             value: 'daily'
         },
         {
-            label: 'Mingguan',
+            label: 'Minggu',
             value: 'weekly'
         },
         {
-            label: 'Bulanan',
+            label: 'Bulan',
             value: 'monthly'
         },
         {
-            label: 'Tahunan',
+            label: 'Tahun',
             value: 'yearly'
         }
     ];
@@ -85,7 +85,15 @@ const TabelAbsensi = () => {
     return (
         <div className="flex flex-col">
             <div className="w-full mx-auto">
-                <div className="flex flex-col justify-between rounded-md mx-5 px-3 bg-slate-100">
+                <div className="flex flex-col justify-between rounded-md px-3 bg-off-white">
+                    <div className="flex justify-end gap-x-2 items-center pt-[11px]">
+                        <div className='min-w-[130px]'>
+                            <DropDown onSelect={handleSelect} options={option} pengajuanHR />
+                        </div>
+                        <ButtonSpan classname='px-5 py-3' type="submit" fill="bg-black" onClick={handleDownload} disabled={isLoading}>
+                            Export
+                        </ButtonSpan>
+                    </div>
                     <table className="mt-2 md:w-full table-fixed border-collapse">
                         <thead className="pb-5 text-black">
                             <tr className="border-b-[2px] text-start border-black">
@@ -109,11 +117,7 @@ const TabelAbsensi = () => {
                                     Durasi
                                 </th>
                                 <th className="hidden p-3 md:table-cell font-semibold" style={{ width: "30%" }}>
-                                    <div className="relative">
-                                        <div className='md:pl-[56px] md:pr-9'>
-                                            <DropDown onSelect={handleSelect} options={option} pengajuanHR />
-                                        </div>
-                                    </div>
+                                    Tanggal
                                 </th>
                                 <th className="p-3 text-center" style={{ width: "10%" }}>Status</th>
                             </tr>
@@ -136,11 +140,6 @@ const TabelAbsensi = () => {
                             onPageChange={handleChange}
                         />
                     </div>
-                </div>
-                <div className="flex justify-end  items-center px-8 pt-[11px]">
-                    <ButtonSpan type="submit" fill="bg-green-500" onClick={handleDownload} disabled={isLoading}>
-                        PRINT
-                    </ButtonSpan>
                 </div>
             </div>
         </div>
