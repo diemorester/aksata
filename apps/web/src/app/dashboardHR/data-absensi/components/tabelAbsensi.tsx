@@ -65,7 +65,7 @@ const TabelAbsensi = () => {
     const handleDownload = async () => {
         setIsLoading(true);
         try {
-            const res = await excelFetch();
+            const res = await excelFetch(filterBy);
             const link = document.createElement('a');
             const url = window.URL.createObjectURL(new Blob([res.data]));
             link.href = url
@@ -84,28 +84,32 @@ const TabelAbsensi = () => {
 
     return (
         <div className="flex flex-col">
-            <div className="w-full mx-auto">
-                <div className="flex flex-col justify-between rounded-md px-3 bg-off-white">
-                    <div className="flex justify-end gap-x-2 items-center pt-[11px]">
-                        <div className='min-w-[130px]'>
-                            <DropDown onSelect={handleSelect} options={option} pengajuanHR />
+            <div className="w-full mx-auto bg-off-white">
+                <div className="flex flex-col justify-between rounded-md px-3">
+                    <div className='flex items-center justify-between pt-3'>
+                        <SearchBarInput search={search} onChange={handleSearch} />
+                        <div className="flex justify-end gap-x-2 items-center">
+                            <div className='min-w-[130px]'>
+                                <DropDown onSelect={handleSelect} options={option} pengajuanHR />
+                            </div>
+                            <ButtonSpan classname='px-5 py-3' type="submit" fill="bg-black" onClick={handleDownload} disabled={isLoading}>
+                                Export
+                            </ButtonSpan>
                         </div>
-                        <ButtonSpan classname='px-5 py-3' type="submit" fill="bg-black" onClick={handleDownload} disabled={isLoading}>
-                            Export
-                        </ButtonSpan>
                     </div>
                     <table className="mt-2 md:w-full table-fixed border-collapse">
                         <thead className="pb-5 text-black">
                             <tr className="border-b-[2px] text-start border-black">
                                 <th className="p-3 text-start font-semibold" style={{ width: "30%" }}>
-                                    <div className='flex items-center justify-between'>
+                                    {/* <div className='flex items-center justify-between'>
                                         {isOpenSearch ? (
                                             <SearchBarInput search={search} onChange={handleSearch} />
                                         ) : (
                                             <button className='w-full text-start' onClick={() => setIsOpenSearch(true)}>Nama</button>
                                         )}
                                         <IoSearch onClick={handleToggle} />
-                                    </div>
+                                    </div> */}
+                                    Nama
                                 </th>
                                 <th className="hidden p-3 text-center md:table-cell font-semibold" style={{ width: "15%" }}>
                                     Clock-In

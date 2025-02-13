@@ -116,8 +116,11 @@ export class AbsensiController {
 
   async exportExcel(req: Request, res: Response, next: NextFunction) {
     try {
-      const { startDate, endDate } = req.body;
-      const excelFile = await exportExcelService();
+      const { filterBy } = req.query
+      const excelFile = await exportExcelService({
+        filterBy:
+          (filterBy as 'daily' | 'weekly' | 'monthly' | 'yearly') || 'daily',
+      });
 
       res.setHeader(
         'Content-Type',

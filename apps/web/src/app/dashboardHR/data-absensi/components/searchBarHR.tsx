@@ -8,15 +8,15 @@ interface SearchBarInputProps {
 const SearchBarInput: React.FC<SearchBarInputProps> = ({ search, onChange }) => {
 
   return (
-    <>
+    <div>
       <input
         type="text"
         placeholder="Search..."
         value={search}
         onChange={onChange}
-        className="px-3 py-2 rounded-md outline-none text-black bg-broken-white"
+        className="px-3 py-3 rounded-md outline-none text-black bg-broken-white"
       />
-    </>
+    </div>
   );
 };
 

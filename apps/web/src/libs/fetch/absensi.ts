@@ -33,12 +33,13 @@ export const clockOutFetch = async () => {
   return res;
 };
 
-export const excelFetch = async () => {
+export const excelFetch = async (filterBy: string) => {
   const res = await axiosInstance.get(
-    '/absensi/export-excel', {
+   `/absensi/export-excel?filterBy=${filterBy}`, {
     responseType: 'blob'
   }
   );
+console.log(res, 'terus dikasih tanda');
 
   return res;
 };
