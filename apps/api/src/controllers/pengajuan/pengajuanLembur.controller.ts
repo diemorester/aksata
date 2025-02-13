@@ -40,11 +40,18 @@ export class PengajuanLemburPerdinController {
 
     async getPengajuanLemburPerdinByUserId(req: Request, res: Response, next: NextFunction) {
         try {
-            const { user, pengajuanUser: response } = await getPengajuanLemburPerdinByUserIdService(req.params.userId);
+            // const { user, pengajuanUser: response } = await getPengajuanLemburPerdinByUserIdService(req.params.userId);
+            const { userId } = req.params;
+            const filterType = req.query.filterType as 'Monthly' | 'Yearly';
+            
+            if (!filterType || (filterType !== 'Monthly' && filterType !== 'Yearly')) {
+                throw new Error("Tipe Filter harus 'Monthly' atau 'Yearly'");
+            }
+
+            const response = await getPengajuanLemburPerdinByUserIdService(userId, filterType)
             return res.status(200).send({
                 status: 'ok',
-                user,
-                response
+                ...response
             })
         } catch (error) {
             next(error)

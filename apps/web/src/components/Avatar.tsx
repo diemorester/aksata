@@ -16,7 +16,7 @@ const Avatar: React.FC<AvatarProps> = ({ image, size = 'Icon', }) => {
       className={cn(`rounded-full object-cover`,
         size === 'Icon' && 'w-8 h-8',
         size === 'Medium' && 'w-16 h-16',
-        size === 'Large' && 'w-28 h-28'
+        size === 'Large' && 'w-20 h-20'
       )}
     />
   );

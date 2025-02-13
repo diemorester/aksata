@@ -1,3 +1,4 @@
+import { getDateRange } from "@/helpers/dateRange";
 import prisma from "@/prisma";
 import { OpsiPengajuan, Pengajuan } from "@prisma/client";
 import { ObjectId } from 'mongodb';
@@ -27,7 +28,7 @@ export const pengajuanLemburPerdinService = async (body: Pengajuan, userId: stri
             if (!durationHours || durationHours <= 0) {
                 throw new Error('Durasi Lembur tidak boleh kurang dari 1 jam per hari');
             }
-            if (durationHours > 7 ) {
+            if (durationHours > 7) {
                 throw new Error('Durasi Lembur tidak boleh lebih dari 7 jam per hari');
             }
             if (kota) {
@@ -156,7 +157,10 @@ export const getAllUserService = async () => {
     }
 };
 
-export const getPengajuanLemburPerdinByUserIdService = async (userId: string) => {
+export const getPengajuanLemburPerdinByUserIdService = async (
+    userId: string,
+    filterType: 'Monthly' | 'Yearly'
+) => {
     try {
         if (!ObjectId.isValid(userId)) {
             throw new Error('UserID tidak valid');
@@ -168,20 +172,87 @@ export const getPengajuanLemburPerdinByUserIdService = async (userId: string) =>
             },
             select: {
                 name: true,
-                avatar: true
+                avatar: true,
+                email: true,
+                phone: true
             }
         })
 
         if (!user) throw new Error('User tydac ditemukan');
 
+        const { startUTC, endUTC } = getDateRange(filterType);
+
         const pengajuanUser = await prisma.pengajuan.findMany({
             where: {
                 userId,
                 statusPengajuan: 'Approved',
+                date: {
+                    gte: startUTC,
+                    lte: endUTC,
+                },
+            },
+            orderBy: {
+                date: 'asc'
+            }
+        });
+
+        const totalHours = await prisma.pengajuan.aggregate({
+            where: {
+                userId,
+                statusPengajuan: 'Approved',
+                date: {
+                    gte: startUTC,
+                    lte: endUTC,
+                },
+            },
+            _sum: {
+                durationHours: true,
             },
         });
 
-        return { user, pengajuanUser };
+        const totalLembur = await prisma.pengajuan.count({
+            where: {
+                userId,
+                statusPengajuan: 'Approved',
+                tipePengajuan: 'Lembur',
+                date: {
+                    gte: startUTC,
+                    lte: endUTC,
+                },
+            },
+        });
+
+        const totalPerjalananDinas = await prisma.pengajuan.count({
+            where: {
+                userId,
+                statusPengajuan: 'Approved',
+                tipePengajuan: 'PerjalananDinas',
+                date: {
+                    gte: startUTC,
+                    lte: endUTC,
+                },
+            },
+        });
+
+        const totalPengajuan = await prisma.pengajuan.count({
+            where: {
+                userId,
+                statusPengajuan: 'Approved',
+                date: {
+                    gte: startUTC,
+                    lte: endUTC,
+                },
+            },
+        });
+
+        return {
+            user,
+            pengajuanUser,
+            totalHours: totalHours._sum.durationHours || 0,
+            totalLembur,
+            totalPerjalananDinas,
+            totalPengajuan
+        };
     } catch (error) {
         throw error;
     }

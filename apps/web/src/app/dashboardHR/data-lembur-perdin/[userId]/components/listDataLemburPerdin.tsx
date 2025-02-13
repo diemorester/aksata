@@ -9,6 +9,9 @@ import ButtonSpan from '@/components/buttons/spanButtons';
 import DropDown from '@/components/dropdowns/dropDown';
 import Avatar from '@/components/Avatar';
 import { notFound } from 'next/navigation';
+import { useState } from 'react';
+import { LuClock8 } from 'react-icons/lu';
+import { LuClipboardList, LuClipboardCopy, LuClipboardPaste } from "react-icons/lu";
 
 interface ListCardDataLemburPerdinProps {
   userId: string;
@@ -17,27 +20,34 @@ interface ListCardDataLemburPerdinProps {
 const ListCardDataLemburPerdin: React.FC<ListCardDataLemburPerdinProps> = ({
   userId,
 }) => {
-  const { data: pengajuanData, error } = useGetPengajuanLemburPerdinByUserId(userId);
+
+  const [filterType, setFilterType] = useState<"Monthly" | "Yearly">("Monthly");
+  const { data: pengajuanData, error } = useGetPengajuanLemburPerdinByUserId(userId, filterType);
+
   if (error) {
     notFound()
   }
 
   const option = [
     {
-      label: 'Bulanan',
-      value: 'monthly'
+      label: 'Bulan',
+      value: 'Monthly'
     },
     {
-      label: 'Tahunan',
-      value: 'yearly'
+      label: 'Tahun',
+      value: 'Yearly'
     }
   ];
 
-  const handleSelect = () => { }
+  const handleSelect = (selectedValue: string) => {
+    if (selectedValue === 'Monthly' || selectedValue === 'Yearly') {
+      setFilterType(selectedValue);
+    }
+  }
 
   return (
     <div className="w-full flex flex-col">
-      <div className='w-full flex flex-col justify-between py-3 px-5 h-1/2 bg-off-white rounded-lg shadow-sm shadow-black/25'>
+      <div className='w-full flex flex-col justify-between py-5 px-6 h-1/2 bg-off-white rounded-lg shadow-sm shadow-black/25'>
         <div className='w-full font-semibold flex justify-between'>
           <Link className='flex items-center gap-x-2 hover:text-neutral-500 transition ease-in-out' href="/dashboardHR/data-lembur-perdin">
             <FaArrowLeftLong />
@@ -60,25 +70,55 @@ const ListCardDataLemburPerdin: React.FC<ListCardDataLemburPerdinProps> = ({
             </ButtonSpan>
           </div>
         </div>
-        <div className='flex py-2 items-center'>
+        <div className='flex px-1 py-2 items-center space-x-3'>
           <Avatar image={pengajuanData?.user.avatar!} size='Large' />
-          <div className='flex flex-col h-full justify-between p-1 md:px-6 bg-red-500'>
-            <p className='text-2xl font-bold'>Namaasdsadsadsadsadsad</p>
-            <div className='flex justify-start gap-x-20'>
-              <p>Apa 1</p>
-              <p>Apa 2</p>
+          <div className='flex flex-col h-full justify-between p-1 md:px-6'>
+            <p className='text-xl font-bold'>{pengajuanData?.user.name}</p>
+            <div className='flex px-1 pt-3 justify-start gap-x-32'>
+              <div>
+                <label className='block font-light text-neutral-800'>Phone Number</label>
+                <p className='px-1'>{pengajuanData?.user.phone == null ? '-' : `+62 ${pengajuanData.user.phone}`}</p>
+              </div>
+              <div>
+                <label className='block font-light text-neutral-800'>Email</label>
+                <p className='px-1'>{pengajuanData?.user.email}</p>
+              </div>
             </div>
           </div>
         </div>
         <div className="grid grid-cols-4 grid-rows-1 gap-3">
-          <div >1</div>
-          <div >2</div>
-          <div >3</div>
-          <div >4</div>
+          <div className="flex px-5 py-4 gap-x-5 rounded-xl bg-slate-200">
+            <LuClock8 className='rounded-full bg-off-white w-12 h-12 p-2 text-black' width={25} height={25} />
+            <div className='space-y-1'>
+              <label className='block font-light text-sm text-neutral-700'>Total Hours</label>
+              <p className='font-semibold text-lg px-2'>{pengajuanData?.totalHours}</p>
+            </div>
+          </div>
+          <div className="flex px-5 py-4 gap-x-5 rounded-xl bg-slate-200">
+            <LuClipboardCopy className='rounded-full bg-off-white w-12 h-12 p-2 text-black' width={25} height={25} />
+            <div className='space-y-1'>
+              <label className='block font-light text-sm'>Total Lembur</label>
+              <p className='font-semibold text-lg px-2'>{pengajuanData?.totalLembur}</p>
+            </div>
+          </div>
+          <div className="flex px-5 py-4 gap-x-5 rounded-xl bg-slate-200">
+            <LuClipboardPaste className='rounded-full bg-off-white w-12 h-12 p-2 text-black' width={25} height={25} />
+            <div className='space-y-1'>
+              <label className='block font-light text-sm'>Total Perjalanan Dinas</label>
+              <p className='font-semibold text-lg px-2'>{pengajuanData?.totalPerjalananDinas}</p>
+            </div>
+          </div>
+          <div className="flex px-5 py-4 gap-x-5 rounded-xl bg-slate-200">
+            <LuClipboardList className='rounded-full bg-off-white w-12 h-12 p-2 text-black' width={25} height={25} />
+            <div className='space-y-1'>
+              <label className='block font-light text-sm'>Total Pengajuan</label>
+              <p className='font-semibold text-lg px-2'>{pengajuanData?.totalPengajuan}</p>
+            </div>
+          </div>
         </div>
       </div>
-      <div className='flex gap-10 flex-wrap'>
-        {pengajuanData?.response.map((pengajuan) => {
+      <div className='flex gap-10 h-1/2 flex-wrap'>
+        {pengajuanData?.pengajuanUser.map((pengajuan) => {
           return (
             <CardDataLemburPerdin
               key={pengajuan.id}
@@ -97,7 +137,7 @@ const ListCardDataLemburPerdin: React.FC<ListCardDataLemburPerdinProps> = ({
           );
         })}
       </div>
-      {pengajuanData?.response.length === 0 && (
+      {pengajuanData?.pengajuanUser.length === 0 && (
         <div>
           <Empty className='py-32' />
         </div>
