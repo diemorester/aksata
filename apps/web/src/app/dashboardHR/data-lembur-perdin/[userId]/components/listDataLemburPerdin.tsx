@@ -53,8 +53,8 @@ const ListCardDataLemburPerdin: React.FC<ListCardDataLemburPerdinProps> = ({
             <FaArrowLeftLong />
             kembali
           </Link>
-          <div className='flex items-center'>
-            <div className='min-w-[168px]'>
+          <div className='flex gap-x-2 items-center'>
+            <div className='w-[122px] text-start'>
               <DropDown
                 pengajuanHR
                 options={option}
@@ -65,6 +65,7 @@ const ListCardDataLemburPerdin: React.FC<ListCardDataLemburPerdinProps> = ({
               aksata
               type='submit'
               fill='bg-black'
+              classname='px-5 py-3'
             >
               Export
             </ButtonSpan>

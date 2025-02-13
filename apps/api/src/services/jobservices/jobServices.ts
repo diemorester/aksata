@@ -3,7 +3,6 @@ import { convertToWIB, getDayRange } from "@/helpers/timezoneConverter";
 import prisma from "@/prisma";
 import { isWeekend } from "date-fns";
 import Holidays from "date-holidays";
-import { Request, Response } from "express";
 
 export const autoAlphaAttendance = async () => {
     const { startDayUTC, endDayUTC } = getDayRange();
@@ -49,7 +48,7 @@ export const autoAlphaAttendance = async () => {
     }
 };
 
-export const autoClockOutAttendance = async (req: Request, res: Response) => {
+export const autoClockOutAttendance = async () => {
     const { startDayUTC, endDayUTC } = getDayRange();
 
     try {
@@ -97,7 +96,6 @@ export const autoClockOutAttendance = async (req: Request, res: Response) => {
                 });
             };
         }
-        return res.json({ msg: 'ok', attendance })
     } catch (error) {
         throw error;
     }

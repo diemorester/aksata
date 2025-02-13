@@ -55,7 +55,7 @@ const DropDown: React.FC<DropDownProps> = ({ onSelect, options, pengajuan, penga
                         ? `border-2 py-[15px] px-5 text-neutral-500/65 border-off-white`
                         : pengajuan
                         ? `border-2 py-[15px] px-5 text-off-white border-off-white`
-                        : `py-2 px-3 text-black`
+                        : `py-2 px-3 text-black border-black`
                 )}
             >
                 {pengajuan ? `${selected}` : `${selected} ini`}
