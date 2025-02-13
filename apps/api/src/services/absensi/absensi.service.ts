@@ -396,11 +396,103 @@ export const getAllAttendanceService = async (query: AbsensiQuery) => {
     throw error;
   }
 };
-
-export const exportExcelService = async () => {
+interface ExcelFilterType {
+  filterBy: 'daily' | 'weekly' | 'monthly' | 'yearly'
+}
+export const exportExcelService = async (query: ExcelFilterType) => {
+  const { startDayUTC, } = getDayRange()
   try {
     const workbook = new ExcelJS.Workbook();
+    const { filterBy } = query;
     const sheet: ExcelJS.Worksheet = workbook.addWorksheet('Absensi');
+
+    const now = new Date();
+    let cutoffStart: Date | undefined;
+    let cutoffEnd: Date | undefined;
+
+    // Menentukan rentang cutoff
+    if (now.getDate() >= 21) {
+      // Kalau tanggal sekarang >= 21, periode mulai 21 bulan ini sampai 20 bulan depan
+      cutoffStart = new Date(now.getFullYear(), now.getMonth(), 21, 0, 0, 0, 0); // 21 bulan ini
+      cutoffEnd = new Date(
+        now.getFullYear(),
+        now.getMonth() + 1,
+        20,
+        23,
+        59,
+        59,
+        999,
+      ); // Sampai 20 bulan depan, jam 23:59:59.999
+    } else {
+      // Kalau tanggal sekarang < 21, periode mulai 21 bulan lalu sampai 20 bulan ini
+      cutoffStart = new Date(
+        now.getFullYear(),
+        now.getMonth() - 1,
+        21,
+        0,
+        0,
+        0,
+        0,
+      ); // 21 bulan lalu
+      cutoffEnd = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        20,
+        23,
+        59,
+        59,
+        999,
+      ); // Sampai 20 bulan ini, jam 23:59:59.999
+    }
+
+    let startDate: Date | undefined;
+    let endDate: Date | undefined;
+
+    if (filterBy === 'daily') {
+      startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      endDate = new Date(startDate);
+      endDate.setDate(startDate.getDate() + 1);
+    } else if (filterBy === 'weekly') {
+      const dayOfWeek = now.getDay();
+      startDate = new Date(now);
+      startDate.setDate(now.getDate() - dayOfWeek);
+      startDate.setHours(0, 0, 0, 0);
+      endDate = new Date(startDate);
+      endDate.setDate(startDate.getDate() + 7);
+    } else if (filterBy === 'monthly') {
+      startDate = new Date(cutoffStart);
+      endDate = new Date(cutoffEnd);
+    } else if (filterBy === 'yearly') {
+      // startDate = new Date(now.getFullYear(), 0, 0);
+      // endDate = new Date(now.getFullYear() + 1, 0, 20);
+      const fiscalYearStart =
+        startDayUTC.getMonth() > 0 ||
+        (startDayUTC.getMonth() === 0 && startDayUTC.getDate() >= 21)
+          ? new Date(startDayUTC.getFullYear(), 0, 21, 0, 0, 0, 0) // 21 Januari tahun ini (WIB)
+          : new Date(startDayUTC.getFullYear() - 1, 0, 21, 0, 0, 0, 0); // 21 Januari tahun lalu (WIB)
+
+      const fiscalYearEnd = new Date(
+        fiscalYearStart.getFullYear() + 1,
+        0,
+        20,
+        23,
+        59,
+        59,
+        999,
+      ); // 20 Januari tahun berikutnya (WIB)
+
+      startDate = fiscalYearStart;
+      endDate = fiscalYearEnd;
+    }
+
+    // startDate = startDate && startDate < cutoffStart ? cutoffStart : startDate;
+    // endDate = endDate && endDate > cutoffEnd ? cutoffEnd : endDate;
+    if (startDate && startDate < cutoffStart!) {
+      startDate = cutoffStart;
+    }
+    if (endDate && endDate > cutoffEnd!) {
+      endDate = cutoffEnd;
+    }
 
     // No.
     sheet.getCell('A1').font = { bold: true, size: 12 };
@@ -528,6 +620,10 @@ export const exportExcelService = async () => {
           none: {
             status: { in: ['Approved', 'Cancelled', 'Declined', 'Waiting'] },
           },
+        },
+        date: {
+          gte: startDate,
+          lte: endDate,
         },
       },
       include: {
