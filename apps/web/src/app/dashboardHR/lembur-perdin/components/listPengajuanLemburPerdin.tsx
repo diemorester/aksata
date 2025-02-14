@@ -9,7 +9,7 @@ const ListPengajuanLemburPerdin = () => {
     
     return (
         <div className="w-full">
-            <div className="grid grid-cols-1 md:grid-cols-3 md:gap-5">
+            <div className="grid md:grid-cols-3 md:gap-5">
                 {data?.response.map((item) => {
                     return <CardPengajuanLemburPerdin key={item.id} durationHours={item.durationHours} kota={item.kota} id={item.id} revalidate={revalidate} keterangan={item.keterangan} user={item.user!} tipePengajuan={item.tipePengajuan} date={item.date} />
                 })}

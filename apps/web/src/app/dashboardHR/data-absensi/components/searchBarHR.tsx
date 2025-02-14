@@ -14,7 +14,7 @@ const SearchBarInput: React.FC<SearchBarInputProps> = ({ search, onChange }) => 
         placeholder="Search..."
         value={search}
         onChange={onChange}
-        className="px-3 py-3 rounded-md outline-none text-black bg-broken-white"
+        className="md:p-3 rounded-md outline-none text-black bg-broken-white"
       />
     </div>
   );

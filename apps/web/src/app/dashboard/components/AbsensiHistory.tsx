@@ -41,11 +41,11 @@ const AbsensiHistory = () => {
         weekEnd: (day) => day.getDay() == 0 || day.getDay() == 6
       }}
       modifiersClassNames={{
-        Hadir: 'bg-[#50C878] text-black',
-        Alpha: 'bg-[#E34234] text-black',
-        Cuti: 'bg-[#4169E1] text-black',
-        Izin: 'bg-[#DA70D6] text-black',
-        Sakit: 'bg-[#FCF55F] text-black',
+        Hadir: 'bg-[#54F1C4]/55 text-[#54F1C4]',
+        Alpha: 'bg-[#F4364C]/55 text-[#F4364C]',
+        Cuti: 'bg-[#4169E1]/55 text-black',
+        Izin: 'bg-[#DA70D6]/55 text-black',
+        Sakit: 'bg-[#FCF55F]/55 text-black',
         weekEnd: 'text-red-500'
       }}
     />

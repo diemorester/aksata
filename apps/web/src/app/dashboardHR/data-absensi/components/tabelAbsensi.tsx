@@ -83,16 +83,16 @@ const TabelAbsensi = () => {
     }
 
     return (
-        <div className="flex flex-col">
-            <div className="w-full mx-auto bg-off-white">
+        <div className="flex flex-col w-full">
+            <div className="w-full bg-off-white">
                 <div className="flex flex-col justify-between rounded-md px-3">
                     <div className='flex items-center justify-between pt-3'>
                         <SearchBarInput search={search} onChange={handleSearch} />
-                        <div className="flex justify-end gap-x-2 items-center">
-                            <div className='min-w-[130px]'>
+                        <div className="flex justify-end md:gap-x-2 items-center">
+                            <div className='md:min-w-[130px]'>
                                 <DropDown onSelect={handleSelect} options={option} pengajuanHR />
                             </div>
-                            <ButtonSpan classname='px-5 py-3' type="submit" fill="bg-black" onClick={handleDownload} disabled={isLoading}>
+                            <ButtonSpan classname='md:px-5 md:py-3' type="submit" fill="bg-black" onClick={handleDownload} disabled={isLoading}>
                                 Export
                             </ButtonSpan>
                         </div>
@@ -101,14 +101,6 @@ const TabelAbsensi = () => {
                         <thead className="pb-5 text-black">
                             <tr className="border-b-[2px] text-start border-black">
                                 <th className="p-3 text-start font-semibold" style={{ width: "30%" }}>
-                                    {/* <div className='flex items-center justify-between'>
-                                        {isOpenSearch ? (
-                                            <SearchBarInput search={search} onChange={handleSearch} />
-                                        ) : (
-                                            <button className='w-full text-start' onClick={() => setIsOpenSearch(true)}>Nama</button>
-                                        )}
-                                        <IoSearch onClick={handleToggle} />
-                                    </div> */}
                                     Nama
                                 </th>
                                 <th className="hidden p-3 text-center md:table-cell font-semibold" style={{ width: "15%" }}>
@@ -120,7 +112,7 @@ const TabelAbsensi = () => {
                                 <th className="hidden p-3 text-center md:table-cell font-semibold" style={{ width: "20%" }}>
                                     Durasi
                                 </th>
-                                <th className="hidden p-3 md:table-cell font-semibold" style={{ width: "30%" }}>
+                                <th className="p-3 font-semibold" style={{ width: "30%" }}>
                                     Tanggal
                                 </th>
                                 <th className="p-3 text-center" style={{ width: "10%" }}>Status</th>

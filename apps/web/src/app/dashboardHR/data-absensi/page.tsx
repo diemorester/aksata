@@ -2,7 +2,7 @@ import TabelAbsensi from "./components/tabelAbsensi"
 
 const DataAbsensi = () => {
   return (
-    <div>
+    <div className="w-full">
         <TabelAbsensi />
     </div>
   )

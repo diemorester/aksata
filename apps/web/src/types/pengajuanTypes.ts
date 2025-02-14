@@ -30,5 +30,6 @@ export interface PengajuanLemburPerdinType {
     user?: {
         name: string;
         avatar: string | null;
+        phone: string | null
     }
   };

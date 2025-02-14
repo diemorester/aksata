@@ -36,11 +36,11 @@ export function PieChartComponent() {
         },
         alpha: {
             label: "Alpha",
-            color: "#E34234",
+            color: "#F4364C",
         },
         hadir: {
             label: "Hadir",
-            color: "#50C878",
+            color: "#54F1C4",
         },
         sakit: {
             label: "Sakit",

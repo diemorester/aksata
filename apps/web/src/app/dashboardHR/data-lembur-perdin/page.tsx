@@ -2,7 +2,7 @@ import ListUser from "./components/ListUser"
 
 const DataLemburPerdin = () => {
     return (
-      <div>
+      <div className="w-full">
           <ListUser />
       </div>
     )

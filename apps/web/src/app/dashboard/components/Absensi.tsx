@@ -79,7 +79,7 @@ const Absensi = () => {
             type="button"
             onClick={handleClockIn}
             disabled={isLoading}
-            className="text-sm bg-green-400/85 active:scale-95 hover:bg-green-400/60 text-white py-2 px-2 rounded-md w-full"
+            className="text-sm bg-[#54F1C4]/55 active:scale-95 hover:bg-[#54F1C4] text-[#54F1C4] hover:text-black py-2 px-2 rounded-md w-full"
           >
             Clock In
           </button>
@@ -87,7 +87,7 @@ const Absensi = () => {
             type="button"
             onClick={handleClockOut}
             disabled={isLoading}
-            className="active:scale-95 text-sm bg-[#E34234] text-white disabled:cursor-not-allowed disabled:active:scale-100 hover:bg-[#E34234]/75 py-2 px-2 rounded-md w-full"
+            className="active:scale-95 text-sm bg-[#F4364C]/55 text-white disabled:cursor-not-allowed disabled:active:scale-100 hover:bg-[#F4364C] py-2 px-2 rounded-md w-full"
           >
             Clock Out
           </button>
