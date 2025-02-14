@@ -8,9 +8,9 @@ const ListUser = () => {
   const { data: dataUsers } = useGetAllUser();
 
   return (
-    <div className="flex gap-10 flex-wrap">
+    <div className="grid md:grid-cols-3 gap-5 md:p-32">
       {dataUsers?.response.map((user) => {
-        return <CardUser key={user.id} id={user.id} name={user.name} />;
+        return <CardUser key={user.id} id={user.id} name={user.name} avatar={user.avatar!} phone={user.phone} />;
       })}
     </div>
   );

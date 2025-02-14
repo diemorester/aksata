@@ -7,7 +7,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query"
 
 interface ResponseGetAllPengajuanLemburPerdin {
     status: string;
-    response: PengajuanLemburPerdinType[]
+    response: PengajuanLemburPerdinType[];
+    
 }
 
 const useGetAllPengajuanLemburPerdin = () => {

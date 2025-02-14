@@ -27,7 +27,7 @@ function Calendar({
         ),
         months: clsx(
           '',
-          numberOfMonths === 12 && 'grid grid-cols-3 gap-3 w-fit'
+          numberOfMonths === 12 && 'grid md:grid-cols-3 gap-3 w-fit'
         ),
         caption: "flex justify-center relative items-center py-3",
         caption_label: "text-xl font-semibold",

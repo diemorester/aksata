@@ -21,12 +21,12 @@ const CardDataAbsensi: React.FC<CardAbsensiProps> = ({ name, clockIn, clockOut, 
     return (
         <tr className={clsx("border-b border-black/10", activeBackground && "bg-broken-white/50")}>
             <th className="px-3 py-1 text-start font-extralight">{name}</th>
-            <th className="px-3 py-1 text-center font-extralight">{clockIn ? hourFormat(clockIn) : "--/--"}</th>
-            <th className="px-3 py-1 text-center font-extralight">{clockOut ? hourFormat(clockOut) : `--/--`}</th>
-            <th className="px-3 py-1 text-center font-extralight">{duration ? `${hours}h ${minutes}m` : `--/--`}</th>
+            <th className="px-3 py-1 text-center font-extralight hidden md:table-cell">{clockIn ? hourFormat(clockIn) : "--/--"}</th>
+            <th className="px-3 py-1 text-center font-extralight hidden md:table-cell">{clockOut ? hourFormat(clockOut) : `--/--`}</th>
+            <th className="px-3 py-1 text-center font-extralight hidden md:table-cell">{duration ? `${hours}h ${minutes}m` : `--/--`}</th>
             <th className="px-3 py-1 text-center font-extralight">{dayFormat(date)}</th>
             <th className="py-1 flex items-center justify-center font-light">
-                <p className={clsx(`text-center py-2  w-full text-black rounded-lg `,
+                <p className={clsx(`text-center py-2 w-full text-black rounded-lg `,
                     status == "Hadir" && "bg-green-500/85",
                     status == "Terlambat" && "bg-amber-500/85",
                     status == "Sakit" && "bg-[#FFFF33]",

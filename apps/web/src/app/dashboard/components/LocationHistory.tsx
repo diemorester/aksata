@@ -60,7 +60,7 @@ const LocationHistory = () => {
           <AccordionItem
             key={absensi.id}
             value={absensi.date}
-            className='cursor-pointer scrollbar-none'
+            className='cursor-pointer scrollbar-none group'
             onClick={(e) => {
               if ((e.target as HTMLElement).closest("button")) return;
               setOpenValue((prev) => (prev === absensi.date ? "" : absensi.date));
@@ -72,7 +72,7 @@ const LocationHistory = () => {
               </p>
               <p className={cn(
                 `p-1 min-w-[50px] font-light text-center text-black tracking-wide rounded-md`,
-                absensi.status === 'Hadir' && 'bg-[#50C878]',
+                absensi.status === 'Hadir' && 'bg-[#54F1C4]/55 group-hover:bg-[#54F1C4] text-[#54F1C4] group-hover:text-black',
                 absensi.status === 'Alpha' && 'bg-[#E34234]',
                 absensi.status === 'Cuti' && 'bg-[#4169E1]',
                 absensi.status === 'Izin' && 'bg-[#DA70D6]',

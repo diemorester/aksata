@@ -42,7 +42,7 @@ const Kalender: React.FC<KalenderProps> = ({ onClick }) => {
                         <div className="rounded-md w-[16px] h-[28px] bg-black border-off-white border-2"></div>
                     </div>
                 </div>
-                <div className="font-bold w-[150px] h-[40px] bg-[#E34234] pt-3 text-off-white rounded-t-lg">
+                <div className="font-bold w-[150px] h-[40px] bg-[#F4364C] pt-3 text-off-white rounded-t-lg">
                     {month[monthNow]}
                 </div>
                 <div className="font-bold w-[150px] h-[90px] bg-off-white text-black place-content-center rounded-b-lg">

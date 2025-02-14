@@ -31,4 +31,6 @@ export interface EditModalProps {
 export interface AllUserType {
     id: string;
     name: string;
+    avatar: string;
+    phone: string;
 }

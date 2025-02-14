@@ -46,15 +46,15 @@ const ListCardDataLemburPerdin: React.FC<ListCardDataLemburPerdinProps> = ({
   }
 
   return (
-    <div className="w-full flex flex-col">
-      <div className='w-full flex flex-col justify-between py-5 px-6 h-1/2 bg-off-white rounded-lg shadow-sm shadow-black/25'>
+    <div className="w-full flex flex-col gap-y-3 relative">
+      <div className='w-full flex flex-col justify-between md:py-5 md:px-6 z-30 bg-off-white sticky top-10 rounded-lg shadow-sm shadow-black/25'>
         <div className='w-full font-semibold flex justify-between'>
           <Link className='flex items-center gap-x-2 hover:text-neutral-500 transition ease-in-out' href="/dashboardHR/data-lembur-perdin">
             <FaArrowLeftLong />
             kembali
           </Link>
           <div className='flex gap-x-2 items-center'>
-            <div className='w-[122px] text-start'>
+            <div className='md:w-[122px] text-start'>
               <DropDown
                 pengajuanHR
                 options={option}
@@ -75,41 +75,41 @@ const ListCardDataLemburPerdin: React.FC<ListCardDataLemburPerdinProps> = ({
           <Avatar image={pengajuanData?.user.avatar!} size='Large' />
           <div className='flex flex-col h-full justify-between p-1 md:px-6'>
             <p className='text-xl font-bold'>{pengajuanData?.user.name}</p>
-            <div className='flex px-1 pt-3 justify-start gap-x-32'>
-              <div>
+            <div className='flex flex-col md:flex-row px-1 pt-3 gap-3 justify-start md:gap-x-32'>
+              <div className='text-xs md:text-base'>
                 <label className='block font-light text-neutral-800'>Phone Number</label>
-                <p className='px-1'>{pengajuanData?.user.phone == null ? '-' : `+62 ${pengajuanData.user.phone}`}</p>
+                <p className='md:px-1'>{pengajuanData?.user.phone == null ? '-' : `+62 ${pengajuanData.user.phone}`}</p>
               </div>
-              <div>
+              <div className='text-xs md:text-base'>
                 <label className='block font-light text-neutral-800'>Email</label>
-                <p className='px-1'>{pengajuanData?.user.email}</p>
+                <p className='md:px-1'>{pengajuanData?.user.email}</p>
               </div>
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-4 grid-rows-1 gap-3">
-          <div className="flex px-5 py-4 gap-x-5 rounded-xl bg-slate-200">
+        <div className="grid grid-cols-2 md:grid-cols-4 grid-rows-1 gap-3">
+          <div className="flex md:px-5 md:py-4 md:gap-x-5 rounded-xl bg-slate-200">
             <LuClock8 className='rounded-full bg-off-white w-12 h-12 p-2 text-black' width={25} height={25} />
             <div className='space-y-1'>
               <label className='block font-light text-sm text-neutral-700'>Total Hours</label>
               <p className='font-semibold text-lg px-2'>{pengajuanData?.totalHours}</p>
             </div>
           </div>
-          <div className="flex px-5 py-4 gap-x-5 rounded-xl bg-slate-200">
+          <div className="flex md:px-5 md:py-4 md:gap-x-5 rounded-xl bg-slate-200">
             <LuClipboardCopy className='rounded-full bg-off-white w-12 h-12 p-2 text-black' width={25} height={25} />
             <div className='space-y-1'>
               <label className='block font-light text-sm'>Total Lembur</label>
               <p className='font-semibold text-lg px-2'>{pengajuanData?.totalLembur}</p>
             </div>
           </div>
-          <div className="flex px-5 py-4 gap-x-5 rounded-xl bg-slate-200">
+          <div className="flex md:px-5 md:py-4 md:gap-x-5 rounded-xl bg-slate-200">
             <LuClipboardPaste className='rounded-full bg-off-white w-12 h-12 p-2 text-black' width={25} height={25} />
             <div className='space-y-1'>
               <label className='block font-light text-sm'>Total Perjalanan Dinas</label>
               <p className='font-semibold text-lg px-2'>{pengajuanData?.totalPerjalananDinas}</p>
             </div>
           </div>
-          <div className="flex px-5 py-4 gap-x-5 rounded-xl bg-slate-200">
+          <div className="flex md:px-5 md:py-4 md:gap-x-5 rounded-xl bg-slate-200">
             <LuClipboardList className='rounded-full bg-off-white w-12 h-12 p-2 text-black' width={25} height={25} />
             <div className='space-y-1'>
               <label className='block font-light text-sm'>Total Pengajuan</label>
@@ -118,25 +118,27 @@ const ListCardDataLemburPerdin: React.FC<ListCardDataLemburPerdinProps> = ({
           </div>
         </div>
       </div>
-      <div className='flex gap-10 h-1/2 flex-wrap'>
-        {pengajuanData?.pengajuanUser.map((pengajuan) => {
-          return (
-            <CardDataLemburPerdin
-              key={pengajuan.id}
-              createdAt={pengajuan.createdAt}
-              date={pengajuan.date}
-              id={pengajuan.date}
-              keterangan={pengajuan.keterangan}
-              nominal={pengajuan.nominal}
-              durationHours={pengajuan.durationHours}
-              kota={pengajuan.kota}
-              statusPengajuan={pengajuan.statusPengajuan}
-              tipePengajuan={pengajuan.tipePengajuan}
-              updatedAt={pengajuan.updatedAt}
-              userId={pengajuan.userId}
-            />
-          );
-        })}
+      <div className='w-full px-2 relative overflow-auto scrollbar-none'>
+        <div className='grid md:grid-cols-3 grid-rows-2 gap-3'>
+          {pengajuanData?.pengajuanUser.map((pengajuan) => {
+            return (
+              <CardDataLemburPerdin
+                key={pengajuan.id}
+                createdAt={pengajuan.createdAt}
+                date={pengajuan.date}
+                id={pengajuan.date}
+                keterangan={pengajuan.keterangan}
+                nominal={pengajuan.nominal}
+                durationHours={pengajuan.durationHours}
+                kota={pengajuan.kota}
+                statusPengajuan={pengajuan.statusPengajuan}
+                tipePengajuan={pengajuan.tipePengajuan}
+                updatedAt={pengajuan.updatedAt}
+                userId={pengajuan.userId}
+              />
+            );
+          })}
+        </div>
       </div>
       {pengajuanData?.pengajuanUser.length === 0 && (
         <div>

@@ -1,5 +1,6 @@
 "use client"
 
+import Avatar from "@/components/Avatar";
 import ButtonSpan from "@/components/buttons/spanButtons";
 import ModalApproval from "@/components/modalApproval";
 import ModalRefusal from "@/components/modalRefusal";
@@ -29,7 +30,7 @@ interface PengajuanLemburPerdinType {
     }
 }
 
-const CardPengajuanLemburPerdin: React.FC<RevalidateType> = ({ user, id, tipePengajuan, revalidate, date, keterangan, durationHours, kota }) => {
+const CardPengajuanLemburPerdin: React.FC<RevalidateType> = ({ user, id, tipePengajuan, revalidate, date, keterangan, durationHours, kota, }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isOpenApproval, setIsOpenApproval] = useState(false);
     const [isOpenRefusal, setIsOpenRefusal] = useState(false);
@@ -70,13 +71,7 @@ const CardPengajuanLemburPerdin: React.FC<RevalidateType> = ({ user, id, tipePen
         <div className="flex flex-col w-full h-full border px-3 pt-2 pb-3 bg-off-white rounded-lg shadow-sm shadow-black/35">
             <div className="flex items-center justify-between pb-2">
                 <div className="flex pt-4 px-2 space-x-2">
-                    <Image
-                        width={168}
-                        height={168}
-                        alt="avatar"
-                        src={user?.avatar || '/profileplaceholder.png'}
-                        className="rounded-full object-cover w-8 h-8"
-                    />
+                    <Avatar image={user.avatar} size="Icon"/>
                     <h1 className="text-lg p-1 font-bold">{user?.name}</h1>
                 </div>
                 <div className="pt-1 pb-5">
