@@ -2,7 +2,7 @@ import ContainerPengajuan from './components/ContainerPengajuan'
 
 const Pengajuan = () => {
   return (
-    <div>
+    <div className='w-full'>
         <ContainerPengajuan />
     </div>
   )

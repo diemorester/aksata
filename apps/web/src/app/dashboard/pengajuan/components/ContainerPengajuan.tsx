@@ -73,7 +73,7 @@ export default function ContainerPengajuan() {
   const january = new Date(thisYear, 0, 1);
 
   return (
-    <div className="min-h-screen relative">
+    <div className="w-full min-h-screen relative">
       <div className="flex justify-center">
         <Calendar
           mode="single"
