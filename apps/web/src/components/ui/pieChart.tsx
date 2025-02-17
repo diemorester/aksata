@@ -48,11 +48,11 @@ export function PieChartComponent() {
         },
         cuti: {
             label: "Cuti",
-            color: "#4169E1",
+            color: "#0437F2",
         },
         izin: {
             label: "Izin",
-            color: "#DA70D6",
+            color: "#F47FFF",
         },
     } satisfies ChartConfig
 

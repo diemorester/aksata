@@ -73,10 +73,10 @@ const LocationHistory = () => {
               <p className={cn(
                 `p-1 min-w-[50px] font-light text-center text-black tracking-wide rounded-md`,
                 absensi.status === 'Hadir' && 'bg-[#54F1C4]/55 group-hover:bg-[#54F1C4] text-[#54F1C4] group-hover:text-black',
-                absensi.status === 'Alpha' && 'bg-[#E34234]',
-                absensi.status === 'Cuti' && 'bg-[#4169E1]',
-                absensi.status === 'Izin' && 'bg-[#DA70D6]',
-                absensi.status === 'Sakit' && 'bg-[#FCF55F]'
+                absensi.status === 'Alpha' && 'bg-[#F4364C]/55 group-hover:bg-[#F4364C] text-[#F4364C] group-hover:text-off-white',
+                absensi.status === 'Cuti' && 'bg-[#0437F2]/55 group-hover:bg-[#0437F2] text-[#0437F2] group-hover:text-off-white',
+                absensi.status === 'Izin' && 'bg-[#F47FFF]/55 group-hover:bg-[#F47FFF] text-[#F47FFF] group-hover:text-black',
+                absensi.status === 'Sakit' && 'bg-[#FCF55F]/55 group-hover:bg-[#FCF55F] text-[#FCF55F] group-hover:text-black'
               )}>
                 {absensi.status}
               </p>
