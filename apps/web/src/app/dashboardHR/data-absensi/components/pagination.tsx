@@ -15,6 +15,8 @@ const Pagination: React.FC<PaginationProps> = ({ total, onPageChange }) => {
             nextLabel={<FaAngleRight />}
             previousLabel={<FaAngleLeft />}
             pageCount={total}
+            pageRangeDisplayed={3}
+            marginPagesDisplayed={1}
             containerClassName="flex gap-5 w-fit items-center"
             pageLinkClassName="px-4 py-2 rounded-lg text-neutral-600"
             activeLinkClassName="text-white bg-black"

@@ -56,9 +56,9 @@ export const approvePengajuanLemburPerdinFetch = async (pengajuanId: string) => 
     return res
 };
 
-export const declinePengajuanLemburPerdinFetch = async (id: string) => {
+export const declinePengajuanLemburPerdinFetch = async (pengajuanId: string) => {
     const token = await getCookie('access_token');
-    const res = await axiosInstance.patch(`/pengajuan-lembur-perdin/decline-pengajuan/${id}`, {
+    const res = await axiosInstance.patch(`/pengajuan-lembur-perdin/decline-pengajuan/${pengajuanId}`, {
 
     }, {
         headers: {

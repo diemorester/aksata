@@ -18,6 +18,7 @@ export class PengajuanLemburPerdinRouter {
         this.router.get('/:userId', this.pengajuanLemburPerdin.getPengajuanLemburPerdinByUserId);
         this.router.post('/ajukan', authMiddleware, this.pengajuanLemburPerdin.pengajuanLemburPerdin);;
         this.router.patch('/approve-pengajuan/:pengajuanId', this.pengajuanLemburPerdin.approvePengajuanLemburPerdin);
+        this.router.patch('/decline-pengajuan/:pengajuanId', this.pengajuanLemburPerdin.declinePengajuanLemburPerdin);
     }
 
     getRouter(): Router {
