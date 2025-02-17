@@ -126,7 +126,7 @@ const TabelAbsensi = () => {
                         </tbody>
                     </table>
                     {data?.attendance.length === 0 && (
-                        <div className='flex w-full h-full place-content-center px-48 items-center'>
+                        <div className='flex w-full h-full place-content-center py-32 items-center'>
                             <Empty />
                         </div>
                     )}

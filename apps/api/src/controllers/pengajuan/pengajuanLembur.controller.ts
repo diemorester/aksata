@@ -1,4 +1,4 @@
-import { approvePengajuanLemburPerdinService, getAllPengajuanLemburService, getAllUserService, getPengajuanLemburPerdinByUserIdService, pengajuanLemburPerdinService, } from "@/services/pengajuan/pengajuanLemburPerdin.service";
+import { approvePengajuanLemburPerdinService, declinePengajuanLemburPerdinService, getAllPengajuanLemburService, getAllUserService, getPengajuanLemburPerdinByUserIdService, pengajuanLemburPerdinService, } from "@/services/pengajuan/pengajuanLemburPerdin.service";
 import { NextFunction, Request, Response } from "express";
 
 export class PengajuanLemburPerdinController {
@@ -43,7 +43,7 @@ export class PengajuanLemburPerdinController {
             // const { user, pengajuanUser: response } = await getPengajuanLemburPerdinByUserIdService(req.params.userId);
             const { userId } = req.params;
             const filterType = req.query.filterType as 'Monthly' | 'Yearly';
-            
+
             if (!filterType || (filterType !== 'Monthly' && filterType !== 'Yearly')) {
                 throw new Error("Tipe Filter harus 'Monthly' atau 'Yearly'");
             }
@@ -61,11 +61,24 @@ export class PengajuanLemburPerdinController {
     async approvePengajuanLemburPerdin(req: Request, res: Response, next: NextFunction) {
         try {
             const { pengajuanId } = req.params;
-            const updatePengajuan = await approvePengajuanLemburPerdinService(pengajuanId);
+            const approvePengajuan = await approvePengajuanLemburPerdinService(pengajuanId);
             return res.status(200).send({
                 status: 'ok',
-                updatePengajuan
+                approvePengajuan
             })
+        } catch (error) {
+            next(error)
+        };
+    };
+
+    async declinePengajuanLemburPerdin(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { pengajuanId } = req.params;
+            const declinedPengajuan = await declinePengajuanLemburPerdinService(pengajuanId);
+            return res.status(200).send({
+                status: 'ok',
+                declinedPengajuan
+            });
         } catch (error) {
             next(error)
         };

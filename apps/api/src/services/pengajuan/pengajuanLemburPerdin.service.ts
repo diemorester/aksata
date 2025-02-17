@@ -217,7 +217,7 @@ export const approvePengajuanLemburPerdinService = async (pengajuanId: string) =
     try {
         const pengajuan = await prisma.pengajuan.findUnique({
             where: { id: pengajuanId }
-        })
+        });
 
         if (!pengajuan) {
             throw new Error('Pengajuan tidak ditemukan')
@@ -231,10 +231,35 @@ export const approvePengajuanLemburPerdinService = async (pengajuanId: string) =
             where: { id: pengajuanId },
             data: {
                 statusPengajuan: 'Approved'
-            }
-        })
+            },
+        });
 
         return approvedPengajuan
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const declinePengajuanLemburPerdinService = async (pengajuanId: string) => {
+    try {
+        const pengajuan = await prisma.pengajuan.findUnique({
+            where: { id: pengajuanId }
+        });
+
+        if (!pengajuan) {
+            throw new Error('Pengajuan tidak ditemukan')
+        };
+
+        if (pengajuan.statusPengajuan === 'Approved' || pengajuan.statusPengajuan === 'Declined') {
+            throw new Error('Pengajuan sudah direspon')
+        };
+
+        const declinedPengajuan = await prisma.pengajuan.update({
+            where: { id: pengajuanId },
+            data: { statusPengajuan: 'Declined' },
+        });
+
+        return declinedPengajuan
     } catch (error) {
         throw error;
     }
